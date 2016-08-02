@@ -1,0 +1,95 @@
+Image Collector project
+
+TODO:
+-----------
+
+SHORT TERM:
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+- textarea and edit icon below each image (textarea hides while not editing)
+				
+
+			
+			
+- Update UI to be more streamlined (no redundant interface elements like the collection name at the bottom)
+	- create custom menu selector for collections with css + jquery
+	
+- Update databases so collections AND collection names are all in the one database
+
+- Implement Import/Export collections and entire databases
+
+IN PROGRESS:
+
+- A new UI for adding images and descriptions?
+				
+				+BONUS:
+				parse for urls within descriptions and turn them into <a>'s
+
+LONG TERM:
+--------------------------------------------------------------------------------------------------------------------------------------------
+- Switch over to legit databases
+
+Change log:
+-----------
+2015-07-12
+- Added support for video
+- Iterate the slideshow with clicking
+
+2015-07-01
+- Completed undo functionality for restoring deleted images, deleting newly added images, and restoring deleted collections.
+- Finished transparancy and UI tweaks
+		
+2015-06-30 
+- Completely new styling & UI
+
+2016-07-16
+- Jumps to the last viewed picture of the slide show when exiting Full Screen
+
+2016-07-19
+- Updated to "jumping" feature to work with jquery scrollTop() and offset() instead of div tags and URL #'s
+
+2016-07-21
+- Added Captions feature
+	- Added captions to Database objects
+	- Created dialogue box for editing captions
+	- Made captions into an overlay over image objects instead of underneath
+	- Bugfixes:
+		various bugs dealing with depracated Database Objects that were just strings
+
+2016-07-24
+- Added thumbnails to edit caption dialogue
+- Changed sizing css for dialogue boxes
+- Disabled text selection app-wide
+- Changed dialogue box styles
+
+2016-07-25
+- Updated styles with rounded corners for images
+
+2016-07-27
+- Updated List() to go backwards from the end of collection, and do append() instead of prepend()
+	which fixes positioning of most recently added images (always on the top left now)
+- Implemented Notifications!
+- In Progress: migrating all dialogs to custom
+
+2016-07-28
+- Created separate "processURL" function for deciding what kind of element to create (currently img and video)
+- Fixed thumbnails in Edit Image caption dialogue to always resize to dialog
+- Changed caption editor textbox into a textarea for more flexibility
+- Added a Fullscreen captions via notifications (notify()) api!
+	- Maintains caption for every slide, then fades out
+- New History Undo Items:
+ - Captions
+ - Collection names
+- Notification colors: green, yellow, and red depending on type of information
+
+2016-08-01
+- Implemented User Settings
+	- localStorage item for settings and retrieving "settings" objects
+	- _settings variable
+	- settings dialog with automated checkboxes for boolean settings
+	- getSetting simplfies the retrieval of a settings object
+- Updated styling
+	- box shadows for top and bottom bars + dialog boxes
+- Split scripts.js
+	- into separate .js's - finally! Whew that one scripts.js was getting pretty hefty!
+	

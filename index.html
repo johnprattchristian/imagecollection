@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="shortcut icon" href="bitmap.png" type="image/x-icon">
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script   src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"   integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E="   crossorigin="anonymous"></script>
+<!-- my scripts !-->
+<script type="text/javascript" src="globals.js"></script>
+<script type="text/javascript" src="settings.js"></script>
+<script type="text/javascript" src="notifications.js"></script>
+<script type="text/javascript" src="collections.js"></script>
+<script type="text/javascript" src="dialogs.js"></script>
+<script type="text/javascript" src="processing.js"></script>
+<script type="text/javascript" src="fullscreen.js"></script>
+<script type="text/javascript" src="list.js"></script>
+<script type="text/javascript" src="undo.js"></script>
+<script type="text/javascript" src="scripts.js"></script>
+<!--!-->
+
+<title>Image Collector</title>
+</head>
+<body>
+<div id="Super">
+	<div id="inputForm">
+		<input type="text" id="txtInput" placeholder="Enter an image url..."/>
+		<button class="rounded" id="btnSubmit">Add</button>
+		<button class="rounded" id="btnUndo">Undo</button>
+		<div id="divCollections">
+			<select id="dropdown"></select>
+			<button class="rounded" id="btnRenameCollection">Edit</button>
+			<button class="rounded" id="btnDeleteCollection">Delete</button>
+			<button class="rounded" id="btnExport">Export All</button>
+			
+			<button class="rounded" id="btnSettings">Settings</button>
+		</div>
+	</div>
+</div>
+
+<div class="spacer" id="top"></div>
+
+
+	<div id="imageList">
+	</div>
+
+	
+
+
+<div class="spacer" id="bottom"></div>
+<div class="collectionFooter">
+	<div style="font-size:14pt;color:white;padding:20px;" id="collectionFooter">Fantastical Fashion</div>
+</div>
+
+<div id="header">Image Collector <sup>v3</sup></div>
+
+<!-- Notifications !-->
+<div class="Notifications">
+
+	<span>Notification status bar.</span>
+</div>
+
+<!-- Dialog Boxes !-->
+<div id="dialogueParent"> <!-- contains all the dialogues !-->
+	<div class="dialogue" id="d_Export">
+		<h1 style="display:inline">Export all your collections</h1>
+		<select id="selectExportType">
+			<option>Plain Text</option>
+			<option>JSON</option>
+		</select>
+		<button class="closeButton">X</button>
+		<span style="display:block">Just copy and paste the text below and save it to a file. Hit <strong>[ESC]</strong> to close this dialogue</span>
+		<div id="exportCode">
+		</div>
+	</div>
+	<div class="dialogue" id="d_EditCaption">
+		<h1>Caption</h1>
+		<button class="closeButton">X</button>
+		<div id="captionThumbContain">
+		<img id="editCaptionThumbnail"></img>
+		</div><br>
+			<span style="display:block">Edit the caption of the image. Hit Shift+ENTER to type a new paragraph.</span>
+			<textarea type="text" id="txtEditCaption"></textarea>
+		<button class="okbutton" id="btnOK_Edit">OK</button>
+	</div>
+	<div class="dialogue" id="d_RenameCollection">
+		<h1 id="dialogue_title">Rename Collection</h1>
+		<button class="closeButton">X</button>
+			<span id="span_instructions" style="display:block">Change the collection name.</span><br>
+			<input type="text" id="txtRenameCollection"></input>
+		<button class="okbutton" id="btnOK_RenameCollection">OK</button>
+	</div>
+	<div class="dialogue" id="d_Settings">
+		<h1>Settings</h1><button class="closeButton">X</button>
+		<span id="span_instructions">Change your preferences below.</span>
+		<div id="settingsContainer">
+		
+		</div>
+	</div>
+</div>
+
+
+
+
+<div id="FullScreenView">
+	<div class="Notifications" id="fullscreenNotifs">
+		<span>Notification status bar.</span>
+	</div>
+</div>
+
+</body>
+</html>

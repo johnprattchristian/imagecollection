@@ -1,0 +1,432 @@
+
+body{
+	font-family:arial;
+	color:gray;
+	//background-color:black;
+	
+	 -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none;   /* Chrome/Safari/Opera */
+  -khtml-user-select: none;    /* Konqueror */
+  -moz-user-select: none;      /* Firefox */
+  -ms-user-select: none;       /* Internet Explorer/Edge */
+  user-select: none;  
+  cursor:default;
+  
+  overflow-x:hidden;
+}
+
+::webkit-scrollbar{
+	width:100px;
+}
+
+#Super{
+	display:block;
+	position:fixed;
+	left:0px;
+	top:0px;
+	padding:20px;
+	background-color:rgba(50,50,50,0.4);
+	/*background-color:rgba(0,0,0,0.4);*/
+	border:solid 1px silver;
+	width:100%;
+	z-index:2;
+	
+	box-shadow:0px 1px 5px black;
+}
+
+h1{
+	font-size:20pt;
+	display:block;
+}
+
+.collectionFooter{
+	display:block;
+	position:fixed;
+	left:0px;
+	bottom:0px;
+	width:100%;
+	z-index:2;
+	background-color:rgba(50,50,50,0.4);
+	border:solid 1px silver;
+	text-shadow:1px 1px 1px rgba(0,0,0,0.5);
+	text-align:center;
+	box-shadow:0px -1px 5px black;
+}
+
+#collectionFooter{
+	display:inline-block;
+}
+
+.Notifications{
+	display:block;
+	position:fixed;
+	left:0px;
+	bottom:64px;
+	width:100%;
+	z-index:3;
+	background-color:rgba(0,0,0,0.7);
+	padding:20px;
+	padding-right:100px;
+	color:white;
+	text-shadow:1px 1px 2px rgba(0,0,0,1);
+	text-align:center;
+}
+
+.Notifications span{
+	display:inline-block;
+	font-size:12pt;
+}
+
+#fullscreenNotifs{
+	position:absolute;
+	bottom:0px;
+	font-size:12pt;
+	background-color:rgba(0,0,0,0.5);
+	z-index:99999;
+	font-size:18pt;
+	color:rgba(130,130,130,1);
+	text-shadow: 2px 2px 2px black;
+}
+
+
+#header{
+	font-size:12pt;
+	padding:20px;
+	float:right;
+	vertical-align:bottom;
+	bottom:0px;
+	z-index:3;
+	position:fixed;
+	color:darkgray;
+}
+
+#header sup{
+	font-size:8pt;
+}
+
+#inputForm{
+	width:100%;
+	//border:solid 5px red;
+}
+
+#inputForm input,#inputForm button,#inputForm select,#inputForm option{
+	font-size:12pt;
+	padding:10px;
+}
+
+#inputForm button{
+	height:42px;
+	padding-right:15px;
+	padding-left:15px;
+	background-color:rgba(0,0,0,0.9);
+	border:solid 1px silver;
+}
+
+#inputForm button:hover{
+	background-color:rgba(60,60,60,0.9);
+}
+
+#txtInput{
+	width:40%;
+	opacity:0.9;
+
+}
+
+#divCollections{
+	display:inline;
+}
+
+.rounded{
+	border:none;
+	border-radius:7px;
+	background-color:#333333;
+	color:whitesmoke;
+	padding:12px 20px;
+}
+.rounded:hover{
+	background-color:gray;
+}
+button:focus{
+	outline:0;
+}
+
+#dropdown{
+	width:12em;
+	opacity:0.9;
+}
+#btnSettings{
+	float:right;
+	margin-right:50px;
+}
+
+
+/*  spacers */
+.spacer{
+	display:block;
+	position:relative;
+	width:100%;
+	height:100px;
+	z-index:-1;
+}
+.spacer#top{
+	top:0px;
+	left:0px;
+}
+.spacer#bottom{
+	
+}
+/*			*/
+
+#imageList{
+	//border:solid 4px red;
+	white-space:nowrap;
+	padding-left:40px;
+}
+
+.column{
+	vertical-align:top;
+	
+	display:inline-block;
+	max-width:33%;
+}
+
+.imageBox{
+	position:relative;
+	height:auto;
+	/*max-height:500px;*/
+	width:auto;
+	max-width:700px;
+	display:block;
+	vertical-align:top;
+	
+	/* border:solid 1px red; */
+	white-space:nowrap;
+	padding:0px;
+	margin:15px 10px;
+	
+}
+
+.imageBox:-webkit-full-screen{
+	max-height:100%;
+	max-width:100%;
+	height:100%;
+	width:100%;
+	padding:0px;
+	margin:09px;
+}
+
+.imageBox img,video{
+
+	/*max-height:700px;*/
+	width:100%;
+	
+	border-radius:15px;
+	/* border:solid 10px red; 
+	*/
+}
+
+#FullScreenView img:-webkit-full-screen{
+	max-height:100%;
+	max-width:100%;
+	height:auto;
+	width:auto;
+}
+
+.caption{
+	position:absolute;
+	bottom:5px;
+	border-bottom-right-radius:15px;
+	border-bottom-left-radius:15px;
+	padding:10px;
+	width:100%;
+	background-color:rgba(0,0,0,0.8);
+	white-space:pre-wrap;
+	word-wrap:break-word;
+	display:none;
+	box-sizing:border-box;
+}	
+
+.caption:hover{
+	background-color:rgba(0,0,0,1);
+	color:white;
+}
+
+.caption a{
+	color:silver;
+}
+
+.caption a:hover{
+	color:white;
+}
+
+span.captionText{
+	
+}
+
+#FullScreenView{
+	visibility:hidden;
+	height:100%;
+	width:100%;
+	background-image:url('');
+	background-size:contain;
+	background-repeat:no-repeat;
+	background-color:rgba(50,50,50,0);
+	background-position:center;
+}
+#FullScreenView:-webkit-full-screen{
+	visibility:visible;
+}
+
+.btnDelete{
+	display:inline-block;
+	position:absolute;
+	right:10px;
+	top:10px;
+	vertical-align:top;
+	z-index:1; /* put on top of image */
+	background-color:rgba(0,0,0,0.1);
+	border:solid 3px silver;
+	color:silver;
+	
+}
+
+.btnDelete:hover{
+	border-color:#fbfbfb; /* off white */
+	background-color:rgba(100,100,100,0.4);
+	color:white;
+}
+
+.btnUnmute{
+	display:relative;
+	position:relative;
+	right:55px;
+	margin-right:-30px;
+	vertical-align:top;
+	z-index:1; /* put on top of image */
+	background-color:rgba(0,0,0,0.1);
+	border:solid 3px silver;
+	color:silver;
+}
+
+.soundOn{
+	border-color:limegreen;
+	color:limegreen;
+}
+
+#dialogueParent{
+	position:fixed;
+	width:100%;
+	height:100%;
+	top:0px;
+	left:0px;
+	z-index:3;
+}
+
+.dialogue{
+	position:relative;
+	width:700px;
+	max-height:70%;
+	top:100px;
+	margin:0 auto;
+	box-shadow:4px 4px 4px rgba(0,0,0,0.5);
+	background-color:rgba(0,0,0,0.8);
+	display:block;
+	padding:20px 50px 30px 50px;
+	color:whitesmoke;
+}
+
+.dialogue button{
+	border:none;
+	border-radius:7px;
+	background-color:#333333;
+	color:whitesmoke;
+	padding:12px 20px;
+}
+.dialogue button:hover{
+	background-color:gray;
+}
+
+#d_Export span{ /* this is the span telling user what to do with the code */
+	margin-bottom:20px;
+	border-bottom:solid 1px gray;
+	margin-top:20px;
+}
+
+#exportCode{
+	position:relative;
+	overflow:scroll;
+	overflow-x:hidden;
+	width:100%;
+	height:400px;
+	word-wrap:break-word;
+	white-space:pre-line;
+}
+
+.dialogue .closeButton{
+	position:absolute;
+	border:none;
+	border-radius:7px;
+	background-color:#333333;
+	color:whitesmoke;
+	padding:5px 10px;
+	font-size:12pt;
+	color:gray;
+	top:0px;right:0px;
+	margin:10px;
+	border-radius:0px;
+}
+
+.closeButton:hover{
+	border-color:silver;
+	color:silver;
+}
+
+.btnEditCaption{
+	position:absolute;
+	right:0px;
+	padding:3px;
+	margin-right:5px;
+	background-color:rgba(0,0,0,0.4);
+}
+
+#selectExportType{
+	margin-left:10px;
+	padding:10px;
+	font-size:14pt;
+}
+
+.dialogue input{
+	font-size:14pt;
+}
+
+
+textarea#txtEditCaption{
+	display:block;
+	width:80%;
+	height:80%;
+	margin-top:10px;
+	margin-bottom:20px;
+	bottom:0px;
+}
+
+#captionThumbContain{
+	position:relative;
+	height:100%;
+	max-height:300px;
+	left:0px;
+}
+
+#d_EditCaption img#editCaptionThumbnail{
+	max-height:100%;
+	border-radius:10px;
+	margin-bottom:20px;
+	top:20px;
+}
+
+.okbutton{
+	position:absolute;
+	right:0px;
+	bottom:0px;
+	margin-right:20px;
+	margin-bottom:20px;
+}
