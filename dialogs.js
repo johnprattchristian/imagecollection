@@ -182,8 +182,9 @@ $(function(){
 	
 	$('#btnOK_RenameCollection').click(function(){
 		var new_name = $('#txtRenameCollection').val();
-		if(new_name !== "" && new_name !== null){
-			var old_name = collections[dbIndex];
+		var old_name = collections[dbIndex];
+		// change collection name only if new name is a an actual name and not the old name
+		if(new_name !== "" && new_name !== null && new_name !== old_name){
 			collections[dbIndex] = new_name;
 			localStorage.setItem("collection_names",JSON.stringify(collections));
 			popDropdown();
@@ -193,8 +194,6 @@ $(function(){
 			notify('Renamed "' + old_name + '" to "' + new_name + '"',"good");
 			// store old collection name in _history
 			_history.push({restoreType:"collection_name",collection_index:dbIndex,name:old_name});
-		}
-		else{
 		}
 		hideDialogue();
 	});
