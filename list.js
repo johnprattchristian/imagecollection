@@ -91,7 +91,7 @@ var List = function(){
 	// mouseenter / mouseleave imageBox binds for fading captions
 	$('.imageBox').bind('mouseenter',function(e){
 		console.log("mouseenter");
-			$(this).children('.caption').fadeIn(100);
+			$(this).children('.caption').show();
 	});
 	
 	$('.imageBox').bind('mouseleave',function(e){
