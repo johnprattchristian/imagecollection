@@ -119,13 +119,6 @@ $(document).ready(function(){
 		Undo();
 	});
 	
-	// MuteAll Video Elements
-	var muteAll = function(){
-		
-		$('video').prop("muted",true);
-		$('.btnUnmute').removeClass("soundOn");
-	}
-	
 	
 // KEYDOWN/PRESS Event Handlers
 	// Capture "ENTER" key for textbox (alt entering method to the submit button)

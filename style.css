@@ -225,13 +225,6 @@ button:focus{
 	*/
 }
 
-#FullScreenView img:-webkit-full-screen{
-	max-height:100%;
-	max-width:100%;
-	height:auto;
-	width:auto;
-}
-
 .caption{
 	position:absolute;
 	bottom:5px;
@@ -277,6 +270,35 @@ span.captionText{
 	visibility:visible;
 }
 
+#FullScreenView video{
+	min-width:100%;
+	min-height:100%;
+	width:100%;
+	height:100%;
+	border-radius:0px; /* fix unknown issue with rounded corners */
+}
+
+#FullScreenView img:-webkit-full-screen{
+	max-height:100%;
+	max-width:100%;
+	height:auto;
+	width:auto;
+}
+
+#btnExitFullscreen{
+	position:fixed;
+	right:0px;
+	background-color:rgba(0,0,0,0);
+	color:gray;
+	border:solid 1px gray;
+	z-index:1000;
+	
+}
+#btnExitFullscreen:hover{
+	border-color:silver;
+	color:silver;
+}
+
 .btnDelete{
 	display:inline-block;
 	position:absolute;
@@ -297,10 +319,10 @@ span.captionText{
 }
 
 .btnUnmute{
-	display:relative;
-	position:relative;
-	right:55px;
-	margin-right:-30px;
+	display:inline-block;
+	position:absolute;
+	left:10px;
+	top:10px;
 	vertical-align:top;
 	z-index:1; /* put on top of image */
 	background-color:rgba(0,0,0,0.1);

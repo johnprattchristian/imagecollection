@@ -45,6 +45,13 @@ var popDropdown = function(){
 		document.getElementById("dropdown").selectedIndex=dbIndex;
 };
 
+// MuteAll Video Elements
+var muteAll = function(){
+	
+	$('video').prop("muted",true);
+	$('.btnUnmute').removeClass("soundOn");
+}
+
 var List = function(){
 	// Populate images
 

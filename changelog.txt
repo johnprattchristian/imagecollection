@@ -92,4 +92,13 @@ Change log:
 	- box shadows for top and bottom bars + dialog boxes
 - Split scripts.js
 	- into separate .js's - finally! Whew that one scripts.js was getting pretty hefty!
+
+UNDATED:
+- Added a close button to fullscreen
+	
+2016-08-07
+- Redid the revamping of fullscreen videos.
+	- Now using .clone() to load fullscreen videos instantly from the imageBox video object
+	- much simpler, only a few lines of code
+	
 	
