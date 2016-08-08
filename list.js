@@ -63,13 +63,12 @@ var List = function(){
 		// Finally, LAYOUT the images and videos in the view // 
 		// Give image and corresponding controls the same id for easy access:
 		$("#imageList").children().eq(current_column).append("<div class='imageBox' id='box"+i+"'>"
-				+ element // the image or video
-			
-				+ /*mute/unmute button*/(element.indexOf("<video")>=0 && element.indexOf(".gifv")===-1 ? "<button class='btnUnmute' id='unmute"+i+"'>&#128266;</button>" : "") 
-				+ /*delete button*/ "<button class='btnDelete' id='delete"+i+"'>x</button>"
-				+"<div class='caption'><span class='captionText'>" + processCaption(imageDB[i])+"</span>"
-				+"<button class='rounded btnEditCaption'>edit</button></div>" // add edit button to image caption
-				+"</div>"); // end the imageBox div
+		+ element // the image or video
+		+ /*delete button*/ "<button class='btnDelete' id='delete"+i+"'>x</button>"
+		+"<div class='caption'><span class='captionText'>" + processCaption(imageDB[i])+"</span>"
+		+"<button class='rounded btnEditCaption'>edit</button></div>" // add edit button to image caption
+		+"</div>"); // end the imageBox div
+		
 		
 		//alert($('.column').attr('id'));
 		// iterate to the next column
@@ -85,6 +84,39 @@ var List = function(){
 	updateVolumes();
 	
 	// Put bindings on all elements after calling List():
+	
+	
+	$('#imageList video').on('loadeddata',function(){
+		if (typeof this.webkitAudioDecodedByteCount !== "undefined") {
+		// non-zero if video has audio track
+			if (this.webkitAudioDecodedByteCount > 0){
+				var thisId = this.getAttribute('id');
+				// create unmute button:
+				var unmuteButton = $('<button/>',{id:'unmute'+thisId});
+				unmuteButton.addClass('btnUnmute')
+				.html('&#128266;')
+				.on('click',function(){
+					var video = document.getElementById(thisId);
+					if(video.muted){
+						muteAll();
+						Unmute(video);
+					}
+					else{
+						muteAll();
+					}
+					
+					checkMuted();
+				});
+				
+				// append to video:
+				$(this).parent().append(unmuteButton);
+				
+			}
+			else{
+			  console.log(this.getAttribute('id') + " video doesn't have audio");
+			}
+		}
+	});
 	
 	// unmute the previously unmuted video if any
 	if(audio_playing_index>=0){
@@ -108,25 +140,6 @@ var List = function(){
 		Delete();
 	});
 	
-	// Unmute button click binds
-	$(".btnUnmute").bind("click",function(){
-		var index = parseInt($(this).attr("id").replace("unmute",""));
-		var video = document.getElementById(index);
-		if(video.muted){
-			muteAll();
-			video.muted=false;
-			$(this).addClass("soundOn");
-			audio_playing_index=index;
-		}
-		else{
-			
-			video.muted=true;
-			$(this).removeClass("soundOn");
-			audio_playing_index=-1;
-		}
-		checkMuted();
-	});
-	
 	// Edit caption button binds
 	$(".btnEditCaption").bind("click",function(){
 		console.log($(this).parent());
@@ -146,14 +159,4 @@ var List = function(){
 		fullscreenVideo(this);			
 	});
 	
-	/*$('video').bind('click',function(e){
-		if(e.button===0){
-			if(!this.paused){
-				this.pause();
-			}
-			else{
-				this.play();
-			}
-		}
-	});*/
 };

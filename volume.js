@@ -35,7 +35,12 @@ var checkMuted = function(){
 	var soundon = 0;
 	$('video').each(function(i,item){
 		if(item.muted==false){
-			soundon+=1;
+			if (typeof item.webkitAudioDecodedByteCount !== "undefined") {
+				// non-zero if video has audio track
+				if (item.webkitAudioDecodedByteCount > 0){
+					soundon+=1;
+				}
+			}
 		}
 	});
 	if(soundon > 0){
