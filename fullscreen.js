@@ -69,7 +69,7 @@ var fullscreenVideo = function(vid){
 	if (!window.screenTop && !window.screenY) {			  
 		
 		goFullscreen();
-		if(getSetting('fullscreenCaptions')){
+		if(getSetting('fullscreenCaptions').value){
 			notify(imageDB[selected_index].caption);
 		}
 	}
