@@ -62,7 +62,7 @@ var volumeSlide = function(amount){
 	
 	
 	var thisvideo = $('#FullScreenView video');
-	var newVolume = global_volume+amount;
+	var newVolume = Math.floor((global_volume+amount)*100) / 100; // rounds the number then returns it to 0.0x
 	if(newVolume <= 1 && newVolume >= 0){
 		global_volume = newVolume; // change the global volume for videos
 		updateVolumes();
