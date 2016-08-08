@@ -150,6 +150,26 @@ var matchVideoCurrentTimes = function(goingFullscreen){
 	}
 };
 
+var tmHideHighlight = 0;
+var highlightElement = function(element){
+	clearTimeout(tmHideHighlight);
+	
+	var highlight = $('<div/>');
+	highlight.css({
+		display:'none',
+		position:'absolute',
+		top:$(element).offset().top,
+		left:$(element).offset().left,
+		width:$(element).parent().width(),
+		height:$(element).parent().height(),
+		backgroundColor:'rgba(100,255,0,0.5)',
+		zIndex:100
+	}).appendTo('body').fadeIn('slow');
+	
+	// Wait, and then fadeOut and remove() the highlight element
+	tmHideHighlight = setTimeout(function(){highlight.fadeOut('slow',function(){highlight.remove()})},100); 
+};
+
 
 $(document).ready(function(){
 	$(document).bind("exitFullscreen msExitFullscreen mozCancelFullScreen webkitExitFullscreen",currentFSfalse());
@@ -167,10 +187,8 @@ $(document).ready(function(){
 					Unmute(currentFSElement);
 				}
 				removeFullScreenChildren(); // clear the fullscreen parent
-				
-				if(currentFSElement){
-					jumpToElementByScrollPosition(currentFSElement);
-				}
+				jumpToElementByScrollPosition(currentFSElement);
+				highlightElement(currentFSElement);
 			}
 			else{
 				$("#FullScreenView").css("visibility","visible");
