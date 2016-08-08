@@ -104,5 +104,7 @@ UNDATED:
 	- created a separate volume.js
 	- functions for checking muted videos and changing the volume dialog accordingly
 
+2016-08-08
+- Added fading animations to loading images
 	
 	

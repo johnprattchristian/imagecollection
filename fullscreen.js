@@ -124,9 +124,15 @@ var currentFSfalse = function(){
 };
 	
 // jumps to an element on the page purely by scrolling to its position
-var jumpToElementByScrollPosition = function(element_to_jump_to){
+var jumpToElementByScrollPosition = function(element_to_jump_to,whatToDoWhenDone){
 	// make the documents scroll position (scrollTop) equal to an elements position
 	$(document).scrollTop($(element_to_jump_to).offset().top - 100);
+	
+	setTimeout(function(){
+		if(typeof whatToDoWhenDone != 'undefined'){
+			whatToDoWhenDone();
+		}
+	},100);
 };
 
 var exitFullScreen = function()
@@ -150,24 +156,67 @@ var matchVideoCurrentTimes = function(goingFullscreen){
 	}
 };
 
-var tmHideHighlight = 0;
-var highlightElement = function(element){
-	clearTimeout(tmHideHighlight);
-	
-	var highlight = $('<div/>');
-	highlight.css({
-		display:'none',
-		position:'absolute',
-		top:$(element).offset().top,
-		left:$(element).offset().left,
-		width:$(element).parent().width(),
-		height:$(element).parent().height(),
-		backgroundColor:'rgba(255,255,255,1)',
-		zIndex:100
-	}).appendTo('body').show();
-	
+var tmStartAnimation = 0;
+var highlightElement = function(element,bigversion){
+	//clearTimeout(tmHideHighlight);
+	var highlight = $('#highlight');
+	var $element = $(element);
+	clearTimeout(tmStartAnimation);
+	tmStartAnimation = setTimeout(function(){
+		$element.clone(false)
+		.off()
+		.css({
+			height:'100%',
+			width:'auto',
+			position:'relative'
+		}).appendTo(highlight);
+			highlight.css({
+				width:window.innerWidth,
+				height:window.innerHeight,
+				top:$(document).scrollTop(),
+				left:'0px'
+			}).wrap('<center/>').show();
+		if(highlight.children().eq(0).is('img')){
+				highlight.children().on('load',function(){
+					var animatePos = {
+						width:$element.parent().width(),
+						height:$element.parent().height(),
+						top:$element.parent().offset().top,
+						left:$element.parent().offset().left
+					}
+					highlight.stop(true,true)
+					.animate({
+							width:animatePos.width,
+							height:animatePos.height,
+							top:animatePos.top,
+							left:animatePos.left
+					},200,function(){
+						highlight.hide().children().remove();
+					});
+				});
+		}
+		else if(highlight.children().eq(0).is('video')){
+				highlight.children().on('loadeddata',function(){
+					var animatePos = {
+						width:$element.parent().width(),
+						height:$element.parent().height(),
+						top:$element.parent().offset().top,
+						left:$element.parent().offset().left
+					}
+					highlight.stop(true,true)
+					.animate({
+							width:animatePos.width,
+							height:animatePos.height,
+							top:animatePos.top,
+							left:animatePos.left
+					},200,function(){
+						highlight.hide().children().remove();
+					});
+				});
+		}
+	},100);
 	// Wait, and then fadeOut and remove() the highlight element
-	tmHideHighlight = setTimeout(function(){highlight.fadeOut('slow',function(){highlight.remove()})},100); 
+	//tmHideHighlight = setTimeout(function(){highlight.fadeOut('slow',function(){highlight.remove()})},100); 
 };
 
 
@@ -186,9 +235,10 @@ $(document).ready(function(){
 					matchVideoCurrentTimes(false);
 					Unmute(currentFSElement);
 				}
+				
 				removeFullScreenChildren(); // clear the fullscreen parent
-				jumpToElementByScrollPosition(currentFSElement);
-				highlightElement(currentFSElement);
+				jumpToElementByScrollPosition(currentFSElement,highlightElement(currentFSElement));
+				
 			}
 			else{
 				$("#FullScreenView").css("visibility","visible");

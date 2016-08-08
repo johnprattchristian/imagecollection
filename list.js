@@ -87,11 +87,10 @@ var List = function(){
 	
 	
 	$('#imageList video').on('loadeddata',function(){
+		$(this).parent().fadeIn(1000);
 		if (typeof this.webkitAudioDecodedByteCount !== "undefined") {
-			
-		// non-zero if video has audio track
+			// non-zero if video has audio track
 			if (this.webkitAudioDecodedByteCount > 0){
-				$(this).parent().fadeIn(1000);
 				var thisId = this.getAttribute('id');
 				// create unmute button:
 				var unmuteButton = $('<button/>',{id:'unmute'+thisId});
@@ -118,6 +117,10 @@ var List = function(){
 			  console.log(this.getAttribute('id') + " video doesn't have audio");
 			}
 		}
+	}).on('error',function(){
+		$(this).parent().show();
+		$(this).css('border','solid 2px red').parent().children('.btnDelete').css('borderColor','rgba(255,0,0,0.7)');
+		notify("Some images could not be loaded.",'warning');
 	});
 	
 	// unmute the previously unmuted video if any
@@ -127,7 +130,15 @@ var List = function(){
 	}
 
 	$('.imageBox img').on('load',function(){
-		$(this).parent().fadeIn(500);
+			$(this).parent().fadeIn(500);
+		}).on('error',function(){
+			$(this).parent().show();
+			$(this).addClass('loadError').height(250)
+			.parent().children('.caption').addClass('loadError').html('Error loading image');
+			$(this).parent().children('.btnDelete').addClass('loadError');
+			
+			
+			notify("Some images could not be loaded.",'warning');
 	});
 	
 
