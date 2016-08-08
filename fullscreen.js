@@ -214,7 +214,7 @@ var highlightElement = function(element,bigversion){
 					});
 				});
 		}
-	},100);
+	},10);
 	// Wait, and then fadeOut and remove() the highlight element
 	//tmHideHighlight = setTimeout(function(){highlight.fadeOut('slow',function(){highlight.remove()})},100); 
 };
