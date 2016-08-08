@@ -45,12 +45,6 @@ var popDropdown = function(){
 		document.getElementById("dropdown").selectedIndex=dbIndex;
 };
 
-// MuteAll Video Elements
-var muteAll = function(){
-	
-	$('video').prop("muted",true);
-	$('.btnUnmute').removeClass("soundOn");
-}
 
 var List = function(){
 	// Populate images
@@ -86,6 +80,9 @@ var List = function(){
 			current_column = 0;
 		}
 	}
+	
+	muteAll();
+	updateVolumes();
 	
 	// Put bindings on all elements after calling List():
 	
@@ -127,6 +124,7 @@ var List = function(){
 			$(this).removeClass("soundOn");
 			audio_playing_index=-1;
 		}
+		checkMuted();
 	});
 	
 	// Edit caption button binds
@@ -137,16 +135,18 @@ var List = function(){
 	});
 	
 	//DOUBLE CLICK IMAGE binds -- fullscreen 
-	$("img").bind("dblclick",function(){
+	$("img").bind("dblclick",function(e){
+		e.preventDefault();
 		selected_index = parseInt($(this).attr("id")); // this is so we can display a notification
 		fullscreenImage(this);
 	});
-	$("video").bind("dblclick",function(){
+	$("video").bind("dblclick",function(e){
+		e.preventDefault();
 		selected_index = parseInt($(this).attr("id"));
 		fullscreenVideo(this);			
 	});
 	
-	$('video').bind('click',function(e){
+	/*$('video').bind('click',function(e){
 		if(e.button===0){
 			if(!this.paused){
 				this.pause();
@@ -155,5 +155,5 @@ var List = function(){
 				this.play();
 			}
 		}
-	});
+	});*/
 };

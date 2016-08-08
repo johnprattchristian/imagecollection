@@ -38,7 +38,7 @@ var processURL = function(i){
 		case 'mov':
 		case 'avi':
 		case 'mpeg':
-			element = "<video muted autoplay loop id='"+i+"' src='"+img+"'></video>";
+			element = "<video autoplay loop id='"+i+"' src='"+img+"'></video>";
 			break;
 		default:
 			element = "<img id='"+i+"' src='"+img+"'/>"; // put in placeholder image object with no source
@@ -46,7 +46,7 @@ var processURL = function(i){
 			
 			$(['mp4','webm','gifv']).each(function(x,item){
 				if(img.indexOf(item)>=0){ // does the url contain a video extension?
-					element = "<video muted autoplay loop id='"+i+"' src='"+img+"'></video>"
+					element = "<video autoplay loop id='"+i+"' src='"+img+"'></video>"
 				}
 			});
 			break;

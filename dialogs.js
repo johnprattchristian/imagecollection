@@ -199,7 +199,7 @@ $(function(){
 	});
 	
 	// magically resize Edit Caption thumbnail img
-	$('#editCaptionThumbnail').load(function(){
+	$('#editCaptionThumbnail').on('load',function(){
 		var image = $(this);
 		var maxHeight = parseInt(image.parent().css("maxHeight").replace("px",""));
 		console.log("maxHeight is"+maxHeight);

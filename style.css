@@ -298,6 +298,70 @@ span.captionText{
 	border-color:silver;
 	color:silver;
 }
+#fsVolumeSlider{
+	position:absolute;
+	bottom:0px;
+	height:100px;
+	width:100%;
+	background-color:gray;
+}
+#fsVolumeSliderContainer{
+	position:fixed;
+	bottom:80px;
+	right:50px;
+	width:50px;
+	height:300px;
+	background-color:rgba(0,0,0,0);
+	border:solid 1px gray;
+	z-index:1000;
+	display:none;
+}
+
+#volumeSliderDialogContainer{
+	display:block;
+	position:fixed;
+	left:0;
+	top:0;
+	width:100%;
+	height:100%;
+	background-color:rgba(0,0,0,0);
+	z-index:1000;
+}
+
+#volumeSliderDialog{
+	position:absolute;
+	box-sizing:border-box;
+	width:500px;
+	height:120px;
+	bottom:100px;
+	margin:auto auto;
+	box-shadow:4px 4px 4px rgba(0,0,0,0.5);
+	background-color:rgba(0,0,0,0.8);
+	display:block;
+	padding:40px 50px 50px 50px;
+	color:whitesmoke;
+}
+
+#imgVolumeIcon{
+	position:relative;
+	display:inline;
+	width:30px;
+	height:30px;
+}
+#volumeSliderContainer{
+	display:inline-block;
+	width:300px;
+	height:100%;
+	border:solid 1px white;
+	background-color:rgba(0,0,0,0);
+	margin-left:20px;
+}
+
+#volumeSlider{
+	background-color:white;
+	height:100%;
+	width:50px;
+}
 
 .btnDelete{
 	display:inline-block;

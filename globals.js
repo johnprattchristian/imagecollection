@@ -13,7 +13,11 @@ var collections,
 	imageDB,
 	selected_index,
 	currentFSElement,
-	audio_playing_index;
+	audio_playing_index,
+	global_volume,
+	helpTips = []; // an array of helpTip objects with "done already" properties
+	
+global_volume = 0.3;
 
 // Function for applying changes to given current Collection 
 var applyChanges=function(){
@@ -23,6 +27,7 @@ var applyChanges=function(){
 	
 
 $(document).ready(function(){
+	
 	// Collection names array
 	 collections = JSON.parse(localStorage.getItem("collection_names")); // get the names of my collections
 	if (collections === null || collections[0] === null || collections[0] === ""){

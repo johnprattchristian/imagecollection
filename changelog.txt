@@ -100,5 +100,9 @@ UNDATED:
 - Redid the revamping of fullscreen videos.
 	- Now using .clone() to load fullscreen videos instantly from the imageBox video object
 	- much simpler, only a few lines of code
+- Added volume controls to videos, both fullscreen and not
+	- created a separate volume.js
+	- functions for checking muted videos and changing the volume dialog accordingly
+
 	
 	
