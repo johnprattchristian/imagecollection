@@ -88,8 +88,10 @@ var List = function(){
 	
 	$('#imageList video').on('loadeddata',function(){
 		if (typeof this.webkitAudioDecodedByteCount !== "undefined") {
+			
 		// non-zero if video has audio track
 			if (this.webkitAudioDecodedByteCount > 0){
+				$(this).parent().fadeIn(1000);
 				var thisId = this.getAttribute('id');
 				// create unmute button:
 				var unmuteButton = $('<button/>',{id:'unmute'+thisId});
@@ -123,6 +125,12 @@ var List = function(){
 		var unmuteVideo = document.getElementById(audio_playing_index);
 		$(unmuteVideo).prop('muted',false);
 	}
+
+	$('.imageBox img').on('load',function(){
+		$(this).parent().fadeIn(500);
+	});
+	
+
 		
 	// mouseenter / mouseleave imageBox binds for fading captions
 	$('.imageBox').bind('mouseenter',function(e){
