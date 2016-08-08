@@ -55,13 +55,14 @@ var fullscreenVideo = function(vid){
 	muteAll(); // mute any videos playing outside of fullscreen
 	var fsParent = $('#FullScreenView');
 	var vidClone = $(vid).clone(true,false);
-	vidClone
+	vidClone.off()
 	.prop('currentTime',0)
 	.attr('id','') // remove the duplicate id'
 	.prop('muted',false)
 	.prop('volume',global_volume)
 	removeFullScreenChildren(); // resets FullscreenView
 	vidClone.appendTo(fsParent).get(0).play(); // appends and begins playing the new Fullscreen video
+
 	if(!iterating){ // if just jumping into fullscreen, match the playhead with the smaller version of the video
 		matchVideoCurrentTimes(true);
 	}
