@@ -162,9 +162,9 @@ var highlightElement = function(element){
 		left:$(element).offset().left,
 		width:$(element).parent().width(),
 		height:$(element).parent().height(),
-		backgroundColor:'rgba(100,255,0,0.5)',
+		backgroundColor:'rgba(255,255,255,1)',
 		zIndex:100
-	}).appendTo('body').fadeIn('slow');
+	}).appendTo('body').show();
 	
 	// Wait, and then fadeOut and remove() the highlight element
 	tmHideHighlight = setTimeout(function(){highlight.fadeOut('slow',function(){highlight.remove()})},100); 
