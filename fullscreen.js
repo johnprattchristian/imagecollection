@@ -159,22 +159,29 @@ var matchVideoCurrentTimes = function(goingFullscreen){
 var tmStartAnimation = 0;
 var highlightElement = function(element,bigversion){
 	//clearTimeout(tmHideHighlight);
+	var type = 'img';
 	var highlight = $('#highlight');
 	var $element = $(element);
+	if($element.is('video')){
+		type = 'video';
+	}
 	clearTimeout(tmStartAnimation);
 	tmStartAnimation = setTimeout(function(){
-		$element.clone(false)
-		.off()
-		.css({
-			height:'100%',
-			width:'auto',
-			position:'relative'
-		}).appendTo(highlight);
+		if(type !== 'video'){
+			$element.clone(false)
+			.off()
+			.css({
+				height:'100%',
+				width:'auto',
+				position:'relative'
+			}).appendTo(highlight);
+		}
 			highlight.css({
 				width:window.innerWidth,
 				height:window.innerHeight,
 				top:$(document).scrollTop(),
-				left:'0px'
+				left:'0px',
+				backgroundColor:(type=='video' ? 'black' : 'none')
 			}).wrap('<center/>').show();
 		if(highlight.children().eq(0).is('img')){
 				highlight.children().on('load',function(){
@@ -195,8 +202,8 @@ var highlightElement = function(element,bigversion){
 					});
 				});
 		}
-		else if(highlight.children().eq(0).is('video')){
-				highlight.children().on('loadeddata',function(){
+		else {
+				
 					var animatePos = {
 						width:$element.parent().width(),
 						height:$element.parent().height(),
@@ -212,7 +219,6 @@ var highlightElement = function(element,bigversion){
 					},200,function(){
 						highlight.hide().children().remove();
 					});
-				});
 		}
 	},10);
 	// Wait, and then fadeOut and remove() the highlight element
