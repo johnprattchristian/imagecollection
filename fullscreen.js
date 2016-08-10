@@ -187,7 +187,7 @@ var highlightElement = function(element,bigversion){
 				height:window.innerHeight,
 				top:$(document).scrollTop(),
 				left:'0px',
-				backgroundColor:(type=='video' ? 'black' : 'none')
+				backgroundColor:('rgba(0,0,0,0)')
 			}).wrap('<center/>').show();
 		if(highlight.children().eq(0).is('img')){
 				highlight.children().on('load',function(){
