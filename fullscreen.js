@@ -167,7 +167,7 @@ var highlightElement = function(element,bigversion){
 	}
 	clearTimeout(tmStartAnimation);
 	tmStartAnimation = setTimeout(function(){
-		if(type !== 'video'){
+		if(true){
 			$element.clone(false)
 			.off()
 			.css({
@@ -175,6 +175,12 @@ var highlightElement = function(element,bigversion){
 				width:'auto',
 				position:'relative'
 			}).appendTo(highlight);
+		}
+		if(type === 'video'){
+			var clonevideo = highlight.children().eq(0);
+			clonevideo.on('load',function(){
+				clonevideo.prop('currentTime',Math.floor(Math.floor(clonevideo.prop('duration'))/10));
+			});
 		}
 			highlight.css({
 				width:window.innerWidth,
@@ -185,20 +191,21 @@ var highlightElement = function(element,bigversion){
 			}).wrap('<center/>').show();
 		if(highlight.children().eq(0).is('img')){
 				highlight.children().on('load',function(){
+					// the position / size to animate TO
 					var animatePos = {
 						width:$element.parent().width(),
 						height:$element.parent().height(),
 						top:$element.parent().offset().top,
 						left:$element.parent().offset().left
 					}
-					highlight.stop(true,true)
+					highlight.stop(true,true) // stop any currently playing animations
 					.animate({
 							width:animatePos.width,
 							height:animatePos.height,
 							top:animatePos.top,
 							left:animatePos.left
-					},200,function(){
-						highlight.hide().children().remove();
+					},400,function(){
+						highlight.hide().children().remove(); // hide the "highlight" element and delete the image on it
 					});
 				});
 		}
