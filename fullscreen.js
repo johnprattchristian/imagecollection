@@ -167,7 +167,7 @@ var highlightElement = function(element,bigversion){
 	}
 	clearTimeout(tmStartAnimation);
 	tmStartAnimation = setTimeout(function(){
-		if(true){
+			// clone the element into the highlight animation div
 			$element.clone(false)
 			.off()
 			.css({
@@ -175,23 +175,18 @@ var highlightElement = function(element,bigversion){
 				width:'auto',
 				position:'relative'
 			}).appendTo(highlight);
-		}
-		if(type === 'video'){
-			var clonevideo = highlight.children().eq(0);
-			clonevideo.on('load',function(){
-				clonevideo.prop('currentTime',Math.floor(Math.floor(clonevideo.prop('duration'))/10));
-			});
-		}
+			// set the default state of highlight BEFORE animation:
 			highlight.css({
 				width:window.innerWidth,
 				height:window.innerHeight,
 				top:$(document).scrollTop(),
 				left:'0px',
 				backgroundColor:('rgba(0,0,0,0)')
+			//wrap it in <center> for easy centering:
 			}).wrap('<center/>').show();
 		if(highlight.children().eq(0).is('img')){
 				highlight.children().on('load',function(){
-					// the position / size to animate TO
+					// the position / size to animate TO:
 					var animatePos = {
 						width:$element.parent().width(),
 						height:$element.parent().height(),
