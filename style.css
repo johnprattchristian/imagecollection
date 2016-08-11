@@ -154,7 +154,7 @@ button:focus{
 	width:12em;
 	opacity:0.9;
 }
-#btnSettings{
+#rightSideButtonsContainer{
 	float:right;
 	margin-right:50px;
 }

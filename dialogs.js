@@ -119,7 +119,17 @@ var parseNewCollectionName = function(new_name){
 	}
 };
 
+var helpDialogue = function(){
+	$('#helpContent').load('https://dl.dropboxusercontent.com/u/4138891/imagecollection/help.html',function(){
+		console.log('help loaded');
+	});
+};
+
 $(function(){
+	$('.okbutton').click(function(){
+		hideDialogue();
+	});
+	
 	$("#txtEditCaption").on("keydown",function(e){
 			if(e.which === 13 && !e.shiftKey){
 				$('#btnOK_Edit').click();
@@ -225,4 +235,6 @@ $(function(){
 	
 	});
 });
+
+
 	

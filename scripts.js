@@ -13,7 +13,11 @@ $(document).ready(function(){
 	$("#collectionFooter").text(collections[dbIndex]);
 	$('#dialogueParent').hide(); // Hide the export dialogue box
 	
-/* DONE INITIALIZING */		
+/* DONE INITIALIZING */
+	$('#btnHelp').click(function(){
+		showDialogue('d_Help');
+		helpDialogue();
+	});
 	
 	$('#btnSettings').click(function(){
 		showDialogue('d_Settings');
