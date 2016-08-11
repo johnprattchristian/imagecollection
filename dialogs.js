@@ -138,8 +138,17 @@ var selectHelpIndexItem = function(index){
 		case 0: // start
 			help_index_content = help_content.find('#start');
 			break;
-		case 1:
+		case 1: // videos
+			help_index_content = help_content.find('#videos');
+			break;
+		case 2:
 			help_index_content = help_content.find('#collections');
+			break;
+		case 3: // slideshow
+			help_index_content = help_content.find('#slideshow');
+			break;
+		case 4: // slideshow
+			help_index_content = help_content.find('#export');
 			break;
 		default: // start
 			log('help index failed');
