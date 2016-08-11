@@ -4,7 +4,15 @@ var UpToDate = function(db_object_to_check){
 		return false;
 	}
 	else if(typeof db_object_to_check === 'object'){ // YES up to date
-		return true;
+		if(typeof db_object_to_check.url !== 'undefined' && typeof db_object_to_check.caption !== 'undefined'){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	else{
+		return false;
 	}
 };
 

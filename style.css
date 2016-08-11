@@ -15,6 +15,19 @@ body{
   overflow-x:hidden;
 }
 
+a{
+	color:silver;	
+}
+
+a:active{
+	color:gray;
+}
+
+a:visited{
+	color:silver;
+	text-decoration:none;
+}
+
 ::webkit-scrollbar{
 	width:100px;
 }
@@ -438,7 +451,10 @@ span.captionText{
 	display:block;
 	padding:20px 50px 30px 50px;
 	color:whitesmoke;
-	
+
+}
+
+.dialogue div{
 	-webkit-touch-callout: text; /* iOS Safari */
 	-webkit-user-select: text;   /* Chrome/Safari/Opera */
 	-khtml-user-select: text;    /* Konqueror */

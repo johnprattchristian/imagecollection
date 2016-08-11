@@ -24,55 +24,107 @@ $(function(){
 
 });
 
+// generate different types of export codes
+var exportCode = function(exportType){
+	var exportObject = $('<div></div>'); // initialize export object to add stuff to
+	
+	if(exportType == 'plain'){ // plain text 
+		var current_item = false;
+		for(var i = 0;i<collections.length;i++){
+			exportObject.append(collections[i]+'</br>');
+			for(var x = 0; x<DATABASE[i].length;x++){
+				current_item = DATABASE[i][x];
+				if(UpToDate(current_item)){
+					exportObject.append('<p>'+current_item.url+'</p>');
+				}
+				else{
+					exportObject.append('<p>'+current_item+'</p>');
+				}
+			}
+		}
+	}
+	else if(exportType == 'html'){ // html
+		$(collections).each(function(d,ditem){ // each collection
+			exportObject.append('<h2>'+ditem+'</h2>'); // collection name
+			$(DATABASE[d]).each(function(i,item){ // each item in the collection
+				console.log((UpToDate(item) ? 'item is up to date. Item url is' + item.url : 'item is not up to date'))
+				exportObject.append('<a href="' + (UpToDate(item) ? item.url : item) + '">'+ (item.caption ? item.caption : item) +'</a><p>');
+			});
+		});
+	}
+	else if(exportType == 'json'){ // json
+		var jsonify = [];
+		var items;
+		
+		$(DATABASE).each(function(i,item){
+			
+			items = [];
+			$(item).each(function(x,xmen){
+				items.push(xmen);
+			});
+			jsonify.push({
+				name:collections[i],
+				items:items
+			});
+		
+		});
+		exportObject.append(JSON.stringify(jsonify));
+	}
+	else if(exportType == 'Image Collection'){
+		
+	}
+	else{
+		console.log('invalid export type (internal)');
+	}
+	
+	return exportObject;
+	
+};
+
 // EXPORT Your Collections via Code copy and paste
 var exportCollections = function(){
 	showDialogue('d_Export');
 	$('#exportCode').html(""); // wipes the 'code' textbox of the export dialogue then refills it 
-	var current_item = false;
-	for(var i = 0;i<collections.length;i++){
-		$('#exportCode').append('<h2>'+collections[i]+'</h2>');
-		for(var x = 0; x<DATABASE[i].length;x++){
-			current_item = DATABASE[i][x];
-			if(UpToDate(current_item)){
-				$('#exportCode').append('<p>'+current_item.url+'</p>');
-			}
-			else{
-				$('#exportCode').append('<p>'+current_item+'</p>');
-			}
-		}
-	}
+	$('#exportCode').html(exportCode('plain'));
 	$('#d_Export').focus(); // focus on the whole dialogue box 
 };
+
 // select an export type
 $(function(){
 	$('#selectExportType').bind('change',function(){
-		if(this.selectedIndex===1){
-			var jsonify = [];
-			var items;
-			$('#exportCode').html("");
-			$(DATABASE).each(function(i,item){
-				
-				items = [];
-				$(item).each(function(x,xmen){
-					items.push(xmen);
-				});
-				jsonify.push({
-					name:collections[i],
-					items:items
-				});
-			
-			});
-			$('#exportCode').append(JSON.stringify(jsonify));
+		var newExportCode = "";
+		$('#exportCode').html("");
+		if(this.selectedIndex === 0){
+			newExportCode = exportCode('plain');
+		}
+		else if(this.selectedIndex === 1){
+			newExportCode = exportCode('html');
+		}
+		else if(this.selectedIndex === 2){
+			newExportCode = exportCode('json');
+		}
+		else if(this.selectedIndex === 3){
+			newExportCode = exportCode('Image Collection');
 		}
 		else{
-			$('#exportCode').html("");
-			for(var i = 0;i < collections.length-1;i++){
-				$('#exportCode').append('<h2>'+collections[i]+'</h2>');
-				for(var x = 0; x<DATABASE[i].length-1;x++){
-					$('#exportCode').append('<p>'+DATABASE[i][x]+'</p>');
-				}
-			}
+			newExportCode = "Error generating export code: invalid export type";
 		}
+		
+		$('#exportCode').html(newExportCode);
+		var html = document.getElementById("exportCode").innerHTML;
+		html = html.replace(/\s{2,}/g, '')   // <-- Replace all consecutive spaces, 2+
+				   .replace(/%/g, '%25')     // <-- Escape %
+				   .replace(/&/g, '%26')     // <-- Escape &
+				   .replace(/#/g, '%23')     // <-- Escape #
+				   .replace(/"/g, '%22')     // <-- Escape "
+				   .replace(/'/g, '%27');    // <-- Escape ' (to be 100% safe)
+		var dataURL = 'data:text/html;charset=UTF-8,' + html;
+		var openbutton = $('<button></button>');
+		openbutton.html('open in full page')
+		.click(function(){
+			document.location = dataURL;
+		});
+		$('#exportCode').prepend(openbutton);
 	});
 });
 
