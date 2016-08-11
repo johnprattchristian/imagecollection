@@ -561,6 +561,9 @@ textarea#txtEditCaption{
 .helpItemClicked{
 	background-color:gray;
 }
+.helpItemClicked:hover{
+	background-color:rgba(155,155,155,1);
+}
 
 #helpContent{
 	color:white;
@@ -577,7 +580,7 @@ textarea#txtEditCaption{
 	font-size:12pt;
 	line-height:1em;
 	border-top:solid 1px gray;
-	margin-top:5px;
+	margin-top:20px;
 	color:gray;
 	
 }

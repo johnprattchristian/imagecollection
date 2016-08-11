@@ -130,29 +130,34 @@ $(function(){
 var selectHelpIndexItem = function(index){
 	var container = $('#helpContent');
 	var help_index_content = "";
+	var subtitle = $('#help_subtitle');
 	
 	$('.helpIndexItem').removeClass('helpItemClicked');
 	$('.helpIndexItem').eq(index).addClass('helpItemClicked');
 	switch(index){
 		case 0: // start
-			help_index_content = help_content.find('#start').html();
-			console.log(help_content.find('#start').html());
+			help_index_content = help_content.find('#start');
 			break;
 		case 1:
-			help_index_content = help_content.find('#collections').html();
+			help_index_content = help_content.find('#collections');
 			break;
 		default: // start
 			log('help index failed');
 			break;
 		
 	}
-	container.html(help_index_content);
+	
+	
+	container.html(help_index_content.html()); // change the help content to the specific loaded index content
 }
 
 var helpDialogue = function(){
+	// bind click event for all help items
 	$('.helpIndexItem').click(function(){
 		selectHelpIndexItem(parseInt($(this).attr('id').replace('help_index_',''))); // derive index from the id of a help item
 	});
+	// click the start item by default
+	$('.helpIndexItem').eq(0).click();
 };
 
 $(function(){
