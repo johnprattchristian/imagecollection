@@ -119,9 +119,39 @@ var parseNewCollectionName = function(new_name){
 	}
 };
 
+var help_content = "";
+$(function(){
+	$.get('https://dl.dropboxusercontent.com/u/4138891/imagecollection/help.html',function(data){
+		help_content = $('<div></div>').html(data);
+		log('help content loaded:'+help_content.html());
+	});
+});
+
+var selectHelpIndexItem = function(index){
+	var container = $('#helpContent');
+	var help_index_content = "";
+	
+	$('.helpIndexItem').removeClass('helpItemClicked');
+	$('.helpIndexItem').eq(index).addClass('helpItemClicked');
+	switch(index){
+		case 0: // start
+			help_index_content = help_content.find('#start').html();
+			console.log(help_content.find('#start').html());
+			break;
+		case 1:
+			help_index_content = help_content.find('#collections').html();
+			break;
+		default: // start
+			log('help index failed');
+			break;
+		
+	}
+	container.html(help_index_content);
+}
+
 var helpDialogue = function(){
-	$('#helpContent').load('https://dl.dropboxusercontent.com/u/4138891/imagecollection/help.html',function(){
-		console.log('help loaded');
+	$('.helpIndexItem').click(function(){
+		selectHelpIndexItem(parseInt($(this).attr('id').replace('help_index_',''))); // derive index from the id of a help item
 	});
 };
 
