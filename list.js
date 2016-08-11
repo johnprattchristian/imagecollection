@@ -1,5 +1,5 @@
 //DELETE AN IMAGE
-var Delete = function(){
+var Delete = function(domElement = null){
 	
 	//alert(selected_index);
 		//alert($(this).attr("id"));
@@ -26,7 +26,13 @@ var Delete = function(){
 		imageDB.splice(selected_index,1);
 		
 		applyChanges();
-		List();
+		
+		var currentscroll = $(window).scrollTop();
+		$(domElement).fadeOut('fast',function(){
+			List(false,function(){
+				$(document).scrollTop(currentscroll);
+			});
+		});
 		
 		notify("Image deleted","warning");
 };
@@ -45,11 +51,14 @@ var popDropdown = function(){
 		document.getElementById("dropdown").selectedIndex=dbIndex;
 };
 
-
-var List = function(){
+var tm_afterlistcallback = 0;
+var List = function(load_animation = false,callback){
 	// Populate images
+	clearTimeout(tm_afterlistcallback);
 
 	$("#imageList").html("");
+	
+	
 	
 	// generate the columns for laying out the images
 	for(var i=0;i < no_of_columns;i++){
@@ -62,7 +71,7 @@ var List = function(){
 		var element = processURL(i);
 		// Finally, LAYOUT the images and videos in the view // 
 		// Give image and corresponding controls the same id for easy access:
-		$("#imageList").children().eq(current_column).append("<div class='imageBox' id='box"+i+"'>"
+		$("#imageList").children().eq(current_column).append("<div class='imageBox' id='box"+i+"' style='display:"+(load_animation ? 'none' : 'block')+"' >"
 		+ element // the image or video
 		+ /*delete button*/ "<button class='btnDelete' id='delete"+i+"'>x</button>"
 		+"<div class='caption'><span class='captionText'>" + processCaption(imageDB[i])+"</span>"
@@ -156,7 +165,7 @@ var List = function(){
 	// bind delete buttons events
 	$(".btnDelete").bind("click",function(){
 		selected_index = parseInt($(this).attr("id").replace("delete",""));
-		Delete();
+		Delete($(this).parent());
 	});
 	
 	// Edit caption button binds
@@ -178,4 +187,5 @@ var List = function(){
 		fullscreenVideo(this);			
 	});
 	
+	tm_afterlistcallback = setTimeout(callback,100);
 };

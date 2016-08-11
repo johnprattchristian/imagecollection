@@ -7,10 +7,7 @@ var Undo = function(){
 			if(dbIndex === item.index){ // check if on the same collection where the image was deleted 
 				imageDB.splice(item.indexOfImage,0,item.imageURL); // add the item back into the collection it was deleted from 
 				applyChanges();
-				List();
-				$('#'+item.indexOfImage).on('load',function(){
-					jumpToElementByScrollPosition(document.getElementById(""+item.indexOfImage+""));
-				}).on('loadeddata',function(){
+				List(false,function(){
 					jumpToElementByScrollPosition(document.getElementById(""+item.indexOfImage+""));
 				});
 				// notification. Update on trash, how many items left. If empty, just say that.				
