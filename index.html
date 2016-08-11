@@ -34,14 +34,19 @@
 			<button class="rounded" id="btnDeleteCollection">Delete</button>
 			<button class="rounded" id="btnExport">Export All</button>
 			
-			<button class="rounded" id="btnSettings">Settings</button>
+			<span id="rightSideButtonsContainer">
+				<button class="rounded" id="btnSettings">Settings</button>
+				<button class="rounded" id="btnHelp">Help</button>
+			</span>
 		</div>
 	</div>
 </div>
 
 <div class="spacer" id="top"></div>
 
-<div id="imageList"></div>
+<div id="imageList">
+<!--columns generated here!-->
+</div>
 
 <div class="spacer" id="bottom"></div>
 <div class="collectionFooter">
@@ -93,6 +98,20 @@
 		
 		</div>
 	</div>
+	<div class="dialogue" id="d_Help">
+		<h1>Help</h1>
+		<button class="closeButton">X</button>
+		<div id="helpIndexTabStrip">
+			<span class="helpIndexItem" id="help_index_0">Start</span>
+			<span class="helpIndexItem" id="help_index_1">Collections</span>
+		</div>
+		<div id="helpContent"></div>
+		<button class="okbutton">OK</button>
+	</div>
+</div>
+
+<div id="highlight">
+
 </div>
 
 <div id="volumeSliderDialogContainer">
@@ -112,6 +131,10 @@
 	<div id="fsVolumeSliderContainer">
 		<div id="fsVolumeSlider"></div>
 	</div>
+</div>
+
+<div id="helpTipsContainer">
+
 </div>
 
 </body>
