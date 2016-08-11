@@ -3,6 +3,7 @@ var changeCollection=function(new_index){
 	dbIndex = new_index;
 	imageDB = DATABASE[dbIndex];
 	$("#collectionFooter").text(collections[dbIndex]);
+	document.title = collections[dbIndex];
 	localStorage.setItem("last_visited_index",dbIndex); // saves the state AKA the last collection you had open
 	if(imageDB==null){
 		imageDB = [];
