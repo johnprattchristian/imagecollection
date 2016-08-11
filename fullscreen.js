@@ -159,53 +159,47 @@ var matchVideoCurrentTimes = function(goingFullscreen){
 var tmStartAnimation = 0;
 var highlightElement = function(element,bigversion){
 	//clearTimeout(tmHideHighlight);
-	var type = 'img';
 	var highlight = $('#highlight');
 	var $element = $(element);
-	if($element.is('video')){
-		type = 'video';
-	}
+	
 	clearTimeout(tmStartAnimation);
 	tmStartAnimation = setTimeout(function(){
-			// clone the element into the highlight animation div
-			$element.clone(false)
-			.off()
-			.css({
-				height:'100%',
-				width:'auto',
-				position:'relative'
-			}).appendTo(highlight);
-			// set the default state of highlight BEFORE animation:
-			highlight.css({
-				width:window.innerWidth,
-				height:window.innerHeight,
-				top:$(document).scrollTop(),
-				left:'0px',
-				backgroundColor:('rgba(0,0,0,0)')
-			//wrap it in <center> for easy centering:
-			}).wrap('<center/>').show();
-		if(highlight.children().eq(0).is('img')){
-				highlight.children().on('load',function(){
-					// the position / size to animate TO:
-					var animatePos = {
-						width:$element.parent().width(),
-						height:$element.parent().height(),
-						top:$element.parent().offset().top,
-						left:$element.parent().offset().left
-					}
-					highlight.stop(true,true) // stop any currently playing animations
-					.animate({
-							width:animatePos.width,
-							height:animatePos.height,
-							top:animatePos.top,
-							left:animatePos.left
-					},400,function(){
-						highlight.hide().children().remove(); // hide the "highlight" element and delete the image on it
-					});
+		var $elementClone = $element.clone(false);
+		$elementClone.off()
+		.css({
+			height:'100%',
+			width:'auto',
+			position:'relative'
+		}).appendTo(highlight);
+	
+		// clone the element into the highlight animation div
+		if($element.is('img')){
+			highlight.children().on('load',function(){
+				// the position / size to animate TO:
+				var animatePos = {
+					width:$element.parent().width(),
+					height:$element.parent().height(),
+					top:$element.parent().offset().top,
+					left:$element.parent().offset().left
+				}
+				highlight.stop(true,true) // stop any currently playing animations
+				.animate({
+						width:animatePos.width,
+						height:animatePos.height,
+						top:animatePos.top,
+						left:animatePos.left
+				},400,function(){
+					highlight.hide().children().remove(); // hide the "highlight" element and delete the image on it
 				});
+			});
 		}
-		else {
-				
+		else if($element.is('video')){
+			
+			highlight.children().on('canplay',function(){
+			log(this);
+			this.currentTime = element.currentTime;
+			$(this).on('seeked',function(){
+				log(this.currentTime);
 					var animatePos = {
 						width:$element.parent().width(),
 						height:$element.parent().height(),
@@ -218,12 +212,23 @@ var highlightElement = function(element,bigversion){
 							height:animatePos.height,
 							top:animatePos.top,
 							left:animatePos.left
-					},200,function(){
+					},400,function(){
 						highlight.hide().children().remove();
 					});
+				});
+			});
 		}
-	},10);
-	// Wait, and then fadeOut and remove() the highlight element
+		// set the default state of highlight BEFORE animation:
+		highlight.css({
+			width:window.innerWidth,
+			height:window.innerHeight,
+			top:$(document).scrollTop(),
+			left:'0px',
+			backgroundColor:('rgba(0,0,0,0)')
+		//wrap it in <center> for easy centering:
+		}).wrap('<center/>').show();
+	},0);
+	// Wait 10ms, and then hide and remove() the highlight element
 	//tmHideHighlight = setTimeout(function(){highlight.fadeOut('slow',function(){highlight.remove()})},100); 
 };
 
