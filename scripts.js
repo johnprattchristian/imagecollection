@@ -1,3 +1,8 @@
+// Console.log() shortcut function:
+var log = function(message){
+		console.log(message);
+};
+
 $(document).ready(function(){
 	
 /* INITIALIZATION */
