@@ -595,13 +595,16 @@ textarea#txtEditCaption{
 	padding:10px;
 }
 
-.helpIndexItem{
+.droplet{
 	display:inline-block;
+	padding:5px;
+	border-radius:4px;
+}
+
+.helpIndexItem{
 	margin-right:2px;
 	font-size:12pt;
 	border:solid 1px gray;
-	padding:5px;
-	border-radius:4px;
 }
 .helpIndexItem:hover{
 	background-color:rgba(100,100,100,0.5);
