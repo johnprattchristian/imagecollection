@@ -155,13 +155,6 @@ $(document).ready(function(){
 	});
 	
 	
-	$('.rounded').on('mousedown',function(){
-		$(this).css({backgroundColor:'rgba(90,90,90,0.6)'});
-	});
-	$('.rounded').on('mouseup',function(){
-			
-		$(this).css({backgroundColor:''});
-	});
 	
 });
 

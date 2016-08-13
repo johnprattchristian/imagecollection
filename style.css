@@ -119,24 +119,33 @@ h1{
 
 #inputForm{
 	width:100%;
-	//border:solid 5px red;
 }
 
-#inputForm input,#inputForm button,#inputForm select,#inputForm option{
+#inputForm input,#inputForm select,#inputForm option{
 	font-size:12pt;
 	padding:10px;
 }
 
-#inputForm button{
+.superButton{
 	height:42px;
-	padding-right:15px;
-	padding-left:15px;
+	padding:0px 15px;
 	background-color:rgba(0,0,0,0.9);
 	border:solid 1px silver;
+	color:whitesmoke;
+	font-size:12pt;
+	
 }
 
-#inputForm button:hover{
+.superButton:hover{
 	background-color:rgba(60,60,60,0.9);
+}
+
+.superButton:active{
+	background-color:rgba(90,90,90,0.6);
+}
+
+.pressed{
+	background-color:red;
 }
 
 #txtInput{
@@ -150,15 +159,9 @@ h1{
 }
 
 .rounded{
-	border:none;
 	border-radius:7px;
-	background-color:#333333;
-	color:whitesmoke;
-	padding:12px 20px;
 }
-.rounded:hover{
-	background-color:gray;
-}
+
 button:focus{
 	outline:0;
 }
@@ -167,6 +170,12 @@ button:focus{
 	width:12em;
 	opacity:0.9;
 }
+
+#collectionsContainer{
+	position:absolute;
+	
+}
+
 #rightSideButtonsContainer{
 	float:right;
 	margin-right:50px;
@@ -471,9 +480,14 @@ span.captionText{
 
 .dialogue button{
 	border:none;
-	border-radius:7px;
 	background-color:#333333;
 	color:whitesmoke;
+	
+}
+
+.okbutton{
+	border:none;
+	border-radius:7px;
 	padding:12px 20px;
 }
 .dialogue button:hover{
