@@ -242,7 +242,7 @@ button:focus{
 	/*max-height:700px;*/
 	width:100%;
 	
-	border-radius:15px;
+	/*border-radius:15px;
 	/* border:solid 10px red; 
 	*/
 }
@@ -259,9 +259,10 @@ button:focus{
 
 .caption{
 	position:absolute;
-	bottom:5px;
+	bottom:3px;
+	/*bottom:5px;
 	border-bottom-right-radius:15px;
-	border-bottom-left-radius:15px;
+	border-bottom-left-radius:15px;*/
 	padding:10px;
 	width:100%;
 	background-color:rgba(0,0,0,0.8);
@@ -495,7 +496,7 @@ span.captionText{
 	white-space:pre-line;
 }
 
-.dialogue .closeButton{
+.closeButton{
 	position:absolute;
 	border:none;
 	border-radius:7px;
@@ -512,6 +513,10 @@ span.captionText{
 .closeButton:hover{
 	border-color:silver;
 	color:silver;
+}
+
+.closeButton:active{ /*pressed*/
+	background-color:darkgray;
 }
 
 .btnEditCaption{
