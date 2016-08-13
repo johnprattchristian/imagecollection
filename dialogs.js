@@ -221,7 +221,9 @@ var helpDialogue = function(){
 	$('.helpIndexItem').eq(0).click();
 };
 
-$(function(){
+$(document).ready(function(){
+
+	
 	$('.okbutton').click(function(){
 		hideDialogue();
 	});
