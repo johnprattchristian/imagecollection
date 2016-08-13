@@ -129,7 +129,7 @@ $(document).ready(function(){
 	});
 	
 	var collectionsButtonClicked = false;
-	var slidespeed = 100;
+	var slidespeed = 50;
 	
 	$('#btnCollections').on('click',function(){
 		if(collectionsButtonClicked==false){
@@ -143,6 +143,17 @@ $(document).ready(function(){
 			collectionsButtonClicked = false;
 		}
 	});
+	
+	
+	$('.collectionItem').on('click',function(){
+		$('.collectionItem').removeClass('collectionItemClicked');
+		$(this).addClass('collectionItemClicked');
+		changeCollection($(this).index());
+		$('#btnCollections').click();
+	});
+	
+	$('#collectionsContainer').hide();
+	$('.collectionItem').eq(dbIndex).click();
 	
 // KEYDOWN/PRESS Event Handlers
 	// Capture "ENTER" key for textbox (alt entering method to the submit button)
@@ -169,7 +180,7 @@ $(document).ready(function(){
 		}
 	});
 	
-	
+
 	
 });
 

@@ -41,21 +41,21 @@ var Delete = function(domElement = null){
 var popDropdown = function(){
 	
 
-		$("#dropdown").html("");
+		/*$("#dropdown").html("");
 		for(var c in collections){
 				$("#dropdown").append("<option>"+collections[c]+"</option>");
 			
 		}
 		$("#dropdown").append("<option>new collection...</option>");
 		
-		document.getElementById("dropdown").selectedIndex=dbIndex;
+		document.getElementById("dropdown").selectedIndex=dbIndex;*/
 		
 		// New Code:
 		
 		var container = $('#collectionsContainer');
 		container.html("");
 		for(var c in collections){
-			$(container.append('<span class="droplet collectionItem">'+collections[c]+'</span>'));
+			$(container.append('<span class="collectionItem">'+collections[c]+'</span>'));
 		}
 };
 

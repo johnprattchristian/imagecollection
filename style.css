@@ -173,20 +173,41 @@ button:focus{
 
 #collectionsUIParent{
 	position:relative;
-	border:solid 5px red;
 	display:inline-block;
 }
 
 #collectionsContainer{
 	display:inline-block;
-	position:absolute;
-	background-color:black;
+	position:fixed;
+	background-color:rgba(0,0,0,0.8);
+	box-shadow:0px 2px 4px black;
 	left:0px;
-	top:62px;
+	top:64px;
 	box-sizing:border-box;
 	padding:20px;
-	width:300px;
-	height:400px;
+	width:100%;
+}
+
+.collectionItem{
+	border:solid 1px gray;
+	margin-right:5px;
+	margin-bottom:5px;
+	border-radius:10px;
+	display:inline-block;
+	padding:10px;
+	color:white;
+}
+
+.collectionItem:hover{
+	background-color:rgba(100,100,100,0.5);
+}
+
+.collectionItemClicked{
+	background-color:rgba(120,120,120,1);
+}
+
+.collectionItemClicked:hover{
+	background-color:rgba(140,140,140,1);
 }
 
 #rightSideButtonsContainer{
