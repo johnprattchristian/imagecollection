@@ -49,6 +49,14 @@ var popDropdown = function(){
 		$("#dropdown").append("<option>new collection...</option>");
 		
 		document.getElementById("dropdown").selectedIndex=dbIndex;
+		
+		// New Code:
+		
+		var container = $('#collectionsContainer');
+		container.html("");
+		for(var c in collections){
+			$(container.append('<span class="droplet collectionItem">'+collections[c]+'</span>'));
+		}
 };
 
 var tm_afterlistcallback = 0;
