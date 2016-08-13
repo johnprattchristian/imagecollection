@@ -90,7 +90,7 @@ $(document).ready(function(){
 	});
 	
 	/* CALLED AT THE BEGINNING OF PROGRAM>>>>>>>>>>>>>>>>>>>>>>>>>>> */ 
-	List(); 
+	List(true); 
 	popDropdown();
 	
 	

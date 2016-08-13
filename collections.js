@@ -9,7 +9,7 @@ var changeCollection=function(new_index){
 		imageDB = [];
 	}
 	applyChanges();
-	List();
+	List(true); // with animations
 	$('#txtInput').focus();
 };
 
