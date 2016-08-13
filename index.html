@@ -29,16 +29,21 @@
 		<button class="rounded" id="btnSubmit">Add</button>
 		<button class="rounded" id="btnUndo">Undo</button>
 		<div id="divCollections">
-			<select id="dropdown"></select>
-			<button class="rounded" id="btnRenameCollection">Edit</button>
-			<button class="rounded" id="btnDeleteCollection">Delete</button>
-			<button class="rounded" id="btnExport">Export All</button>
-			
-			<span id="rightSideButtonsContainer">
-				<button class="rounded" id="btnSettings">Settings</button>
-				<button class="rounded" id="btnHelp">Help</button>
+		<span id="divCollections">
+		
+			<span id="collectionsUIParent">
+				<button class="rounded superButton" id="btnCollections">Collections</button>
+				<div id="collectionsContainer">
+					<!--collections here!-->
+					Collections here;
+				</div>
 			</span>
-		</div>
+			<select id="dropdown"></select>
+			<button class="rounded superButton" id="btnRenameCollection">Edit</button>
+			<button class="rounded superButton" id="btnDeleteCollection">Delete</button>
+			<button class="rounded superButton" id="btnExport">Export All</button>
+			
+		</span>
 	</div>
 </div>
 
@@ -71,14 +76,14 @@
 			<option>JSON</option>
 			<option>Image Collection</option>
 		</select>
-		<button class="closeButton">X</button>
+		<button class="closeButton">x</button>
 		<span style="display:block">Just copy and paste the text below and save it to a file. Hit <strong>[ESC]</strong> to close this dialogue</span>
 		<div id="exportCode">
 		</div>
 	</div>
 	<div class="dialogue" id="d_EditCaption">
 		<h1>Caption</h1>
-		<button class="closeButton">X</button>
+		<button class="closeButton">x</button>
 		<div id="captionThumbContain">
 		<img id="editCaptionThumbnail"></img>
 		</div><br>
@@ -88,13 +93,13 @@
 	</div>
 	<div class="dialogue" id="d_RenameCollection">
 		<h1 id="dialogue_title">Rename Collection</h1>
-		<button class="closeButton">X</button>
+		<button class="closeButton">x</button>
 			<span id="span_instructions" style="display:block">Change the collection name.</span><br>
 			<input type="text" id="txtRenameCollection"></input>
 		<button class="okbutton" id="btnOK_RenameCollection">OK</button>
 	</div>
 	<div class="dialogue" id="d_Settings">
-		<h1>Settings</h1><button class="closeButton">X</button>
+		<h1>Settings</h1><button class="closeButton">x</button>
 		<span id="span_instructions">Change your preferences below.</span>
 		<div id="settingsContainer">
 		
@@ -102,7 +107,7 @@
 	</div>
 	<div class="dialogue" id="d_Help">
 		<h1>Help</h1>
-		<button class="closeButton">X</button>
+		<button class="closeButton">x</button>
 		<div id="helpIndexTabStrip">
 			<span class="helpIndexItem" id="help_index_0">Starting off</span>
 			<span class="helpIndexItem" id="help_index_1">Videos</span>

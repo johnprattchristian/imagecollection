@@ -37,7 +37,7 @@ a:visited{
 	position:fixed;
 	left:0px;
 	top:0px;
-	padding:20px;
+	padding:10px 20px;
 	background-color:rgba(50,50,50,0.4);
 	/*background-color:rgba(0,0,0,0.4);*/
 	border:solid 1px silver;
@@ -171,9 +171,22 @@ button:focus{
 	opacity:0.9;
 }
 
+#collectionsUIParent{
+	position:relative;
+	border:solid 5px red;
+	display:inline-block;
+}
+
 #collectionsContainer{
+	display:inline-block;
 	position:absolute;
-	
+	background-color:black;
+	left:0px;
+	top:62px;
+	box-sizing:border-box;
+	padding:20px;
+	width:300px;
+	height:400px;
 }
 
 #rightSideButtonsContainer{

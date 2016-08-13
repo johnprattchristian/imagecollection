@@ -128,6 +128,21 @@ $(document).ready(function(){
 		Undo();
 	});
 	
+	var collectionsButtonClicked = false;
+	var slidespeed = 100;
+	
+	$('#btnCollections').on('click',function(){
+		if(collectionsButtonClicked==false){
+			$(this).css({backgroundColor:'gray'});
+			$('#collectionsContainer').slideDown(slidespeed);
+			collectionsButtonClicked = true;
+		}
+		else{
+			$(this).css({backgroundColor:'black'});
+			$('#collectionsContainer').slideUp(slidespeed);
+			collectionsButtonClicked = false;
+		}
+	});
 	
 // KEYDOWN/PRESS Event Handlers
 	// Capture "ENTER" key for textbox (alt entering method to the submit button)
