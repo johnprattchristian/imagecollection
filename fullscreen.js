@@ -2,12 +2,10 @@ var iterating = false; // decide if iterating the slideshow or just jumping into
 
 // function to test if fullscreen
 var Fullscreen = function(){
-	if(window.innerHeight == screen.height && window.innerWidth == screen.width){
+	if($('#FullScreenView').width() === screen.width){
 		return true;
 	}
-	else{
-		return false;
-	}
+	return false;
 }
 
 // removes video and img elements in the fullscreenView parent element, so as to retain the #fullscreenNotifications
@@ -19,6 +17,7 @@ var removeFullScreenChildren = function(){
 
 var goFullscreen = function(){
 	var element = document.getElementById('FullScreenView');
+	
 	if(element.requestFullscreen) {
 		element.requestFullscreen();
 	  } else if(element.mozRequestFullScreen) {
@@ -28,7 +27,8 @@ var goFullscreen = function(){
 	  } else if(element.msRequestFullscreen) {
 		element.msRequestFullscreen();
 	  }
-	  
+	 
+	$('#FullScreenView').css('visibility','visible');
 	
 };
 	
@@ -38,16 +38,16 @@ var fullscreenImage = function(img){
 	var element = document.getElementById("FullScreenView");
 	//element.style.visibility="visible";
 	element.style.backgroundImage='url('+img.getAttribute("src")+')';
-	$(element).css("background-color","rgba(100,100,100,0.4");
-	if (!window.screenTop && !window.screenY) { // not already fullscreen, right?
+	$(element).css("background-color","black");
+	if (Fullscreen() == false) { // not already fullscreen, right?
 	
 		goFullscreen();
 		
-		if(getSetting('fullscreenCaptions') === true){
+		if(getSetting('fullscreenCaptions').value === true){
 			notify(imageDB[selected_index].caption);
 		}
-		
 	}
+	
 };
 
 var fullscreenVideo = function(vid){
@@ -67,12 +67,13 @@ var fullscreenVideo = function(vid){
 		matchVideoCurrentTimes(true);
 	}
 
-	if (!window.screenTop && !window.screenY) {			  
+	if (Fullscreen() == false) {			  
 		
 		goFullscreen();
 		if(getSetting('fullscreenCaptions').value){
 			notify(imageDB[selected_index].caption);
 		}
+		
 	}
 	
 	checkMuted();
@@ -84,6 +85,7 @@ var IterateSlideshow = function(direction){
 		var nextElemId = parseInt(currentFSElement.getAttribute("id"))-direction; // the id of the element to switch to
 		var element = null;
 		iterating = true;
+		
 		
 		if (direction>0){
 			if(nextElemId > -1){ // if not reached the end of the collection, proceed (direction increment correlates with id decrement)
@@ -120,7 +122,6 @@ var IterateSlideshow = function(direction){
 var currentFSfalse = function(){
 		//alert("got fullscreen request")
 		currentFSElement = false;
-		$("#FullScreenView").css("visibility","hidden");
 };
 	
 // jumps to an element on the page purely by scrolling to its position
@@ -145,6 +146,9 @@ var exitFullScreen = function()
         document.mozCancelFullScreen();
     else if (document.webkitExitFullscreen)
         document.webkitExitFullscreen();
+	
+	$('#FullScreenView').css('visibility','hidden');
+	
 };
 
 var matchVideoCurrentTimes = function(goingFullscreen){
@@ -234,30 +238,30 @@ var highlightElement = function(element,bigversion){
 
 
 $(document).ready(function(){
-	$(document).bind("exitFullscreen msExitFullscreen mozCancelFullScreen webkitExitFullscreen",currentFSfalse());
+	$(document).bind("exitFullscreen msExitFullscreen mozCancelFullScreen webkitExitFullscreen",function(){
+		currentFSfalse();
+	});
 	$(document).on("fullscreenchange mozfullscreenchange msfullscreenchange webkitfullscreenchange",function(){
-			if($("#FullScreenView").css("visibility")=="visible"){
-				$("#FullScreenView").css("visibility","hidden");
-			 // clears everything inside the fullScreenView object
+			if(Fullscreen()===false){
 				// jumps to the last slideshow-ed image outside of full screen view:
-				// jumpToElementById(currentFSElement); NO LONGER RELEVANT
 				
 				notifs.hide();
-				iterating = false; // reset this variable
+				iterating = false; // reset this variable for slideshow iterating
 				if('#FullScreenView video'){
 					matchVideoCurrentTimes(false);
 					Unmute(currentFSElement);
 				}
 				
-				removeFullScreenChildren(); // clear the fullscreen parent
+				removeFullScreenChildren(); // clear the fullscreen parent				
+				// jumpToElementByScroll
 				jumpToElementByScrollPosition(currentFSElement,highlightElement(currentFSElement));
 				
-			}
-			else{
-				$("#FullScreenView").css("visibility","visible");
+				
 			}
 
 	});
+	
+
 
 	//Fullscreen click events
 	$('#FullScreenView')
@@ -273,7 +277,7 @@ $(document).ready(function(){
 				alert("middle button!");
 				if(document.webkitExitFullscreen){
 					e.preventDefault();
-					document.webkitExitFullscreen();
+					exitFullScreen();
 				}
 			}
 		})
@@ -286,7 +290,7 @@ $(document).ready(function(){
 	$(window).on("keydown",function(e){
 		
 		// Fullscreen only
-		if(Fullscreen){
+		if(Fullscreen()){
 			
 			//RIGHT ARROW KEY DOWN (fullscreen)
 			if(e.which==39 && !e.shiftKey){
@@ -300,8 +304,9 @@ $(document).ready(function(){
 			else if(e.which==27){
 				
 				setTimeout(function(){
-					$("#FullScreenView").css("visibility","hidden");
+					exitFullScreen();
 				},100)
+				
 			}
 
 		}
@@ -311,7 +316,7 @@ $(document).ready(function(){
 	});
 	
 	$('#btnExitFullscreen').click(function(){
-		exitFullScreen();		
+		exitFullScreen();
 	});
 });
 		
