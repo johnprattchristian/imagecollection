@@ -10,7 +10,7 @@ $(document).ready(function(){
 	// Initial functions:
 	// Focus on the TEXT input when the page opens
 	$("#txtInput").focus();
-	$("#collectionFooter").text(collections[dbIndex]);
+	$("#collectionTitleSpan").html(collections[dbIndex]);
 	$('#dialogueParent').hide(); // Hide the export dialogue box
 	
 /* DONE INITIALIZING */
@@ -29,64 +29,28 @@ $(document).ready(function(){
 		exportCollections();
 	});	
 	
-// SELECT CHANGED from the collections dropdown 
-	$("#dropdown").bind("change",function(){
-		if(this.selectedIndex==this.length-1){
-			newCollection(); // create a new one
-			
-		}
-		else{
-			// Select an already-made collection
-			//alert(this.selectedIndex);
-			changeCollection(this.selectedIndex);
-			
-		}
-		
-	});
-	
-	$("#btnRenameCollection").bind("click",function(){
-		
+	var openDialogRenameCollection = function(){
 		showDialogue('d_RenameCollection'); // Rename collection dialogue
 		var txtbx = $('#txtRenameCollection');
 		txtbx.val(collections[dbIndex]); // set the textbox to the current collection name
 		txtbx.focus();
 		txtbx.select();
+	}
+	
+	$("#btnRenameCollection").bind("click",function(){
+		
+		openDialogRenameCollection();
 		
 	});
-		
+	
+	$('#btnEditCollection').on('click',function(){
+		openDialogRenameCollection();
+	});
+	
+	$('#collectionTitleSpan').on('click',function(){
+		$('body').animate({scrollTop:0},500);
+	});
 
-// DELETE a collection
-	var deleteCollection=function(){
-		var really = confirm("Are you sure you want to delete '"+collections[dbIndex]+"'?");
-			if (collections.length>1&&dbIndex!=0){
-				if(really){
-					var new_deleted = {
-						restoreType:"deleted_collection",
-						index:dbIndex,
-						collectionName:collections[dbIndex],
-						collectionContent:imageDB
-					};
-					_history.push(new_deleted); // push the new _history state for undo
-					DATABASE.splice(dbIndex,1); //delete the collection from DATABASE
-					collections.splice(dbIndex,1); // remove its name from collection_names
-					localStorage.setItem("collection_names",JSON.stringify(collections));
-					localStorage.setItem("imageDB",JSON.stringify(DATABASE));
-					changeCollection(dbIndex-1); // Now that this doesn't exist, go back 1 collection 
-					popDropdown(); // refresh the dropdown of collections
-					
-					setTimeout(notify('"' + new_deleted.collectionName + '" deleted',"warning"),100);
-					return;
-					
-					
-				}
-				else{
-					return;
-				}
-			}
-			else{
-				alert("Cannot delete the Default collection!"); // this is to preserve the indexing of collections
-			}
-	};
 	
 	$("#btnDeleteCollection").on("click",function(){
 		deleteCollection();
