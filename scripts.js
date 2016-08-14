@@ -46,7 +46,11 @@ $(document).ready(function(){
 	
 	$("#btnRenameCollection").bind("click",function(){
 		
-		renameCollection();
+		showDialogue('d_RenameCollection'); // Rename collection dialogue
+		var txtbx = $('#txtRenameCollection');
+		txtbx.val(collections[dbIndex]); // set the textbox to the current collection name
+		txtbx.focus();
+		txtbx.select();
 		
 	});
 		
@@ -90,7 +94,7 @@ $(document).ready(function(){
 	});
 	
 	/* CALLED AT THE BEGINNING OF PROGRAM>>>>>>>>>>>>>>>>>>>>>>>>>>> */ 
-	List(true); 
+	List(true);
 	popDropdown();
 	
 	
@@ -131,29 +135,14 @@ $(document).ready(function(){
 	var collectionsButtonClicked = false;
 	var slidespeed = 50;
 	
+	
+	
 	$('#btnCollections').on('click',function(){
-		if(collectionsButtonClicked==false){
-			$(this).css({backgroundColor:'gray'});
-			$('#collectionsContainer').slideDown(slidespeed);
-			collectionsButtonClicked = true;
-		}
-		else{
-			$(this).css({backgroundColor:'black'});
-			$('#collectionsContainer').slideUp(slidespeed);
-			collectionsButtonClicked = false;
-		}
-	});
-	
-	
-	$('.collectionItem').on('click',function(){
-		$('.collectionItem').removeClass('collectionItemClicked');
-		$(this).addClass('collectionItemClicked');
-		changeCollection($(this).index());
-		$('#btnCollections').click();
+		toggleCollections();
 	});
 	
 	$('#collectionsContainer').hide();
-	$('.collectionItem').eq(dbIndex).click();
+	selectCollectionItem(dbIndex);
 	
 // KEYDOWN/PRESS Event Handlers
 	// Capture "ENTER" key for textbox (alt entering method to the submit button)
@@ -183,4 +172,3 @@ $(document).ready(function(){
 
 	
 });
-

@@ -129,15 +129,20 @@ h1{
 .superButton{
 	height:42px;
 	padding:0px 15px;
-	background-color:rgba(0,0,0,0.9);
+	background-color:rgba(100,100,100,0.4);
 	border:solid 1px silver;
-	color:whitesmoke;
+	color:white;
 	font-size:12pt;
 	
 }
 
 .superButton:hover{
-	background-color:rgba(60,60,60,0.9);
+/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,ffffff+100&0.4+0,0.67+100 */
+background: -moz-linear-gradient(top,  rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.4) 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(top,  rgba(255,255,255,0.2) 0%,rgba(255,255,255,0.4) 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to bottom,  rgba(255,255,255,0.2) 0%,rgba(255,255,255,0.4) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#66ffffff', endColorstr='#abffffff',GradientType=0 ); /* IE6-9 */
+
 }
 
 .superButton:active{
@@ -145,7 +150,13 @@ h1{
 }
 
 .pressed{
-	background-color:red;
+	background:rgba(50,50,50,0.8);
+}
+.pressed:hover{
+	background:rgba(50,50,50,0.8);
+}
+.pressed:active{
+	background:rgba(50,50,50,0.8);
 }
 
 #txtInput{
@@ -177,6 +188,7 @@ button:focus{
 }
 
 #collectionsContainer{
+	font-size:10pt;
 	display:inline-block;
 	position:fixed;
 	background-color:rgba(0,0,0,0.8);
@@ -184,8 +196,18 @@ button:focus{
 	left:0px;
 	top:64px;
 	box-sizing:border-box;
-	padding:20px;
+	padding:7px;
+	padding-right:5px;
 	width:100%;
+	
+	
+	
+/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#959595+0,0d0d0d+32,010101+50,0a0a0a+53,4e4e4e+83,383838+87,1b1b1b+100&0.34+0,0.63+100 */
+background: -moz-linear-gradient(top,  rgba(149,149,149,0.34) 0%, rgba(13,13,13,0.43) 32%, rgba(1,1,1,0.48) 50%, rgba(10,10,10,0.49) 53%, rgba(78,78,78,0.58) 83%, rgba(56,56,56,0.59) 87%, rgba(27,27,27,0.63) 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(top,  rgba(149,149,149,0.34) 0%,rgba(13,13,13,0.43) 32%,rgba(1,1,1,0.48) 50%,rgba(10,10,10,0.49) 53%,rgba(78,78,78,0.58) 83%,rgba(56,56,56,0.59) 87%,rgba(27,27,27,0.63) 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to bottom,  rgba(149,149,149,0.34) 0%,rgba(13,13,13,0.43) 32%,rgba(1,1,1,0.48) 50%,rgba(10,10,10,0.49) 53%,rgba(78,78,78,0.58) 83%,rgba(56,56,56,0.59) 87%,rgba(27,27,27,0.63) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#57959595', endColorstr='#a11b1b1b',GradientType=0 ); /* IE6-9 */
+
 }
 
 .collectionItem{
@@ -210,6 +232,19 @@ button:focus{
 	background-color:rgba(140,140,140,1);
 }
 
+#btnNewCollection{
+	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#008a00+23,005700+100 */
+color:white;
+background-color:rgba(0,100,20,0.5);
+padding-left:15px;padding-right:15px;
+}
+#btnNewCollection:hover{
+	background-color:rgba(0,100,20,0.8);
+}
+#btnNewCollection:active{
+	background-color:rgba(20,100,20,0.9);
+}
+
 #rightSideButtonsContainer{
 	float:right;
 	margin-right:50px;
@@ -227,6 +262,7 @@ button:focus{
 .spacer#top{
 	top:0px;
 	left:0px;
+	height:120px;
 }
 .spacer#bottom{
 	
@@ -482,6 +518,7 @@ span.captionText{
 	top:0px;
 	left:0px;
 	z-index:3;
+	display:none;
 }
 
 .dialogue{
@@ -573,6 +610,13 @@ span.captionText{
 	padding:3px;
 	margin-right:5px;
 	background-color:rgba(0,0,0,0.4);
+	border:none;
+	color:gray;
+}
+
+.btnEditCaption:hover{
+	color:whitesmoke;
+	background-color:rgba(20,20,20,1);
 }
 
 #selectExportType{

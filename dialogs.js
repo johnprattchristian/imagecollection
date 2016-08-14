@@ -150,15 +150,6 @@ var editImageCaption = function(){
 	text_edit.select();
 };
 
-// RENAME current collection
-var renameCollection=function(){
-	showDialogue('d_RenameCollection'); // Rename collection dialogue
-	var txtbx = $('#txtRenameCollection');
-	txtbx.val(collections[dbIndex]); // set the textbox to the current collection name
-	txtbx.focus();
-	txtbx.select();
-	
-};
 
 var parseNewCollectionName = function(new_name){
 	if(new_name!=null&&new_name!=""){
@@ -281,29 +272,20 @@ $(document).ready(function(){
 		}
 	});
 	
+	var submitRenameCollection = function(){
+		renameCollection($('#txtRenameCollection').val());
+		log('txtrename value is ' + $('#txtRenameCollection').val());
+		hideDialogue();
+	}
 	
 	$("#txtRenameCollection").on("keydown",function(e){
 		if(e.which === 13){
-			$('#btnOK_RenameCollection').click();
+			submitRenameCollection();
 		}
 	});
 	
 	$('#btnOK_RenameCollection').click(function(){
-		var new_name = $('#txtRenameCollection').val();
-		var old_name = collections[dbIndex];
-		// change collection name only if new name is a an actual name and not the old name
-		if(new_name !== "" && new_name !== null && new_name !== old_name){
-			collections[dbIndex] = new_name;
-			localStorage.setItem("collection_names",JSON.stringify(collections));
-			popDropdown();
-			changeCollection(dbIndex);
-			
-			//notification
-			notify('Renamed "' + old_name + '" to "' + new_name + '"',"good");
-			// store old collection name in _history
-			_history.push({restoreType:"collection_name",collection_index:dbIndex,name:old_name});
-		}
-		hideDialogue();
+		submitRenameCollection();
 	});
 	
 	// magically resize Edit Caption thumbnail img
