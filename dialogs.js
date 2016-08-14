@@ -47,8 +47,14 @@ var exportCode = function(exportType){
 		$(collections).each(function(d,ditem){ // each collection
 			exportObject.append('<h2>'+ditem+'</h2>'); // collection name
 			$(DATABASE[d]).each(function(i,item){ // each item in the collection
+				var url = (UpToDate(item) ? item.url : item);
+				var caption = (item.caption ? item.caption : item);
+				
 				console.log((UpToDate(item) ? 'item is up to date. Item url is' + item.url : 'item is not up to date'))
-				exportObject.append('<a href="' + (UpToDate(item) ? item.url : item) + '">'+ (item.caption ? item.caption : item) +'</a><p>');
+				exportObject.append('<div style="display:inline-block;border:solid 1px gray;width:200px;margin:0px;">'+
+				'<a href="' + url + '">'+
+				'<img style="width:200px;height:auto;" src="' + url + '"/></a></br>'+
+				'<caption style="display:block;word-wrap:break-word;overflow-wrap:break-word;word-break:break-word;white-space:nowrap">'+ caption + '</caption></div>');
 			});
 		});
 	}
