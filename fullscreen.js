@@ -200,10 +200,8 @@ var highlightElement = function(element,bigversion){
 		else if($element.is('video')){
 			
 			highlight.children().on('canplay',function(){
-			log(this);
 			this.currentTime = element.currentTime;
 			$(this).on('seeked',function(){
-				log(this.currentTime);
 					var animatePos = {
 						width:$element.parent().width(),
 						height:$element.parent().height(),
