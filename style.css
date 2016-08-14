@@ -70,6 +70,27 @@ h1{
 	display:inline-block;
 }
 
+#collectionTitleSpan{
+	cursor:pointer;
+}
+
+#btnEditCollection{
+	background:transparent;
+	border:none;
+	color:white;
+	cursor:pointer;
+	text-shadow:2px 2px 0px black;
+	font-size:12pt;
+	margin-left:-25px;
+	;
+	
+}
+
+#btnEditCollection:hover{
+	color:white;
+	font-weight:bold
+}
+
 .Notifications{
 	display:block;
 	position:fixed;
@@ -228,6 +249,17 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#80fcfff4', e
 
 .collectionItemClicked:hover{
 	background:rgba(70,70,70,0.8);
+}
+
+.editCollectionItem{
+	margin-left:5px;
+	color:gray;
+	text-decoration:none;
+	display:none;
+}
+
+.editCollectionItem:hover{
+	text-shadow:1px 1px 1px black;
 }
 
 #btnNewCollection{
@@ -611,14 +643,16 @@ span.captionText{
 	right:0px;
 	padding:3px;
 	margin-right:5px;
-	background-color:rgba(0,0,0,0.4);
+	background-color:transparent;
 	border:none;
 	color:gray;
+	cursor:pointer;
+	font-weight:bold;
+	vertical-align:text-top;
 }
 
 .btnEditCaption:hover{
 	color:whitesmoke;
-	background-color:rgba(20,20,20,1);
 }
 
 #selectExportType{
@@ -713,4 +747,5 @@ textarea#txtEditCaption{
 	bottom:0px;
 	margin-right:20px;
 	margin-bottom:20px;
+	
 }
