@@ -82,13 +82,17 @@ h1{
 	text-shadow:2px 2px 0px black;
 	font-size:12pt;
 	margin-left:-25px;
-	;
+
 	
 }
 
 #btnEditCollection:hover{
 	color:white;
 	font-weight:bold
+}
+
+#btnEditCollection:active{
+	color:gray;
 }
 
 .Notifications{
