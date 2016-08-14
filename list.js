@@ -61,7 +61,7 @@ var List = function(load_animation = false,callback){
 		+ element // the image or video
 		+ /*delete button*/ "<button class='btnDelete' id='delete"+i+"'>x</button>"
 		+"<div class='caption'><span class='captionText'>" + processCaption(imageDB[i])+"</span>"
-		+"<button class='rounded btnEditCaption'>edit</button></div>" // add edit button to image caption
+		+"<button class='btnEditCaption'>&#128393;</button></div>" // add edit button to image caption
 		+"</div>"); // end the imageBox div
 		
 		

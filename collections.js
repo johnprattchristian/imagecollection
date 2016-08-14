@@ -65,6 +65,8 @@ var popDropdown = function(){
 			changeCollection($(this).index());
 		});
 		
+		
+		
 		// append "new collection" button to the end:
 		$(container).append('<span id="btnNewCollection" class="collectionItem">+</span>');
 		
@@ -76,6 +78,7 @@ var popDropdown = function(){
 		});
 		
 		
+		
 };
 
 // CHANGE the current collection
@@ -83,7 +86,7 @@ var changeCollection=function(new_index){
 	dbIndex = new_index;
 	
 	imageDB = DATABASE[dbIndex];
-	$("#collectionFooter").text(collections[dbIndex]);
+	$("#collectionTitleSpan").html(collections[dbIndex]);
 	document.title = collections[dbIndex];
 	localStorage.setItem("last_visited_index",dbIndex); // saves the state AKA the last collection you had open
 	if(imageDB==null || typeof imageDB=='undefined'){
@@ -114,7 +117,41 @@ var newCollection = function(){
 	
 };
 
+// DELETE a collection
+var deleteCollection=function(){
+	var really = confirm("Are you sure you want to delete '"+collections[dbIndex]+"'?");
+		if (collections.length>1&&dbIndex!=0){
+			if(really){
+				var new_deleted = {
+					restoreType:"deleted_collection",
+					index:dbIndex,
+					collectionName:collections[dbIndex],
+					collectionContent:imageDB
+				};
+				_history.push(new_deleted); // push the new _history state for undo
+				DATABASE.splice(dbIndex,1); //delete the collection from DATABASE
+				collections.splice(dbIndex,1); // remove its name from collection_names
+				localStorage.setItem("collection_names",JSON.stringify(collections));
+				localStorage.setItem("imageDB",JSON.stringify(DATABASE));
+				changeCollection(dbIndex-1); // Now that this doesn't exist, go back 1 collection 
+				popDropdown(); // refresh the dropdown of collections
+				
+				setTimeout(notify('"' + new_deleted.collectionName + '" deleted',"warning"),100);
+				return;
+				
+				
+			}
+			else{
+				return;
+			}
+		}
+		else{
+			alert("Cannot delete the Default collection!"); // this is to preserve the indexing of collections
+		}
+};
+
 var renameCollection = function(newname){
+	
 	var new_name = $('#txtRenameCollection').val();
 		var old_name = collections[dbIndex];
 		// change collection name only if new name is a an actual name and not the old name

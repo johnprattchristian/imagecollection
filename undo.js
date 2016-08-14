@@ -8,7 +8,7 @@ var Undo = function(){
 				imageDB.splice(item.indexOfImage,0,item.imageURL); // add the item back into the collection it was deleted from 
 				applyChanges();
 				List(false,function(){
-					jumpToElementByScrollPosition(document.getElementById(""+item.indexOfImage+""));
+					jumpToElementByScrollPosition(document.getElementById(""+item.indexOfImage+""),false,100);
 				});
 				// notification. Update on trash, how many items left. If empty, just say that.				
 				notify("Image restored. " + (_history.length - 1 > 0 ? itemsLeft + ' items left in trash.' : ' Trash is empty.'),"good");
