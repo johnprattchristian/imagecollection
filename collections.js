@@ -1,17 +1,19 @@
 //POPULATE the Dropdown of Collections
 
+var tm_containerSlideUp = 0;
 var selectCollectionItem = function(index){
+	clearTimeout(tm_containerSlideUp);
 	$('.collectionItem').removeClass('collectionItemClicked');
 	$('.collectionItem').eq(index).addClass('collectionItemClicked');
-	toggleCollections();
-
+	tm_containerSlideUp = setTimeout(function(){
+		toggleCollections(100);
+	},100);
 };
 
 
 var collectionsButtonClicked = false;
-var slidespeed = 50;
 
-var toggleCollections = function(){
+var toggleCollections = function(slidespeed = 50){
 	var button = $('#btnCollections');
 	var container = $('#collectionsContainer');
 	
@@ -20,6 +22,8 @@ var toggleCollections = function(){
 		button.children('span').html('&#128314;');
 		//button.css({backgroundColor:'gray'});
 		container.slideDown(slidespeed);
+		
+		$('.spacer#top').animate({height:'130px'},slidespeed);
 		collectionsButtonClicked = true;
 	}	
 	else{
@@ -27,6 +31,7 @@ var toggleCollections = function(){
 		button.children('span').html('&#128315;');
 		//button.css({backgroundColor:'black'});
 		container.slideUp(slidespeed);
+		$('.spacer#top').animate({height:'90px'},slidespeed);
 		collectionsButtonClicked = false;
 	}
 }
@@ -76,7 +81,7 @@ var popDropdown = function(){
 // CHANGE the current collection
 var changeCollection=function(new_index){
 	dbIndex = new_index;
-	selectCollectionItem(dbIndex);
+	
 	imageDB = DATABASE[dbIndex];
 	$("#collectionFooter").text(collections[dbIndex]);
 	document.title = collections[dbIndex];
