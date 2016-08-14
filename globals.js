@@ -36,7 +36,7 @@ $(document).ready(function(){
 	
 	// Database Index
 	 dbIndex = localStorage.getItem("last_visited_index"); // which image collection to fetch?
-	if(dbIndex==null){
+	if(dbIndex==null || dbIndex == -1){
 		dbIndex=0;
 	}
 	

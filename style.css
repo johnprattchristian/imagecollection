@@ -70,6 +70,27 @@ h1{
 	display:inline-block;
 }
 
+#collectionTitleSpan{
+	cursor:pointer;
+}
+
+#btnEditCollection{
+	background:transparent;
+	border:none;
+	color:white;
+	cursor:pointer;
+	text-shadow:2px 2px 0px black;
+	font-size:12pt;
+	margin-left:-25px;
+	;
+	
+}
+
+#btnEditCollection:hover{
+	color:white;
+	font-weight:bold
+}
+
 .Notifications{
 	display:block;
 	position:fixed;
@@ -129,15 +150,20 @@ h1{
 .superButton{
 	height:42px;
 	padding:0px 15px;
-	background-color:rgba(0,0,0,0.9);
+	background-color:rgba(100,100,100,0.4);
 	border:solid 1px silver;
-	color:whitesmoke;
+	color:white;
 	font-size:12pt;
 	
 }
 
 .superButton:hover{
-	background-color:rgba(60,60,60,0.9);
+/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,ffffff+100&0.4+0,0.67+100 */
+background: -moz-linear-gradient(top,  rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.4) 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(top,  rgba(255,255,255,0.2) 0%,rgba(255,255,255,0.4) 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to bottom,  rgba(255,255,255,0.2) 0%,rgba(255,255,255,0.4) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#66ffffff', endColorstr='#abffffff',GradientType=0 ); /* IE6-9 */
+
 }
 
 .superButton:active{
@@ -145,7 +171,13 @@ h1{
 }
 
 .pressed{
-	background-color:red;
+	background:rgba(50,50,50,0.8);
+}
+.pressed:hover{
+	background:rgba(50,50,50,0.8);
+}
+.pressed:active{
+	background:rgba(50,50,50,0.8);
 }
 
 #txtInput{
@@ -173,20 +205,78 @@ button:focus{
 
 #collectionsUIParent{
 	position:relative;
-	border:solid 5px red;
 	display:inline-block;
 }
 
 #collectionsContainer{
+	font-size:10pt;
 	display:inline-block;
-	position:absolute;
-	background-color:black;
+	position:relative
+	background-color:rgba(50,50,50,0.4);
+	/*box-shadow:0px 2px 4px black;*/
 	left:0px;
-	top:62px;
+	top:64px;
 	box-sizing:border-box;
-	padding:20px;
-	width:300px;
-	height:400px;
+	padding-top:15px;
+	width:100%;
+	
+	
+	
+}
+
+.collectionItem{
+	border:solid 1px gray;
+	margin-right:5px;
+	margin-bottom:5px;
+	border-radius:10px;
+	display:inline-block;
+	padding:10px;
+	color:white;
+}
+
+.collectionItem:hover{
+	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#fcfff4+0,e9e9ce+100&0.5+0,0.69+100;Wax+3D+%232 */
+background: -moz-radial-gradient(center, ellipse cover,  rgba(252,255,244,0.5) 0%, rgba(233,233,206,0.69) 100%); /* FF3.6-15 */
+background: -webkit-radial-gradient(center, ellipse cover,  rgba(252,255,244,0.5) 0%,rgba(233,233,206,0.69) 100%); /* Chrome10-25,Safari5.1-6 */
+background: radial-gradient(ellipse at center,  rgba(252,255,244,0.5) 0%,rgba(233,233,206,0.69) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#80fcfff4', endColorstr='#b0e9e9ce',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+
+}
+
+.collectionItemClicked{
+	background-color:rgba(80,80,80,0.8);
+}
+
+.collectionItemClicked:hover{
+	background:rgba(70,70,70,0.8);
+}
+
+.editCollectionItem{
+	margin-left:5px;
+	color:gray;
+	text-decoration:none;
+	display:none;
+}
+
+.editCollectionItem:hover{
+	text-shadow:1px 1px 1px black;
+}
+
+#btnNewCollection{
+	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#008a00+23,005700+100 */
+color:white;
+padding-left:15px;padding-right:15px;
+}
+#btnNewCollection:hover{
+	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#fcfff4+0,e9e9ce+100&0.5+0,0.69+100;Wax+3D+%232 */
+background: -moz-radial-gradient(center, ellipse cover,  rgba(252,255,244,0.5) 0%, rgba(233,233,206,0.69) 100%); /* FF3.6-15 */
+background: -webkit-radial-gradient(center, ellipse cover,  rgba(252,255,244,0.5) 0%,rgba(233,233,206,0.69) 100%); /* Chrome10-25,Safari5.1-6 */
+background: radial-gradient(ellipse at center,  rgba(252,255,244,0.5) 0%,rgba(233,233,206,0.69) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#80fcfff4', endColorstr='#b0e9e9ce',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+
+}
+#btnNewCollection:active{
+	background-color:rgba(20,100,20,0.9);
 }
 
 #rightSideButtonsContainer{
@@ -206,6 +296,7 @@ button:focus{
 .spacer#top{
 	top:0px;
 	left:0px;
+	height:120px;
 }
 .spacer#bottom{
 	
@@ -461,6 +552,7 @@ span.captionText{
 	top:0px;
 	left:0px;
 	z-index:3;
+	display:none;
 }
 
 .dialogue{
@@ -551,7 +643,16 @@ span.captionText{
 	right:0px;
 	padding:3px;
 	margin-right:5px;
-	background-color:rgba(0,0,0,0.4);
+	background-color:transparent;
+	border:none;
+	color:gray;
+	cursor:pointer;
+	font-weight:bold;
+	vertical-align:text-top;
+}
+
+.btnEditCaption:hover{
+	color:whitesmoke;
 }
 
 #selectExportType{
@@ -595,13 +696,16 @@ textarea#txtEditCaption{
 	padding:10px;
 }
 
-.helpIndexItem{
+.droplet{
 	display:inline-block;
+	padding:5px;
+	border-radius:4px;
+}
+
+.helpIndexItem{
 	margin-right:2px;
 	font-size:12pt;
 	border:solid 1px gray;
-	padding:5px;
-	border-radius:4px;
 }
 .helpIndexItem:hover{
 	background-color:rgba(100,100,100,0.5);
@@ -643,4 +747,5 @@ textarea#txtEditCaption{
 	bottom:0px;
 	margin-right:20px;
 	margin-bottom:20px;
+	
 }

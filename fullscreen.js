@@ -125,12 +125,18 @@ var currentFSfalse = function(){
 };
 	
 // jumps to an element on the page purely by scrolling to its position
-var jumpToElementByScrollPosition = function(element_to_jump_to,whatToDoWhenDone){
+var jumpToElementByScrollPosition = function(element_to_jump_to,whatToDoWhenDone,animation_speed){
 	// make the documents scroll position (scrollTop) equal to an elements position
-	$(document).scrollTop($(element_to_jump_to).offset().top - 100);
+	if(animation_speed !== null && animation_speed !== false && typeof animation_speed !== 'undefined' && animation_speed > 0){
+		$('body').animate({scrollTop:$(element_to_jump_to).offset().top-100},animation_speed);
+		log('animated scroll!');
+	}
+	else{
+		$(document).scrollTop($(element_to_jump_to).offset().top - 100);
+	}
 	
 	setTimeout(function(){
-		if(typeof whatToDoWhenDone != 'undefined'){
+		if(typeof whatToDoWhenDone != 'undefined' && whatToDoWhenDone !== false){
 			whatToDoWhenDone();
 		}
 	},100);
@@ -166,6 +172,7 @@ var highlightElement = function(element,bigversion){
 	var highlight = $('#highlight');
 	var $element = $(element);
 	
+	$element.parent().css('visibility','hidden');
 	clearTimeout(tmStartAnimation);
 	tmStartAnimation = setTimeout(function(){
 		var $elementClone = $element.clone(false);
@@ -173,7 +180,8 @@ var highlightElement = function(element,bigversion){
 		.css({
 			height:'100%',
 			width:'auto',
-			position:'relative'
+			position:'relative',
+			visibility:'visible'
 		}).appendTo(highlight);
 	
 		// clone the element into the highlight animation div
@@ -194,16 +202,15 @@ var highlightElement = function(element,bigversion){
 						left:animatePos.left
 				},400,function(){
 					highlight.hide().children().remove(); // hide the "highlight" element and delete the image on it
+					$element.parent().css('visibility','visible'); // makes it so controls only appear after animation
 				});
 			});
 		}
 		else if($element.is('video')){
 			
 			highlight.children().on('canplay',function(){
-			log(this);
 			this.currentTime = element.currentTime;
 			$(this).on('seeked',function(){
-				log(this.currentTime);
 					var animatePos = {
 						width:$element.parent().width(),
 						height:$element.parent().height(),
@@ -218,6 +225,7 @@ var highlightElement = function(element,bigversion){
 							left:animatePos.left
 					},400,function(){
 						highlight.hide().children().remove();
+						$element.parent().css('visibility','visible'); // makes it so controls only appear after animation
 					});
 				});
 			});

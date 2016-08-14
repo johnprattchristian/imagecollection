@@ -37,20 +37,6 @@ var Delete = function(domElement = null){
 		notify("Image deleted","warning");
 };
 
-//POPULATE the Dropdown of Collections
-var popDropdown = function(){
-	
-
-		$("#dropdown").html("");
-		for(var c in collections){
-				$("#dropdown").append("<option>"+collections[c]+"</option>");
-			
-		}
-		$("#dropdown").append("<option>new collection...</option>");
-		
-		document.getElementById("dropdown").selectedIndex=dbIndex;
-};
-
 var tm_afterlistcallback = 0;
 var List = function(load_animation = false,callback){
 	// Populate images
@@ -75,7 +61,7 @@ var List = function(load_animation = false,callback){
 		+ element // the image or video
 		+ /*delete button*/ "<button class='btnDelete' id='delete"+i+"'>x</button>"
 		+"<div class='caption'><span class='captionText'>" + processCaption(imageDB[i])+"</span>"
-		+"<button class='rounded btnEditCaption'>edit</button></div>" // add edit button to image caption
+		+"<button class='btnEditCaption'>&#128393;</button></div>" // add edit button to image caption
 		+"</div>"); // end the imageBox div
 		
 		
@@ -123,7 +109,6 @@ var List = function(load_animation = false,callback){
 				
 			}
 			else{
-			  console.log(this.getAttribute('id') + " video doesn't have audio");
 			}
 		}
 	}).on('error',function(){
@@ -154,7 +139,6 @@ var List = function(load_animation = false,callback){
 		
 	// mouseenter / mouseleave imageBox binds for fading captions
 	$('.imageBox').bind('mouseenter',function(e){
-		console.log("mouseenter");
 			$(this).children('.caption').show();
 	});
 	
@@ -170,7 +154,6 @@ var List = function(load_animation = false,callback){
 	
 	// Edit caption button binds
 	$(".btnEditCaption").bind("click",function(){
-		console.log($(this).parent());
 		selected_index = parseInt($(this).closest('.imageBox').attr("id").replace("box","")); // gets the image's index for editing
 		editImageCaption();
 	});

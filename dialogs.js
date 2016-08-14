@@ -47,8 +47,14 @@ var exportCode = function(exportType){
 		$(collections).each(function(d,ditem){ // each collection
 			exportObject.append('<h2>'+ditem+'</h2>'); // collection name
 			$(DATABASE[d]).each(function(i,item){ // each item in the collection
+				var url = (UpToDate(item) ? item.url : item);
+				var caption = (item.caption ? item.caption : item);
+				
 				console.log((UpToDate(item) ? 'item is up to date. Item url is' + item.url : 'item is not up to date'))
-				exportObject.append('<a href="' + (UpToDate(item) ? item.url : item) + '">'+ (item.caption ? item.caption : item) +'</a><p>');
+				exportObject.append('<div style="display:inline-block;border:solid 1px gray;width:200px;margin:0px;">'+
+				'<a href="' + url + '">'+
+				'<img style="width:200px;height:auto;" src="' + url + '"/></a></br>'+
+				'<caption style="display:block;word-wrap:break-word;overflow-wrap:break-word;word-break:break-word;white-space:nowrap">'+ caption + '</caption></div>');
 			});
 		});
 	}
@@ -150,15 +156,6 @@ var editImageCaption = function(){
 	text_edit.select();
 };
 
-// RENAME current collection
-var renameCollection=function(){
-	showDialogue('d_RenameCollection'); // Rename collection dialogue
-	var txtbx = $('#txtRenameCollection');
-	txtbx.val(collections[dbIndex]); // set the textbox to the current collection name
-	txtbx.focus();
-	txtbx.select();
-	
-};
 
 var parseNewCollectionName = function(new_name){
 	if(new_name!=null&&new_name!=""){
@@ -281,29 +278,20 @@ $(document).ready(function(){
 		}
 	});
 	
+	var submitRenameCollection = function(){
+		renameCollection($('#txtRenameCollection').val());
+		log('txtrename value is ' + $('#txtRenameCollection').val());
+		hideDialogue();
+	}
 	
 	$("#txtRenameCollection").on("keydown",function(e){
 		if(e.which === 13){
-			$('#btnOK_RenameCollection').click();
+			submitRenameCollection();
 		}
 	});
 	
 	$('#btnOK_RenameCollection').click(function(){
-		var new_name = $('#txtRenameCollection').val();
-		var old_name = collections[dbIndex];
-		// change collection name only if new name is a an actual name and not the old name
-		if(new_name !== "" && new_name !== null && new_name !== old_name){
-			collections[dbIndex] = new_name;
-			localStorage.setItem("collection_names",JSON.stringify(collections));
-			popDropdown();
-			changeCollection(dbIndex);
-			
-			//notification
-			notify('Renamed "' + old_name + '" to "' + new_name + '"',"good");
-			// store old collection name in _history
-			_history.push({restoreType:"collection_name",collection_index:dbIndex,name:old_name});
-		}
-		hideDialogue();
+		submitRenameCollection();
 	});
 	
 	// magically resize Edit Caption thumbnail img

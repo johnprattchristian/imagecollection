@@ -31,13 +31,9 @@
 		<span id="divCollections">
 		
 			<span id="collectionsUIParent">
-				<button class="rounded superButton" id="btnCollections">Collections</button>
-				<div id="collectionsContainer">
-					<!--collections here!-->
-					Collections here;
-				</div>
+				<button class="rounded superButton" id="btnCollections">Collections <span id='arrow'>&#128315;</span></button>
+				
 			</span>
-			<select id="dropdown"></select>
 			<button class="rounded superButton" id="btnRenameCollection">Edit</button>
 			<button class="rounded superButton" id="btnDeleteCollection">Delete</button>
 			<button class="rounded superButton" id="btnExport">Export All</button>
@@ -50,6 +46,11 @@
 			<button class="rounded superButton" id="btnHelp">Help</button>
 			
 		</span>
+		
+		<div id="collectionsContainer">
+					<!--collections here!-->
+					Collections here
+				</div>
 	</div>
 </div>
 
@@ -61,11 +62,16 @@
 
 <div class="spacer" id="bottom"></div>
 <div class="collectionFooter">
-	<div style="font-size:14pt;color:white;padding:20px;" id="collectionFooter">Fantastical Fashion</div>
+	<div style="font-size:14pt;color:white;padding:20px;" id="collectionFooter">
+		<span id="collectionTitleSpan">Fantastical Fashion</span>
+	</div>
+	<button id="btnEditCollection">&#128393;</button>
 </div>
 
 <div id="header">Image Collector <sup>v3</sup></div>
 
+
+<!-- TEMPORAL UI ELEMENTS START HERE !-->
 <!-- Notifications !-->
 <div class="Notifications">
 
@@ -115,11 +121,11 @@
 		<h1>Help</h1>
 		<button class="closeButton">x</button>
 		<div id="helpIndexTabStrip">
-			<span class="helpIndexItem" id="help_index_0">Starting off</span>
-			<span class="helpIndexItem" id="help_index_1">Videos</span>
-			<span class="helpIndexItem" id="help_index_2">Collections</span>
-			<span class="helpIndexItem" id="help_index_3">Fullscreen + Slideshow</span>
-			<span class="helpIndexItem" id="help_index_4">Exporting your library</span>
+			<span class="helpIndexItem droplet" id="help_index_0">Starting off</span>
+			<span class="helpIndexItem droplet" id="help_index_1">Videos</span>
+			<span class="helpIndexItem droplet" id="help_index_2">Collections</span>
+			<span class="helpIndexItem droplet" id="help_index_3">Fullscreen + Slideshow</span>
+			<span class="helpIndexItem droplet" id="help_index_4">Exporting your library</span>
 			
 		</div>
 		<div id="helpContent"></div>
