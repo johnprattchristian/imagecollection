@@ -116,3 +116,7 @@ UNDATED:
 
 2016-08-13
 - Fixed bug with fullscreen not working
+
+2016-08-14
+- Completed new collection UI functionality
+- Updated styles
