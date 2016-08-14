@@ -120,7 +120,7 @@ var newCollection = function(){
 // DELETE a collection
 var deleteCollection=function(){
 	var really = confirm("Are you sure you want to delete '"+collections[dbIndex]+"'?");
-		if (collections.length>1&&dbIndex!=0){
+		if (collections.length>1){
 			if(really){
 				var new_deleted = {
 					restoreType:"deleted_collection",
@@ -146,7 +146,7 @@ var deleteCollection=function(){
 			}
 		}
 		else{
-			alert("Cannot delete the Default collection!"); // this is to preserve the indexing of collections
+			alert("Must have one collection"); // this is to preserve the indexing of collections
 		}
 };
 
