@@ -182,18 +182,20 @@ $(document).ready(function(){
 	//Fullscreen click events
 	$('#FullScreenView')
 		.on('click',function(e){
-			if(e.which===1){
-				IterateSlideshow(1);
-			}
-			else if(e.which===3){
-				IterateSlideshow(-1);
-			}
-			else if(e.which===2){
-				
-				alert("middle button!");
-				if(document.webkitExitFullscreen){
-					e.preventDefault();
-					exitFullScreen();
+			if(e.target !== document.getElementById('btnExitFullscreen')){
+				if(e.which===1){
+					IterateSlideshow(1);
+				}
+				else if(e.which===3){
+					IterateSlideshow(-1);
+				}
+				else if(e.which===2){
+					
+					alert("middle button!");
+					if(document.webkitExitFullscreen){
+						e.preventDefault();
+						exitFullScreen();
+					}
 				}
 			}
 		})
@@ -232,7 +234,8 @@ $(document).ready(function(){
 	});
 	
 	$('#btnExitFullscreen').click(function(){
-		exitFullScreen();
+	
+					exitFullScreen();
 	});
 });
 		
