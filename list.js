@@ -138,12 +138,14 @@ var List = function(load_animation = false,callback){
 
 		
 	// mouseenter / mouseleave imageBox binds for fading captions
-	$('.imageBox').bind('mouseenter',function(e){
+	$('.imageBox').bind('mousemove',function(e){
 			$(this).children('.caption').show();
 	});
 	
 	$('.imageBox').bind('mouseleave',function(e){
-		$(this).children('.caption').fadeOut(100);
+		if($(this).has('.txtEditCaption').length === 0){
+			$(this).children('.caption').fadeOut(100);
+		}
 	});
 
 	// bind delete buttons events
@@ -152,10 +154,30 @@ var List = function(load_animation = false,callback){
 		Delete($(this).parent());
 	});
 	
+	// show the Caption editor
+	var editImageCaption = function(element){
+		$(element).children('.captionText').hide();
+		$(element).prepend('<textarea class="txtEditCaption"/>');
+		
+		$('.txtEditCaption').val(getCaption(imageDB[selected_index])) // put in the old caption
+		.on('keydown',function(e){
+			if(!e.shiftKey && e.which == 13){
+				e.preventDefault();
+				changeCaption(selected_index,$(this).val()); // change image caption to whatever's in the textarea
+			$(element).children('.captionText').show();
+			$(element).children('.txtEditCaption').remove();
+			}
+		}).on('blur',function(){
+			changeCaption(selected_index,$(this).val()); // change image caption to whatever's in the textarea
+			$(element).children('.captionText').show();
+			$(element).children('.txtEditCaption').remove();
+		}).focus().select();
+	};
+	
 	// Edit caption button binds
 	$(".btnEditCaption").bind("click",function(){
 		selected_index = parseInt($(this).closest('.imageBox').attr("id").replace("box","")); // gets the image's index for editing
-		editImageCaption();
+		editImageCaption($(this).parent().get(0));
 	});
 	
 	//DOUBLE CLICK IMAGE binds -- fullscreen 
@@ -171,4 +193,49 @@ var List = function(load_animation = false,callback){
 	});
 	
 	tm_afterlistcallback = setTimeout(callback,100);
+};
+
+var changeCaption = function(item_index,newcaption,callback){
+	var new_caption = newcaption;
+	var old_caption = "";
+	hideDialogue();
+	if(new_caption !== "" && new_caption !== null){
+		if(!UpToDate(imageDB[item_index])){
+			//forces new Database style on old depracated objects:
+			if(imageDB[item_index]!== new_caption)
+			{
+				old_caption = imageDB[item_index];
+				if(new_caption !== ""){
+					
+					// updates object to new style with .caption property:
+					imageDB[item_index] = {'url':imageDB[item_index],'caption':new_caption};
+				}
+				else{
+					// if input was blank, set the caption to URL
+					imageDB[item_index] = {'url':imageDB[item_index],'caption':imageDB[item_index]};
+				}
+				notify("Image caption changed","neutral");
+			}
+		}
+		else{
+			if(imageDB[item_index].caption !== new_caption)
+			{
+				old_caption = imageDB[item_index].caption;
+				if(new_caption !== ""){
+					imageDB[item_index].caption = new_caption; // uses the new database style with url: & caption:
+					
+				}
+				else{
+					imageDB[item_index].caption = imageDB[item_index].url;
+				}
+				notify("Image caption changed","neutral");
+			}
+		}
+		
+		// store old caption in _history:
+		_history.push({restoreType:'caption',index:item_index,caption:old_caption});
+		
+		applyChanges();
+		$('#box'+item_index).find('.captionText').html(new_caption);
+	}
 };
