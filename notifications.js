@@ -8,18 +8,22 @@ $(document).ready(function(){
 	notifs.hide();
 });
 
+var show = function(element){
+	$(element).css('display','block');
+}
+
 var notify = function(text,type){
+	$('.Notifications').stop(true,true);
+	$('.Notifications').hide();
 	notifs = $('.Notifications');
-	notifs.stop(true,true);
-	notifs.hide();
 	clearTimeout(ntimeout); // in case another notification was already there
-	if($('#FullScreenView').css('visibility')==='visible'){
+	if(Fullscreen()){
 		if(getSetting('fullscreenCaptions').value === true){
 			notifs = $('#fullscreenNotifs');
 			fadeoutDelay = 1500;
 			notifs.stop(true,true); // stops the fadeOut and resets
 			
-			notifs.show();
+			show(notifs.get(0));
 		}
 		else{
 			return false; // exit the function. no notification
@@ -55,6 +59,7 @@ var notify = function(text,type){
 	}
 	
 	notifs.children().text(text); // sets the notification text
+	notifs.children('span').html(text);
 	
 	ntimeout = setTimeout(function(){
 		notifs.fadeOut(400);
