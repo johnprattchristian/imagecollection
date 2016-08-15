@@ -98,7 +98,7 @@ var zoomOutSlideshow = function(element,bigversion){
 var tm_highlightFadeOut = 0;
 var highlightRestore = function(element){
 	var highlight = $('#highlight');
-	var speed = 400;
+	var speed = 200;
 	
 	clearTimeout(tm_highlightFadeOut);
 	highlight.stop(true,true).hide().css({
@@ -113,6 +113,6 @@ var highlightRestore = function(element){
 	highlight.fadeIn(speed,function(){
 		tm_highlightFadeOut = setTimeout(function(){
 			highlight.fadeOut(speed);
-		},100);
+		},0);
 	});
 }
