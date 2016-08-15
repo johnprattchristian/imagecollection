@@ -135,7 +135,7 @@ $(function(){
 });
 
 // EDIT the CAPTION of an image
-var editImageCaption = function(){
+/*var editImageCaption = function(){
 	showDialogue('d_EditCaption');
 	
 	var text_edit = $('#txtEditCaption');
@@ -155,7 +155,7 @@ var editImageCaption = function(){
 	text_edit.focus();
 	text_edit.select();
 };
-
+*/
 
 var parseNewCollectionName = function(new_name){
 	if(new_name!=null&&new_name!=""){
@@ -232,50 +232,11 @@ $(document).ready(function(){
 			
 	});
 	
+	
+	
 	// when you hit the OK button, save the caption
 	$('#btnOK_Edit').on('click',function(){
-		var new_caption = $('#txtEditCaption').val();
-		var old_caption = "";
-		hideDialogue();
-		if(new_caption !== "" && new_caption !== null){
-			if(!UpToDate(imageDB[selected_index])){
-				//forces new Database style on old depracated objects:
-				if(imageDB[selected_index]!== new_caption)
-				{
-					old_caption = imageDB[selected_index];
-					if(new_caption !== ""){
-						
-						// updates object to new style with .caption property:
-						imageDB[selected_index] = {'url':imageDB[selected_index],'caption':new_caption};
-					}
-					else{
-						// if input was blank, set the caption to URL
-						imageDB[selected_index] = {'url':imageDB[selected_index],'caption':imageDB[selected_index]};
-					}
-					notify("Image caption changed","neutral");
-				}
-			}
-			else{
-				if(imageDB[selected_index].caption !== new_caption)
-				{
-					old_caption = imageDB[selected_index].caption;
-					if(new_caption !== ""){
-						imageDB[selected_index].caption = new_caption; // uses the new database style with url: & caption:
-						
-					}
-					else{
-						imageDB[selected_index].caption = imageDB[selected_index].url;
-					}
-					notify("Image caption changed","neutral");
-				}
-			}
-		
-		// store old caption in _history:
-		_history.push({restoreType:'caption',index:selected_index,caption:old_caption});
-		
-		applyChanges();
-		List();
-		}
+		changeCaption($('#txtEditCaption').val());
 	});
 	
 	var submitRenameCollection = function(){
