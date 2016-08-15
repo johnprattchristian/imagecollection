@@ -648,9 +648,8 @@ span.captionText{
 
 .btnEditCaption{
 	position:absolute;
-	right:0px;
-	padding:3px;
-	margin-right:5px;
+	bottom:5px;
+	right:5px;
 	background-color:transparent;
 	border:none;
 	color:gray;
@@ -688,9 +687,10 @@ textarea#txtEditCaption{
 	display:block;
 	width:90%;
 	max-width:90%;
-	height:2em;
+	height:3em;
 	top:0px;
 	overflow:auto;
+	resize:none;
 }
 
 #captionThumbContain{
