@@ -239,10 +239,11 @@ button:focus{
 }
 
 .collectionItem:hover{
-	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#fcfff4+0,e9e9ce+100&0.5+0,0.69+100;Wax+3D+%232 */
-background: -moz-radial-gradient(center, ellipse cover,  rgba(252,255,244,0.5) 0%, rgba(233,233,206,0.69) 100%); /* FF3.6-15 */
-background: -webkit-radial-gradient(center, ellipse cover,  rgba(252,255,244,0.5) 0%,rgba(233,233,206,0.69) 100%); /* Chrome10-25,Safari5.1-6 */
-background: radial-gradient(ellipse at center,  rgba(252,255,244,0.5) 0%,rgba(233,233,206,0.69) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	
+		/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#fcfff4+0,e9e9ce+100&0.5+0,0.69+100;Wax+3D+%232 */
+background: -moz-radial-gradient(center, ellipse cover,  rgba(255,255,255,0.5) 0%, rgba(233,233,233,0.69) 100%); /* FF3.6-15 */
+background: -webkit-radial-gradient(center, ellipse cover,  rgba(255,255,255,0.5) 0%,rgba(233,233,233,0.69) 100%); /* Chrome10-25,Safari5.1-6 */
+background: radial-gradient(ellipse at center,  rgba(255,255,255,0.5) 0%,rgba(233,233,233,0.69) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#80fcfff4', endColorstr='#b0e9e9ce',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 
 }
@@ -272,15 +273,17 @@ color:white;
 padding-left:15px;padding-right:15px;
 }
 #btnNewCollection:hover{
+	
 	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#fcfff4+0,e9e9ce+100&0.5+0,0.69+100;Wax+3D+%232 */
-background: -moz-radial-gradient(center, ellipse cover,  rgba(252,255,244,0.5) 0%, rgba(233,233,206,0.69) 100%); /* FF3.6-15 */
-background: -webkit-radial-gradient(center, ellipse cover,  rgba(252,255,244,0.5) 0%,rgba(233,233,206,0.69) 100%); /* Chrome10-25,Safari5.1-6 */
-background: radial-gradient(ellipse at center,  rgba(252,255,244,0.5) 0%,rgba(233,233,206,0.69) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+background: -moz-radial-gradient(center, ellipse cover,  rgba(100,255,50,0.2) 0%,rgba(80,233,40,0.3) 100%); /* FF3.6-15 */
+background: -webkit-radial-gradient(center, ellipse cover,  rgba(100,255,50,0.2) 0%,rgba(80,233,40,0.3) 100%); /* Chrome10-25,Safari5.1-6 */
+background: radial-gradient(ellipse at center,  rgba(100,255,50,0.2) 0%,rgba(80,233,40,0.3) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#80fcfff4', endColorstr='#b0e9e9ce',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+
 
 }
 #btnNewCollection:active{
-	background-color:rgba(20,100,20,0.9);
+	background-color:rgba(20,100,20,0.3);
 }
 
 #rightSideButtonsContainer{
@@ -407,6 +410,7 @@ span.captionText{
 }
 
 #FullScreenView{
+	
 	visibility:hidden;
 	height:100%;
 	width:100%;
