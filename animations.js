@@ -59,15 +59,16 @@ var zoomOutSlideshow = function(element,bigversion){
 		}
 		else if($element.is('video')){
 			
-			highlight.children().on('canplay',function(){
+			highlight.children().on('loadeddata',function(){
 			this.currentTime = element.currentTime;
-			$(this).on('seeked',function(){
+			highlight.children().on('seeked',function(){
+					
 					var animatePos = {
 						width:$element.parent().width(),
 						height:$element.parent().height(),
 						top:$element.parent().offset().top,
 						left:$element.parent().offset().left
-					}
+					};
 					highlight.stop(true,true)
 					.animate({
 							width:animatePos.width,
