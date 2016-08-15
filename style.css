@@ -691,6 +691,7 @@ textarea#txtEditCaption{
 	height:2em;
 	top:0px;
 	overflow:auto;
+	resize:none;
 }
 
 #captionThumbContain{
