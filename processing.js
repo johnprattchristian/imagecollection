@@ -82,6 +82,15 @@ var processCaption = function(image){
 	
 };
 
+var getCaption = function(item){
+	if(UpToDate(item)){
+		return item.caption;
+	}
+	else{
+		return item;
+	}
+}
+
 var validImageCheck = function(src){
 	var valid = true;
 	var img = new Image(src);
