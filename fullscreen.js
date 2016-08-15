@@ -2,10 +2,12 @@ var iterating = false; // decide if iterating the slideshow or just jumping into
 
 // function to test if fullscreen
 var Fullscreen = function(){
-	if($('#FullScreenView').width() === screen.width){
-		return true;
-	}
-	return false;
+	
+		if($('#FullScreenView').width() === screen.width){
+			return true;
+		}
+	
+		return false;
 }
 
 // removes video and img elements in the fullscreenView parent element, so as to retain the #fullscreenNotifications
@@ -17,6 +19,7 @@ var removeFullScreenChildren = function(){
 
 var goFullscreen = function(){
 	var element = document.getElementById('FullScreenView');
+
 	
 	if(element.requestFullscreen) {
 		element.requestFullscreen();
@@ -28,8 +31,8 @@ var goFullscreen = function(){
 		element.msRequestFullscreen();
 	  }
 	 
+
 	$('#FullScreenView').css('visibility','visible');
-	
 };
 	
 var fullscreenImage = function(img){
@@ -136,6 +139,7 @@ var exitFullScreen = function()
         document.webkitExitFullscreen();
 	
 	$('#FullScreenView').css('visibility','hidden');
+	$('.Notifications').stop(true,true).hide();
 	
 };
 
@@ -156,7 +160,7 @@ $(document).ready(function(){
 	$(document).on("fullscreenchange mozfullscreenchange msfullscreenchange webkitfullscreenchange",function(){
 			if(Fullscreen()===false){
 				// jumps to the last slideshow-ed image outside of full screen view:
-				
+				$('#FullScreenView').css('visibility','hidden');
 				notifs.hide();
 				iterating = false; // reset this variable for slideshow iterating
 				if('#FullScreenView video'){
