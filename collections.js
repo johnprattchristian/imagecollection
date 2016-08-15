@@ -142,11 +142,12 @@ var deleteCollection=function(){
 				
 			}
 			else{
+				notify('Must have at least 1 collection!','warning');
 				return;
 			}
 		}
 		else{
-			alert("Must have one collection"); // this is to preserve the indexing of collections
+			notify("Must have one collection"); // this is to preserve the indexing of collections
 		}
 };
 
