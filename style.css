@@ -683,6 +683,16 @@ textarea#txtEditCaption{
 	bottom:0px;
 }
 
+.txtEditCaption{
+	position:relative;
+	display:block;
+	width:90%;
+	max-width:90%;
+	height:2em;
+	top:0px;
+	overflow:auto;
+}
+
 #captionThumbContain{
 	position:relative;
 	height:100%;
