@@ -16,6 +16,15 @@ var UpToDate = function(db_object_to_check){
 	}
 };
 
+var widerThanTall = function(img){
+	if(img.width > img.height){
+		return true;
+	}
+	else{
+		return false;
+	}
+}
+
 var processURL = function(i){
 
 	/* for(var i = 0;i<imageDB.length;i++){ */
@@ -99,3 +108,9 @@ var validImageCheck = function(src){
 	};
 	return valid;
 };
+
+var bgPositionToObject = function(element){
+	var position = $(element).css('background-position').replace('px','').replace('px','').replace('%','').replace('%','').split(' ');
+	
+	return {x:parseInt(position[0]),y:parseInt(position[1])};
+}
