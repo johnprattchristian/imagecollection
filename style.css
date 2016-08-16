@@ -72,6 +72,7 @@ h1{
 
 #collectionTitleSpan{
 	cursor:pointer;
+	text-shadow:2px 2px 2px black;
 }
 
 #btnEditCollection{
@@ -123,6 +124,10 @@ h1{
 	z-index:99999;
 	font-size:18pt;
 	color:rgba(130,130,130,1);
+	text-shadow: 2px 2px 2px black;
+}
+
+#regularNotifications{
 	text-shadow: 2px 2px 2px black;
 }
 
