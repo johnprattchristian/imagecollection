@@ -259,7 +259,7 @@ $(document).ready(function(){
 			console.log(delta);
 		
 			
-			$(this).css('backgroundPosition',String((bgPositionToObject(this).x - delta.x)+'px '+(bgPositionToObject(this).y - delta.y)+'px'));
+			$(this).css('backgroundPosition',String((delta.x)+'px '+(delta.y)+'px'));
 		
 			
 		}
