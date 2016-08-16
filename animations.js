@@ -116,4 +116,12 @@ var highlightRestore = function(element){
 			highlight.fadeOut(speed);
 		},0);
 	});
-}
+};
+
+
+// Scroll back to top
+var scrollToTop = function(){
+	var currentScrollTop = $('body').scrollTop();
+	var factor = currentScrollTop / $('body').height();
+	$('body').animate({scrollTop:0},500 * factor); //increase speed (decrease ms) based on how far down the page we are
+};
