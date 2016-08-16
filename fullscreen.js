@@ -181,7 +181,7 @@ $(document).ready(function(){
 
 	//Fullscreen click events
 	$('#FullScreenView')
-		.on('click',function(e){
+		.on('mouseup',function(e){
 			if(e.target !== document.getElementById('btnExitFullscreen')){
 				if(e.which===1){
 					IterateSlideshow(1);
