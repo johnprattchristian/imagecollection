@@ -9,7 +9,7 @@ var Undo = function(){
 				applyChanges();
 				List(false,function(){
 					var element = document.getElementById(""+item.indexOfImage+"");
-					jumpToElementByScrollPosition(element,highlightRestore(element),100);
+					jumpToElementByScrollPosition(element,100,highlightRestore(element));
 				});
 				// notification. Update on trash, how many items left. If empty, just say that.				
 				notify("Image restored. " + (_history.length - 1 > 0 ? itemsLeft + ' items left in trash.' : ' Trash is empty.'),"good");
