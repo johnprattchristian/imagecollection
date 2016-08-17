@@ -19,7 +19,7 @@ var toggleCollections = function(slidespeed = 50){
 	
 	if(collectionsButtonClicked==false){
 		button.toggleClass('pressed');
-		button.children('span').html('&#128314;');
+		button.children('span').html('▲');
 		//button.css({backgroundColor:'gray'});
 		container.slideDown(slidespeed);
 		
@@ -28,7 +28,7 @@ var toggleCollections = function(slidespeed = 50){
 	}	
 	else{
 		button.toggleClass('pressed');
-		button.children('span').html('&#128315;');
+		button.children('span').html('▼');
 		//button.css({backgroundColor:'black'});
 		container.slideUp(slidespeed);
 		$('.spacer#top').animate({height:'90px'},slidespeed);
