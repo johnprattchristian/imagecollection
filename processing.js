@@ -109,7 +109,7 @@ var validImageCheck = function(src){
 	return valid;
 };
 
-var bgPositionToObject = function(element){
+var bgPosition = function(element){
 	var position = $(element).css('background-position').replace('px','').replace('px','').replace('%','').replace('%','').split(' ');
 	
 	return {x:parseInt(position[0]),y:parseInt(position[1])};
