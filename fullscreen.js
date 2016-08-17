@@ -55,14 +55,18 @@ var fullscreenImage = function(img){
 	if(widerThanTall(img)){
 		ghostImageForZoom.width = screen.width;
 		ratio = img.height / img.width;
+		log('width / height  =  ' + img.width / img.height);
 		ghostImageForZoom.height = screen.width * ratio;
+		log('the height of the fs image is ' + ghostImageForZoom.height + '. the height of the screen is ' + screen.width);
 	}
 	else{
 		ghostImageForZoom.height = screen.height;
 		ratio = img.width / img.height;
 		ghostImageForZoom.width = screen.height * ratio;
 	}
-	element.style.backgroundPosition = 'center';
+	element.style.backgroundSize = ghostImageForZoom.width + 'px ' + ghostImageForZoom.height + 'px';
+	element.style.backgroundPosition = (screen.width / 2 - ghostImageForZoom.width / 2) + 'px ' + (screen.height / 2 - ghostImageForZoom.height / 2)+'px';
+	log('ghostImageForZoom.width ' + ghostImageForZoom.width);
 	
 	log('ghostImageForZoom.width = ' + ghostImageForZoom.width + ' height = ' + ghostImageForZoom.height);
 	
@@ -208,30 +212,37 @@ $(document).ready(function(){
 	};
 	$('#FullScreenView').on('wheel',function(e){
 			var ogEvent = e.originalEvent;
-			var zoomAmountPerTick = 1.05;
-			
-			log('ghostImageForZoom.width = ' + ghostImageForZoom.width);
+			var factor = 1.05;
 			
 		//if($(this).has('video').length === 0){ // image not video
 			if(ogEvent.deltaY < 0){ // zooming in
+			
 				// scale the ghostImage
-				ghostImageForZoom.width *= zoomAmountPerTick;
-				ghostImageForZoom.height *= zoomAmountPerTick;
+				ghostImageForZoom.width *= factor;
+				ghostImageForZoom.height *= factor;
 				
 				
 				$(this).css({
 					backgroundSize:String(ghostImageForZoom.width + 'px ' + ghostImageForZoom.height + 'px')
 				});
 				
+				var newPosition = {
+					x:e.clientX - bgPosition(this).x * (factor-1),
+					y:0
+				};
+				
+				$(this).css('background-position',newPosition.x + 'px ' + newPosition.y + 'px');
+				
+				
 				zoomedIn = true;
 				
 			}
 			else{ // zooming out 
-			
+			// don't let it get smaller than the screen
 				if(widerThanTall(ghostImageForZoom) ? (ghostImageForZoom.width > $(this).width()) : (ghostImageForZoom.height > $(this).height())){ // create if statement based on whether its a wide or tall image 
 					// scale the ghostImage
-					ghostImageForZoom.width /= zoomAmountPerTick;
-					ghostImageForZoom.height /= zoomAmountPerTick;
+					ghostImageForZoom.width /= factor;
+					ghostImageForZoom.height /= factor;
 					
 					// change backgroundImage to ghostImage size
 					$(this).css({
@@ -250,17 +261,20 @@ $(document).ready(function(){
 	// drag around a zoomed in image
 	$('#FullScreenView').on('mousemove',function(e){
 		console.log(e.button);
+		
 		if(zoomDrag.value == true){
+			var pos = bgPosition(this);
+			log(bgPosition(this));
 			
-			// establish distance to move
-			log('e.clientX: '+e.clientX + ' zoomDrag.originX: ' + zoomDrag.originX);
-			log('e.clientX - zoomDrag.originX = ' + (e.clientX - zoomDrag.originX));
-			var delta = {x:e.clientX - zoomDrag.originX,y:e.clientY - zoomDrag.originY};
-			console.log(delta);
-		
+				// establish distance to move
+				log('e.clientX: '+e.clientX + ' zoomDrag.originX: ' + zoomDrag.originX);
+				log('e.clientX - zoomDrag.originX = ' + (e.clientX - zoomDrag.originX));
+				var delta = {x:e.clientX - zoomDrag.originX,y:e.clientY - zoomDrag.originY};
+				console.log(delta);
 			
-			$(this).css('backgroundPosition',String((delta.x)+'px '+(delta.y)+'px'));
-		
+				
+				$(this).css('backgroundPosition',String((delta.x)+'px '+(delta.y)+'px'));
+			
 			
 		}
 	});
@@ -292,11 +306,11 @@ $(document).ready(function(){
 			if(zoomedIn){
 			
 				zoomDrag.value = true; // only set if zoomed in
-				zoomDrag.originX = e.clientX;
-				zoomDrag.originY = e.clientY;
+				zoomDrag.originX = e.clientX - bgPosition(this).x;
+				zoomDrag.originY = e.clientY - bgPosition(this).y;
 				log(zoomDrag.originX + ' ' + zoomDrag.originY);
 				$('#FullScreenView').css({cursor:'move'});
-				console.log('backgroundPos.x = ' + bgPositionToObject(this).x);
+				console.log('backgroundPos.x = ' + bgPosition(this).x);
 			}
 		})
 		.on('contextmenu',function(e){ // 'contextmenu' is just right click basically
