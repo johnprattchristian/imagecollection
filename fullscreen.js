@@ -46,6 +46,7 @@ var fullscreenImage = function(img){
 	
 		goFullscreen();
 		
+		$('.Notifications').hide();
 		if(getSetting('fullscreenCaptions').value === true){
 			notify(imageDB[selected_index].caption);
 		}
