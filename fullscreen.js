@@ -178,26 +178,33 @@ $(document).ready(function(){
 
 	});
 	
-
-
+	// is bgSize set to 'covered'?
+	var covered = false;
+	
 	//Fullscreen click events
 	$('#FullScreenView')
-		.on('mouseup',function(e){
-			if(e.target !== document.getElementById('btnExitFullscreen')){
-				if(e.which===1){
-					IterateSlideshow(1);
+		.on('mousedown',function(e){
+			if(!covered){
+				if(e.target !== document.getElementById('btnExitFullscreen')){
+					if(e.which===1){
+						IterateSlideshow(1);
+					}
+					else if(e.which===3){
+						IterateSlideshow(-1);
+					}
+					else if(e.which===2){
+						e.preventDefault();
+					}
 				}
-				else if(e.which===3){
-					IterateSlideshow(-1);
-				}
-				else if(e.which===2){
-					e.preventDefault();
-				}
+			}
+			else{
+				
 			}
 		})
 		.on('contextmenu',function(e){ // 'contextmenu' is just right click basically
 			e.preventDefault();
 		});
+	
 	
 	// SLIDESHOW ARROW KEY EVENTS
 	$(window).on("keydown",function(e){
@@ -220,6 +227,16 @@ $(document).ready(function(){
 					exitFullScreen();
 				},100)
 				
+			}
+			else if(e.which==187){ // '+'
+				if(!covered){
+					$('#FullScreenView').css('backgroundSize','cover');
+					covered = true;
+				}
+				else{
+					$('#FullScreenView').css('backgroundSize','contain');
+					covered = false;
+				}
 			}
 
 		}
