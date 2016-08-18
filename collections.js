@@ -205,7 +205,8 @@ $(function(){
 	var howManyThisDirection = 0;
 	var elasticity = 10;
 	$(window).on('scroll',function(e){
-		var current = $(window).scrollTop();
+		// Annoying behavior? 
+		/* var current = $(window).scrollTop();
 		var stillGoingUp = (current < lastScrollTop);
 		
 		if(stillGoingUp !== goingUp){
@@ -229,5 +230,6 @@ $(function(){
 		
 		howManyThisDirection += 1;
 		log((stillGoingUp ? 'going up. so far: ' : 'going down: ') + howManyThisDirection );
+		*/
 	});
 });

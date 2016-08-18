@@ -20,12 +20,21 @@ var Unmute = function(element){
 };
 
 // change volume icon based on muted or not
-var toggleMuteIcon = function(){
+var toggleMuteIcon = function(volumeAtZero = false){
 	if(muted === true){
 		$('#imgVolumeIcon').attr('src','mute_icon.png');
 	}
 	else{
-		$('#imgVolumeIcon').attr('src','volume_icon.png');
+		
+		
+		if(volumeAtZero === true){
+			$('#imgVolumeIcon').attr('src','mute_icon.png');
+			log('volume is at zero!');
+		}
+		else{
+			$('#imgVolumeIcon').attr('src','volume_icon.png');
+			
+		}
 	}
 }
 
@@ -68,10 +77,18 @@ var volumeSlide = function(amount){
 	
 	var thisvideo = $('#FullScreenView video');
 	var newVolume = Math.floor((global_volume+amount)*100) / 100; // rounds the number then returns it to 0.0x
+	
+	// Change volume
 	if(newVolume <= 1 && newVolume >= 0){
 		global_volume = newVolume; // change the global volume for videos
 		updateVolumes();
+		log('not at zero!');
 	}
+	else if(newVolume < 0){
+			$('#imgVolumeIcon').attr('src','mute_icon.png');
+			log('volume is at zero!');
+	}
+	
 	clearTimeout(tmHideVolume);
 	
 	/*

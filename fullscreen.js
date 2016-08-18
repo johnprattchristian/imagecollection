@@ -191,18 +191,12 @@ $(document).ready(function(){
 					IterateSlideshow(-1);
 				}
 				else if(e.which===2){
-					
-					alert("middle button!");
-					if(document.webkitExitFullscreen){
-						e.preventDefault();
-						exitFullScreen();
-					}
+					e.preventDefault();
 				}
 			}
 		})
 		.on('contextmenu',function(e){ // 'contextmenu' is just right click basically
 			e.preventDefault();
-			IterateSlideshow(-1);
 		});
 	
 	// SLIDESHOW ARROW KEY EVENTS
