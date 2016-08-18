@@ -180,7 +180,8 @@ $(document).ready(function(){
 	
 	// is bgSize set to 'covered'?
 	var covered = false;
-	
+	var dragging = false,
+		originX = 0, originY = 0;
 	
 	//Fullscreen click events
 	$('#FullScreenView')
@@ -199,11 +200,15 @@ $(document).ready(function(){
 				}
 			}
 			else{
-				
+				dragging = true;
+				originY = e.clientY - 
 			}
 		})
 		.on('contextmenu',function(e){ // 'contextmenu' is just right click basically
 			e.preventDefault();
+		})
+		.on('mouseup',function(e){
+			dragging = false;
 		});
 	
 	
