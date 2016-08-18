@@ -181,6 +181,7 @@ $(document).ready(function(){
 	// is bgSize set to 'covered'?
 	var covered = false;
 	
+	
 	//Fullscreen click events
 	$('#FullScreenView')
 		.on('mousedown',function(e){
