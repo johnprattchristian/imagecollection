@@ -13,10 +13,23 @@ var selectCollectionItem = function(index){
 
 var collectionsButtonClicked = false;
 
-var toggleCollections = function(slidespeed = 50){
-	var button = $('#btnCollections');
+var showCollections = function(animation = true,slidespeed = 50){
 	var container = $('#collectionsContainer');
+	var button = $('#btnCollections');
 	
+	button.addClass('pressed');
+	button.children('span').html('&#128314;');
+	//button.css({backgroundColor:'gray'});
+	container.slideDown(slidespeed);
+	$('.spacer#top').animate({height:'130px'},slidespeed);
+	collectionsButtonClicked = true;
+}
+
+var hideCollections = function(animation = true,slidespeed = 50){
+	var container = $('#collectionsContainer');
+	var button = $('#btnCollections');
+	
+<<<<<<< HEAD
 	if(collectionsButtonClicked==false){
 		button.toggleClass('pressed');
 		button.children('span').html('▲');
@@ -30,9 +43,31 @@ var toggleCollections = function(slidespeed = 50){
 		button.toggleClass('pressed');
 		button.children('span').html('▼');
 		//button.css({backgroundColor:'black'});
+=======
+	button.removeClass('pressed');
+	button.children('span').html('&#128315;');
+	//button.css({backgroundColor:'black'});
+	if(animation){
+>>>>>>> refs/remotes/origin/master
 		container.slideUp(slidespeed);
 		$('.spacer#top').animate({height:'90px'},slidespeed);
-		collectionsButtonClicked = false;
+	}
+	else{
+		container.hide();
+		$('.spacer#top').css('height','90px');
+	}
+	collectionsButtonClicked = false;
+}
+
+var toggleCollections = function(slidespeed = 50,trueSlideUp_falseSlideDown){
+	var button = $('#btnCollections');
+	var container = $('#collectionsContainer');
+	
+	if(collectionsButtonClicked==false || trueSlideUp_falseSlideDown === false){
+		showCollections(undefined,50);
+	}	
+	else if(collectionsButtonClicked==true || trueSlideUp_falseSlideDown == true){
+		hideCollections(undefined,50);
 	}
 }
 
@@ -172,15 +207,47 @@ var renameCollection = function(newname){
 }
 
 $(function(){
-	$(document).mouseup(function (e)
-{
-    var container = $("#collectionsContainer");
-	var button = $('#btnCollections');
+	$(document).on('mousedown',function (e){
+		var container = $("#collectionsContainer");
+		var button = $('#btnCollections');
 
-    if (!container.is(e.target) && container.has(e.target).length === 0 && !button.is(e.target) && button.has(e.target).length === 0){
-		if(container.css('display')!=='none'){
-			toggleCollections();
+		if (!container.is(e.target) && container.has(e.target).length === 0 && !button.is(e.target) && button.has(e.target).length === 0){
+			if(container.css('display')!=='none'){
+				toggleCollections();
+			}
 		}
-    }
-});
+	});
+
+	var lastScrollTop = 0;
+	var goingUp = true;
+	var howManyThisDirection = 0;
+	var elasticity = 10;
+	$(window).on('scroll',function(e){
+		// Annoying behavior? 
+		/* var current = $(window).scrollTop();
+		var stillGoingUp = (current < lastScrollTop);
+		
+		if(stillGoingUp !== goingUp){
+			howManyThisDirection = 0;
+		}
+		
+		
+		if(current < lastScrollTop){
+			if(howManyThisDirection > 1){
+				showCollections();
+			}
+			goingUp = true;
+		}
+		else if(current > lastScrollTop){
+			if(howManyThisDirection > elasticity){
+				hideCollections();
+			}
+			goingUp = false;
+		}
+		lastScrollTop = current;
+		
+		howManyThisDirection += 1;
+		log((stillGoingUp ? 'going up. so far: ' : 'going down: ') + howManyThisDirection );
+		*/
+	});
 });

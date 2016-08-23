@@ -1,19 +1,14 @@
 // jumps to an element on the page purely by scrolling to its position
-var jumpToElementByScrollPosition = function(element_to_jump_to,whatToDoWhenDone,animation_speed){
+var jumpToElementByScrollPosition = function(element_to_jump_to,animation_speed,callback){
 	// make the documents scroll position (scrollTop) equal to an elements position
 	if(animation_speed !== null && animation_speed !== false && typeof animation_speed !== 'undefined' && animation_speed > 0){
-		$('body').animate({scrollTop:$(element_to_jump_to).offset().top-100},animation_speed);
+		$('body').animate({scrollTop:$(element_to_jump_to).offset().top-100},animation_speed,callback ? callback : undefined);
 		log('animated scroll!');
 	}
 	else{
 		$(document).scrollTop($(element_to_jump_to).offset().top - 100);
 	}
 	
-	setTimeout(function(){
-		if(typeof whatToDoWhenDone != 'undefined' && whatToDoWhenDone !== false){
-			whatToDoWhenDone();
-		}
-	},100);
 };
 
 // 
@@ -120,8 +115,8 @@ var highlightRestore = function(element){
 
 
 // Scroll back to top
-var scrollToTop = function(){
+var scrollToTop = function(callback){
 	var currentScrollTop = $('body').scrollTop();
 	var factor = currentScrollTop / $('body').height();
-	$('body').animate({scrollTop:0},500 * factor); //increase speed (decrease ms) based on how far down the page we are
+	$('body').animate({scrollTop:0},500 * factor,callback); //increase speed (decrease ms) based on how far down the page we are
 };

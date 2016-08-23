@@ -80,7 +80,11 @@ var fullscreenImage = function(img){
 	
 		goFullscreen();
 		
+<<<<<<< HEAD
 		
+=======
+		$('.Notifications').hide();
+>>>>>>> refs/remotes/origin/master
 		if(getSetting('fullscreenCaptions').value === true){
 			notify(imageDB[selected_index].caption);
 		}
@@ -212,6 +216,7 @@ $(document).ready(function(){
 
 	});
 	
+<<<<<<< HEAD
 	var wheelEvent = function(){
 		
 	};
@@ -305,8 +310,26 @@ $(document).ready(function(){
 					
 					alert("middle button!");
 					if(document.webkitExitFullscreen){
+=======
+	// is bgSize set to 'covered'?
+	var covered = false;
+	var dragging = false,
+		originX = 0, originY = 0;
+	
+	//Fullscreen click events
+	$('#FullScreenView')
+		.on('mousedown',function(e){
+			if(!covered){
+				if(e.target !== document.getElementById('btnExitFullscreen')){
+					if(e.which===1){
+						IterateSlideshow(1);
+					}
+					else if(e.which===3){
+						IterateSlideshow(-1);
+					}
+					else if(e.which===2){
+>>>>>>> refs/remotes/origin/master
 						e.preventDefault();
-						exitFullScreen();
 					}
 				}
 				
@@ -316,6 +339,7 @@ $(document).ready(function(){
 				originX = e.clientX - bgPosition(this).x;
 				originY = (e.clientY - bgPosition(this).y) / ghostImageForZoom.height;
 			}
+<<<<<<< HEAD
 			
 		})
 		.on('mouseup',function(e){
@@ -324,7 +348,20 @@ $(document).ready(function(){
 		.on('contextmenu',function(e){ // 'contextmenu' is just right click basically
 			e.preventDefault();
 			//IterateSlideshow(-1);
+=======
+			else{
+				dragging = true;
+				originY = e.clientY - 
+			}
+		})
+		.on('contextmenu',function(e){ // 'contextmenu' is just right click basically
+			e.preventDefault();
+		})
+		.on('mouseup',function(e){
+			dragging = false;
+>>>>>>> refs/remotes/origin/master
 		});
+	
 	
 	// SLIDESHOW ARROW KEY EVENTS
 	$(window).on("keydown",function(e){
@@ -348,6 +385,7 @@ $(document).ready(function(){
 				},100)
 				
 			}
+<<<<<<< HEAD
 			else if(e.which===187){ // '+'
 				var fsv = $('#FullScreenView');
 				ghostImageForZoom.width+=ghostImageForZoom.width*zoomFactor;
@@ -368,6 +406,16 @@ $(document).ready(function(){
 				}
 				else{
 					zoomedIn = false;
+=======
+			else if(e.which==187){ // '+'
+				if(!covered){
+					$('#FullScreenView').css('backgroundSize','cover');
+					covered = true;
+				}
+				else{
+					$('#FullScreenView').css('backgroundSize','contain');
+					covered = false;
+>>>>>>> refs/remotes/origin/master
 				}
 			}
 
