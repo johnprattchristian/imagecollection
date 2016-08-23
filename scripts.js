@@ -68,9 +68,23 @@ $(document).ready(function(){
 	var Add = function(){
 		
 		var text = $("#txtInput").val(); // Only go through with it if there's text in the textbox
+		
 		if(text!=null&&text!=""){
+			var url,
+				caption; // in case a caption is included in-line
+			
+			// decide if there's a caption after a " " in the text
+			if(text.indexOf(' ') > -1){
+				url = text.slice(0,text.indexOf(' ')); // the url is the first part
+				caption = text.slice(text.indexOf(' ')+1);
+			}
+			else{
+				url = text;
+				caption = text;
+			}
+			
 			if(validImageCheck()){ // is there actually an image at this url?
-				imageDB.push({"url":text,"caption":text});
+				imageDB.push({"url":url,"caption":caption});
 				applyChanges();
 				List();
 				_history.push({
