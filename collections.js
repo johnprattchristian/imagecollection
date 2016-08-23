@@ -2,12 +2,12 @@
 
 var tm_containerSlideUp = 0;
 var selectCollectionItem = function(index){
-	clearTimeout(tm_containerSlideUp);
+	// clearTimeout(tm_containerSlideUp);
 	$('.collectionItem').removeClass('collectionItemClicked');
 	$('.collectionItem').eq(index).addClass('collectionItemClicked');
-	tm_containerSlideUp = setTimeout(function(){
+	/*tm_containerSlideUp = setTimeout(function(){
 		toggleCollections(100);
-	},100);
+	},100);*/<
 };
 
 
@@ -55,7 +55,9 @@ var popDropdown = function(){
 		var container = $('#collectionsContainer');
 			
 		
-		container.html("");
+		container.children('.collectionItem').each(function(i,item){
+			$(item).remove();
+		});
 		for(var c in collections){
 			$(container).append('<span class="collectionItem">'+collections[c]+'</span>');
 		}

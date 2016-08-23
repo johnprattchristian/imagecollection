@@ -114,3 +114,7 @@ var bgPosition = function(element){
 	
 	return {x:parseInt(position[0]),y:parseInt(position[1])};
 }
+
+var bgSize = function(element){
+	var size = $(element).css('background-size').replace('px','').replace('px','').replace('%');
+}
