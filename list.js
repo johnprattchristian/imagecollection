@@ -44,6 +44,8 @@ var List = function(load_animation = false,callback){
 
 	$("#imageList").html("");
 	
+	// refresh images array for dynamicColorBars
+	images = [];
 	
 	
 	// generate the columns for laying out the images
@@ -125,6 +127,7 @@ var List = function(load_animation = false,callback){
 
 	$('.imageBox img').on('load',function(){
 			$(this).parent().fadeIn(500);
+			pushImageToDynamicColor(this);
 		}).on('error',function(){
 			$(this).parent().show();
 			$(this).addClass('loadError').height(250)
@@ -193,6 +196,9 @@ var List = function(load_animation = false,callback){
 	});
 	
 	tm_afterlistcallback = setTimeout(callback,100);
+	
+	
+	
 };
 
 var changeCaption = function(item_index,newcaption,callback){

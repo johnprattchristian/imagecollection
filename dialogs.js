@@ -172,7 +172,6 @@ var help_content = "";
 $(function(){
 	$.get('https://dl.dropboxusercontent.com/u/4138891/imagecollection/help.html',function(data){
 		help_content = $('<div></div>').html(data);
-		log('help content loaded:'+help_content.html());
 	});
 });
 

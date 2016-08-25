@@ -7,7 +7,7 @@ var selectCollectionItem = function(index){
 	$('.collectionItem').eq(index).addClass('collectionItemClicked');
 	/*tm_containerSlideUp = setTimeout(function(){
 		toggleCollections(100);
-	},100);*/<
+	},100);*/
 };
 
 
@@ -23,13 +23,13 @@ var showCollections = function(animation = true,slidespeed = 50){
 	container.slideDown(slidespeed);
 	$('.spacer#top').animate({height:'130px'},slidespeed);
 	collectionsButtonClicked = true;
-}
+};
 
 var hideCollections = function(animation = true,slidespeed = 50){
 	var container = $('#collectionsContainer');
 	var button = $('#btnCollections');
 	
-<<<<<<< HEAD
+
 	if(collectionsButtonClicked==false){
 		button.toggleClass('pressed');
 		button.children('span').html('▲');
@@ -43,12 +43,10 @@ var hideCollections = function(animation = true,slidespeed = 50){
 		button.toggleClass('pressed');
 		button.children('span').html('▼');
 		//button.css({backgroundColor:'black'});
-=======
-	button.removeClass('pressed');
-	button.children('span').html('&#128315;');
+
+	}
 	//button.css({backgroundColor:'black'});
 	if(animation){
->>>>>>> refs/remotes/origin/master
 		container.slideUp(slidespeed);
 		$('.spacer#top').animate({height:'90px'},slidespeed);
 	}
@@ -57,7 +55,7 @@ var hideCollections = function(animation = true,slidespeed = 50){
 		$('.spacer#top').css('height','90px');
 	}
 	collectionsButtonClicked = false;
-}
+};
 
 var toggleCollections = function(slidespeed = 50,trueSlideUp_falseSlideDown){
 	var button = $('#btnCollections');
@@ -69,7 +67,7 @@ var toggleCollections = function(slidespeed = 50,trueSlideUp_falseSlideDown){
 	else if(collectionsButtonClicked==true || trueSlideUp_falseSlideDown == true){
 		hideCollections(undefined,50);
 	}
-}
+};
 
 
 var teaseSlideBackTimeout = 0;
