@@ -79,12 +79,8 @@ var fullscreenImage = function(img){
 	if (Fullscreen() == false) { // not already fullscreen, right?
 	
 		goFullscreen();
-		
-<<<<<<< HEAD
-		
-=======
+
 		$('.Notifications').hide();
->>>>>>> refs/remotes/origin/master
 		if(getSetting('fullscreenCaptions').value === true){
 			notify(imageDB[selected_index].caption);
 		}
@@ -216,7 +212,7 @@ $(document).ready(function(){
 
 	});
 	
-<<<<<<< HEAD
+
 	var wheelEvent = function(){
 		
 	};
@@ -309,15 +305,15 @@ $(document).ready(function(){
 				else if(e.which===2){
 					
 					alert("middle button!");
-					if(document.webkitExitFullscreen){
-=======
-	// is bgSize set to 'covered'?
-	var covered = false;
-	var dragging = false,
-		originX = 0, originY = 0;
-	
-	//Fullscreen click events
-	$('#FullScreenView')
+						if(document.webkitExitFullscreen){
+							// is bgSize set to 'covered'?
+							var covered = false;
+							var dragging = false,
+								originX = 0, originY = 0;
+						}
+				}
+			}
+		})
 		.on('mousedown',function(e){
 			if(!covered){
 				if(e.target !== document.getElementById('btnExitFullscreen')){
@@ -328,7 +324,6 @@ $(document).ready(function(){
 						IterateSlideshow(-1);
 					}
 					else if(e.which===2){
->>>>>>> refs/remotes/origin/master
 						e.preventDefault();
 					}
 				}
@@ -339,7 +334,7 @@ $(document).ready(function(){
 				originX = e.clientX - bgPosition(this).x;
 				originY = (e.clientY - bgPosition(this).y) / ghostImageForZoom.height;
 			}
-<<<<<<< HEAD
+
 			
 		})
 		.on('mouseup',function(e){
@@ -348,18 +343,14 @@ $(document).ready(function(){
 		.on('contextmenu',function(e){ // 'contextmenu' is just right click basically
 			e.preventDefault();
 			//IterateSlideshow(-1);
-=======
-			else{
-				dragging = true;
-				originY = e.clientY - 
-			}
+
+
 		})
 		.on('contextmenu',function(e){ // 'contextmenu' is just right click basically
 			e.preventDefault();
 		})
 		.on('mouseup',function(e){
 			dragging = false;
->>>>>>> refs/remotes/origin/master
 		});
 	
 	
@@ -384,39 +375,6 @@ $(document).ready(function(){
 					exitFullScreen();
 				},100)
 				
-			}
-<<<<<<< HEAD
-			else if(e.which===187){ // '+'
-				var fsv = $('#FullScreenView');
-				ghostImageForZoom.width+=ghostImageForZoom.width*zoomFactor;
-				ghostImageForZoom.height+=ghostImageForZoom.height*zoomFactor;
-				
-				fsv.css('background-size',ghostImageForZoom.width + 'px ' + ghostImageForZoom.height + 'px');
-				fsv.css('background-position','center');
-				zoomedIn = true;
-			}
-			else if(e.which===189){ // '-'
-				if((widerThanTall(ghostImageForZoom) ? (ghostImageForZoom.width >= screen.width) : (ghostImageForZoom.	height >= screen.height))){
-					var fsv = $('#FullScreenView');
-					ghostImageForZoom.width-=ghostImageForZoom.width*zoomFactor;
-					ghostImageForZoom.height-=ghostImageForZoom.height*zoomFactor;
-					
-					fsv.css('background-size',ghostImageForZoom.width + 'px ' + ghostImageForZoom.height + 'px');
-					fsv.css('background-position','center');
-				}
-				else{
-					zoomedIn = false;
-=======
-			else if(e.which==187){ // '+'
-				if(!covered){
-					$('#FullScreenView').css('backgroundSize','cover');
-					covered = true;
-				}
-				else{
-					$('#FullScreenView').css('backgroundSize','contain');
-					covered = false;
->>>>>>> refs/remotes/origin/master
-				}
 			}
 
 		}
