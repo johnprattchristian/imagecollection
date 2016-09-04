@@ -63,6 +63,7 @@ var MigrateDB = function(){
 			newItem.type = uptodate ? (item.url ? getURLType(item.url) : getURLType(item)) : getURLType(item);
 			newItem.url = getURL(item);
 			newItem.date_added = generateTimestamp();
+			newItem.caption = getCaption(item);
 			
 			
 			// push the new style of item to the new library/collection style of database

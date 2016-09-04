@@ -142,7 +142,12 @@ var processCaption = function(image){
 
 var getCaption = function(item){
 	if(UpToDate(item)){
-		return item.caption;
+		if(item.caption){
+			return item.caption;
+		}
+		else{
+			return undefined;
+		}
 	}
 	else{
 		return item;
