@@ -26,7 +26,7 @@ global_volume = 0.3;
 
 // Function for applying changes to given current Collection 
 var applyChanges=function(){
-		DATABASE.libraries[libraryIndex].collections[libraryIndex].collections[collectionIndex]=imageDB;
+		DATABASE.libraries[libraryIndex].collections[libraryIndex].collections[collectionIndex].name=imageDB;
 		localStorage.setItem(CURRENT_DATABASE,JSON.stringify(DATABASE)); //save the entire database
 };
 
@@ -75,7 +75,7 @@ $(document).ready(function(){
 		});
 	}
 	else{
-		imageDB = DATABASE.libraries[libraryIndex].collections[collectionIndex]; //set imageDB to a single collection in the database
+		imageDB = DATABASE.libraries[libraryIndex].collections[collectionIndex].name; //set imageDB to a single collection in the database
 	}
 	
 	

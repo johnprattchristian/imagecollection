@@ -84,7 +84,7 @@ $(document).ready(function(){
 	// Initial functions:
 	// Focus on the TEXT input when the page opens
 	$("#txtInput").focus();
-	$("#collectionTitleSpan").html(collections[collectionIndex]);
+	$("#collectionTitleSpan").html(collections[collectionIndex].name);
 	$('#dialogueParent').hide(); // Hide the export dialogue box
 	
 /* DONE INITIALIZING */
@@ -106,7 +106,7 @@ $(document).ready(function(){
 	var openDialogRenameCollection = function(){
 		showDialogue('d_RenameCollection'); // Rename collection dialogue
 		var txtbx = $('#txtRenameCollection');
-		txtbx.val(collections[collectionIndex]); // set the textbox to the current collection name
+		txtbx.val(collections[collectionIndex].name); // set the textbox to the current collection name
 		txtbx.focus();
 		txtbx.select();
 	}

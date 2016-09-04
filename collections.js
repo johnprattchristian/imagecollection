@@ -120,9 +120,9 @@ var popDropdown = function(){
 var changeCollection=function(new_index){
 	collectionIndex = new_index;
 	
-	imageDB = DATABASE.libraries[libraryIndex].collections[collectionIndex];
-	$("#collectionTitleSpan").html(collections[collectionIndex]);
-	document.title = collections[collectionIndex];
+	imageDB = DATABASE.libraries[libraryIndex].collections[collectionIndex].name;
+	$("#collectionTitleSpan").html(collections[collectionIndex].name);
+	document.title = collections[collectionIndex].name;
 	
 	
 	// saves the state AKA the last collection you had open
@@ -163,13 +163,13 @@ var newCollection = function(){
 
 // DELETE a collection
 var deleteCollection=function(){
-	var really = confirm("Are you sure you want to delete '"+collections[collectionIndex]+"'?");
+	var really = confirm("Are you sure you want to delete '"+collections[collectionIndex].name+"'?");
 		if (collections.length>1){
 			if(really){
 				var new_deleted = {
 					restoreType:"deleted_collection",
 					index:collectionIndex,
-					collectionName:collections[collectionIndex],
+					collectionName:collections[collectionIndex].name,
 					collectionContent:imageDB
 				};
 				_history.push(new_deleted); // push the new _history state for undo
@@ -198,10 +198,10 @@ var deleteCollection=function(){
 var renameCollection = function(newname){
 	
 	var new_name = $('#txtRenameCollection').val();
-		var old_name = collections[collectionIndex];
+		var old_name = collections[collectionIndex].name;
 		// change collection name only if new name is a an actual name and not the old name
 		if(new_name !== "" && new_name !== null && new_name !== old_name){
-			collections[collectionIndex].name = new_name;
+			collections[collectionIndex].name.name = new_name;
 			applyChanges();
 			popDropdown();
 			changeCollection(collectionIndex);
