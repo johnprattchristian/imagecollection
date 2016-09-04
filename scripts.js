@@ -9,10 +9,10 @@ var generateTimestamp = function(){
 	var year = dateObj.getUTCFullYear();
 	var month = dateObj.getUTCMonth();
 	var day = dateObj.getUTCDate();
-	var hour = dateObj.getHours();
-	var minute = dateObj.getMinutes();
-	var second = dateObj.getSeconds();
-	var milli = dateObj.getMilliseconds();
+	var hour = dateObj.getUTCHours();
+	var minute = dateObj.getUTCMinutes();
+	var second = dateObj.getUTCSeconds();
+	var milli = dateObj.getUTCMilliseconds();
 	
 	dateString = year.toString()
 				+(month < 10 ? "0" + month.toString() : month.toString())
