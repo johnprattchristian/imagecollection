@@ -25,6 +25,54 @@ var widerThanTall = function(img){
 	}
 }
 
+var getURL = function(item){
+	if(UpToDate(item)){
+		return item.url;
+	}
+	else{
+		return item;
+	}
+}
+
+var urlType = function(url,assumeImage = true){
+	var typeString = "";
+	var extension = img.substr(img.lastIndexOf('.')+1);
+	switch(extension){ // if its an image file
+		case 'jpg':
+		case 'jpeg':
+		case 'bmp':
+		case 'tif':
+		case 'gif':
+			typeString = 'image';
+			break;
+		case 'gifv': // if its an html5 video file
+		case 'webm':
+		case 'mp4':
+		case 'mov':
+		case 'avi':
+		case 'mpeg':
+			typeString = 'video';
+			break;
+		default:
+			// assume url is an image to simplify things
+			if(assumeImage){
+				typeString = 'image';
+			}
+			else{
+				typeString = 'generic';
+			}
+			
+			$(['mp4','webm','gifv']).each(function(x,item){
+				if(img.indexOf(item)>=0){ // does the url contain a video extension?
+					typeString = 'video'
+				}
+			});
+			break;
+	}
+	
+	return typeString;
+}
+
 var processURL = function(i){
 
 	/* for(var i = 0;i<imageDB.length;i++){ */
@@ -72,6 +120,7 @@ var processURL = function(i){
 	return element;
 };
 
+// used for getting rid of embedded HTML in captions that are being displayed
 var processCaption = function(image){
 	
 	var caption = "";

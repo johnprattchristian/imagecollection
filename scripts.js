@@ -3,6 +3,62 @@ var log = function(message){
 		console.log(message);
 };
 
+var generateTimestamp(){
+	var dateString = "";
+	var year = dateObj.getUTCFullYear();
+	var month = dateObj.getUTCMonth();
+	var day = dateObj.getUTCDate();
+	var hour = dateObj.getHours();
+	var minute = dateObj.getMinutes();
+	var second = dateObj.getSeconds();
+	
+	dateString = year.toString()
+				+(month < 10 ? "0" + month.toString() : month.toString())
+				+(day < 10 ? "0" + day.toString() : day.toString());
+				+(hour < 10 ? "0" + hour.toString() : hour.toString());
+				+(minute < 10 ? "0" + minute.toString() : minute.toString());
+				+(second < 10 ? "0" + second.toString() : second.toString());
+				
+	log('timestamp generated: ' + dateString);
+	
+	return dateString;
+}
+
+var MigrateDB = function(){
+	var newDB;
+	var dateObj = new Date();
+	
+	// get a timestamp for collections
+	var timestamp = generateTimestamp();
+	
+	newDB.libraries = [{name:'default',collections:[]];
+	
+	// the new collections located in libraries:
+	var newCollections = newDB.libraries[0].collections;
+	
+	
+	// collections is a global
+	$(collections).each(function(collection_index,collection_name){
+		// push each collection to the new collection model
+		newCollections.push(
+			// the new-style object for collections
+			{
+				name:collection_name, // set the new collection object name = collection item (which is just the namestring)
+				items:[], // items are images, videos, or albums of images and videos (expand to text entries?)
+				date_created:timestamp
+			}
+		)
+		
+		$(imageDB).each(function(i,item){
+			newCollections[newCollections.length - 1].items.push({
+				type:'image',
+				
+			})
+		});
+		
+	});
+}
+
 $(document).ready(function(){
 	
 /* INITIALIZATION */
