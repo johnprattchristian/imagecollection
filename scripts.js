@@ -25,31 +25,30 @@ var generateTimestamp(){
 }
 
 var MigrateDB = function(){
-	var newDB;
-	var dateObj = new Date();
 	
-	// get a timestamp for collections
-	var timestamp = generateTimestamp();
+	var newDB = new Object();
 	
-	newDB.libraries = [{name:'default',collections:[]];
-	
-	// the new collections located in libraries:
-	var newCollections = newDB.libraries[0].collections;
-	
+	// basically a Super database containing ALL the 
+	// user's *libraries* of *collections* of *items*,
+	// some of which could be *albums* of MORE *items*
+	newDB.id = 0;
+	newDB.libraries = [{
+		name:'default',date_created:generateTimestamp(),collections:[]
+	}]; // an array with 1 library to fill with all the current user collections
+	newDB.date_created = generateTimestamp();
 	
 	// collections is a global
-	$(collections).each(function(collection_index,collection_name){
-		// push each collection to the new collection model
-		newCollections.push(
-			// the new-style object for collections
-			{
-				name:collection_name, // set the new collection object name = collection item (which is just the namestring)
-				items:[], // items are images, videos, or albums of images and videos (expand to text entries?)
-				date_created:timestamp
-			}
-		)
+	$(collections).each(function(cindex,cname){
 		
-		$(imageDB).each(function(i,item){
+		var newCollection = new Object();
+		newCollection.name = cname;
+		newCollection.date_created = generateTimestamp();
+		newCollection.items = []; // initialize an empty array to then be filled in the following loop
+		
+		// iterate through the all the items in all the collections and add them to
+		// the newly-styled collection
+		
+		$(DATABASE[cindex]).each(function(i,item){
 			// shorthand the uptodate item function
 			var uptodate = UpToDate(item);
 			
@@ -64,8 +63,11 @@ var MigrateDB = function(){
 			
 			
 			// push the new style of item to the new library/collection style of database
-			newCollections[newCollections.length - 1].items.push(newItem);
+			newCollection.items.push(newItem);
 		});
+		
+		// push new-style collection to new libraries db
+		newDB.libraries[0].collections.push(newCollection);
 		
 	});
 }
