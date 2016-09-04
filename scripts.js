@@ -3,26 +3,29 @@ var log = function(message){
 		console.log(message);
 };
 
-var generateTimestamp(){
+var generateTimestamp = function(){
 	var dateString = "";
+	var dateObj = new Date();
 	var year = dateObj.getUTCFullYear();
 	var month = dateObj.getUTCMonth();
 	var day = dateObj.getUTCDate();
 	var hour = dateObj.getHours();
 	var minute = dateObj.getMinutes();
 	var second = dateObj.getSeconds();
+	var milli = dateObj.getMilliseconds();
 	
 	dateString = year.toString()
 				+(month < 10 ? "0" + month.toString() : month.toString())
-				+(day < 10 ? "0" + day.toString() : day.toString());
-				+(hour < 10 ? "0" + hour.toString() : hour.toString());
-				+(minute < 10 ? "0" + minute.toString() : minute.toString());
-				+(second < 10 ? "0" + second.toString() : second.toString());
+				+(day < 10 ? "0" + day.toString() : day.toString())
+				+(hour < 10 ? "0" + hour.toString() : hour.toString())
+				+(minute < 10 ? "0" + minute.toString() : minute.toString())
+				+(second < 10 ? "0" + second.toString() : second.toString())
+				+(milli < 10 ? "0" + milli.toString() : milli.toString());
 				
 	log('timestamp generated: ' + dateString);
 	
 	return dateString;
-}
+};
 
 var MigrateDB = function(){
 	
@@ -52,7 +55,7 @@ var MigrateDB = function(){
 			// shorthand the uptodate item function
 			var uptodate = UpToDate(item);
 			
-			var newItem;
+			var newItem = new Object();
 			
 			// determine the item type:
 			// item is up to date? has a url? use that. no? then the item *is* the url string.
@@ -68,8 +71,10 @@ var MigrateDB = function(){
 		
 		// push new-style collection to new libraries db
 		newDB.libraries[0].collections.push(newCollection);
-		
 	});
+	
+	localStorage.setItem('database'+newDB.id,JSON.stringify(newDB));
+	alert('database successfully upgraded!');
 }
 
 $(document).ready(function(){

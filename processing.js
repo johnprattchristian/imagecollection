@@ -36,7 +36,7 @@ var getURL = function(item){
 
 var getURLType = function(url,assumeImage = true){
 	var typeString = "";
-	var extension = img.substr(img.lastIndexOf('.')+1);
+	var extension = url.substr(url.lastIndexOf('.')+1);
 	switch(extension){ // if its an image file
 		case 'jpg':
 		case 'jpeg':
@@ -63,7 +63,7 @@ var getURLType = function(url,assumeImage = true){
 			}
 			
 			$(['mp4','webm','gifv']).each(function(x,item){
-				if(img.indexOf(item)>=0){ // does the url contain a video extension?
+				if(url.indexOf(item)>=0){ // does the url contain a video extension?
 					typeString = 'video'
 				}
 			});
