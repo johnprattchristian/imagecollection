@@ -7,31 +7,50 @@ $(document).ready(function(){
 var dynamicColorBars = function(){
 	var width = $('.column').width();
 	var canv = document.getElementById('canvDynamicColor');
+	var images = [];
+	$('.imageBox img').each(function(i,item){
+		images.push(item);
+	});
 	canv.height = '0px';
+	canv.style.display = 'block';
+	canv.style.border = 'solid 1px black';
 	
-	var totalHeight = 0;
+	var blockSize = {width:300,height:300}; // size of blocks to sample from each image
+	
+	var totalHeight = blockSize.height; //images[img].height;
+	
+	canv.width = blockSize.width;
+	canv.height = blockSize.height;
+	var ctx = canv.getContext('2d');
+	ctx.clearRect(0,0,canv.width,canv.height);
+	
 	for(var img in images){
-		totalHeight += images[img].height;
+		try{
+			ctx.drawImage(images[img]);
+			totalHeight+=blockSize.height;
+		}
+		catch(error){
+			continue;
+		}
 	}
 	
-	canv.width = width;
 	canv.height = totalHeight;
 	var ctx = canv.getContext('2d');
 	ctx.clearRect(0,0,canv.width,canv.height);
 	
 	var currentHeight = 0;
 	for(var img in images){
+		ctx.save(); // save region of entire canvas
+		ctx.rect(0,currentHeight,blockSize.width,blockSize.height);
+		ctx.clip();
 		try{
-			ctx.drawImage(images[img],0,currentHeight,width,500);
-			currentHeight+=500;
+			ctx.drawImage(images[img],-(images[img].width / 2 - blockSize.width / 2),currentHeight - (images[img].height / 2 - blockSize.height / 2));
 		}
 		catch(error){
-			console.log(error);
+			log(error);
 			continue;
 		}
-		finally{
-			continue;
-		}
+		
 	}
 	
 	var imageData = ctx.getImageData(0,0,canv.width,canv.height);
@@ -69,6 +88,7 @@ var dynamicColorBars = function(){
 	console.log('rgba is ' + rgba);
 };
 
+/*
 var images = [];
 var tm_dynamic = 0;
 var pushImageToDynamicColor = function(image){
@@ -78,8 +98,12 @@ var pushImageToDynamicColor = function(image){
 	img.src = image.src;
 	images.push(img);
 	console.log('pushed image! '+image.src + ' images is '+images.length+' images long');
-	if(images.length === $('.imageBox img').length){
-		setTimeout(dynamicColorBars,1000);
-	}
+	tm_dynamic = setTimeout(function(){
+		if(images.length === $('.imageBox img').length){
+			dynamicColorBars();
+		}
+	},500);
 	
 };
+
+*/

@@ -94,6 +94,10 @@ $(document).ready(function(){
 				});
 			
 				notify('"'+text+'" added.','good');
+				
+				// changeDynamicColor
+				
+				setTimeout(dynamicColorBars,5000);
 			}
 			else{
 				alert("Cannot find image at that URL! :( ");

@@ -127,7 +127,7 @@ var List = function(load_animation = false,callback){
 
 	$('.imageBox img').on('load',function(){
 			$(this).parent().fadeIn(500);
-			pushImageToDynamicColor(this);
+			//pushImageToDynamicColor(this);
 		}).on('error',function(){
 			$(this).parent().show();
 			$(this).addClass('loadError').height(250)
