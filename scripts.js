@@ -50,10 +50,21 @@ var MigrateDB = function(){
 		)
 		
 		$(imageDB).each(function(i,item){
-			newCollections[newCollections.length - 1].items.push({
-				type:'image',
-				
-			})
+			// shorthand the uptodate item function
+			var uptodate = UpToDate(item);
+			
+			var newItem;
+			
+			// determine the item type:
+			// item is up to date? has a url? use that. no? then the item *is* the url string.
+			// determine the item type from that using getURLType
+			newItem.type = uptodate ? (item.url ? getURLType(item.url) : getURLType(item)) : getURLType(item);
+			newItem.url = getURL(item);
+			newItem.date_added = generateTimestamp();
+			
+			
+			// push the new style of item to the new library/collection style of database
+			newCollections[newCollections.length - 1].items.push(newItem);
 		});
 		
 	});

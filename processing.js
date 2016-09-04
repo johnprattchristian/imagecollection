@@ -34,7 +34,7 @@ var getURL = function(item){
 	}
 }
 
-var urlType = function(url,assumeImage = true){
+var getURLType = function(url,assumeImage = true){
 	var typeString = "";
 	var extension = img.substr(img.lastIndexOf('.')+1);
 	switch(extension){ // if its an image file
