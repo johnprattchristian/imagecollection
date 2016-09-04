@@ -120,14 +120,14 @@ var popDropdown = function(){
 var changeCollection=function(new_index){
 	collectionIndex = new_index;
 	
-	imageDB = DATABASE.libraries[libraryIndex].collections[collectionIndex].name;
+	imageDB = DATABASE.libraries[libraryIndex].collections[collectionIndex];
 	$("#collectionTitleSpan").html(collections[collectionIndex].name);
 	document.title = collections[collectionIndex].name;
 	
 	
 	// saves the state AKA the last collection you had open
 	lastVisited.collection = collectionIndex;
-	setLastVisited();
+	setLastVisited(); // sets the localStorage last_visited_index object
 	
 	if(imageDB==null || typeof imageDB=='undefined'){
 		imageDB = {
