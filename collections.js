@@ -81,7 +81,7 @@ var popDropdown = function(){
 		}
 		$("#dropdown").append("<option>new collection...</option>");
 		
-		document.getElementById("dropdown").selectedIndex=dbIndex;*/
+		document.getElementById("dropdown").selectedIndex=collectionIndex;*/
 		
 		// New Code:
 		
@@ -92,7 +92,7 @@ var popDropdown = function(){
 			$(item).remove();
 		});
 		for(var c in collections){
-			$(container).append('<span class="collectionItem">'+collections[c]+'</span>');
+			$(container).append('<span class="collectionItem">'+collections[c].name+'</span>');
 		}
 		// bind click event to collectionItems:
 		$('.collectionItem').on('click',function(){
@@ -105,7 +105,7 @@ var popDropdown = function(){
 		// append "new collection" button to the end:
 		$(container).append('<span id="btnNewCollection" class="collectionItem">+</span>');
 		
-		$(selectCollectionItem(dbIndex)); // select the collectionItem corresponding to the current dbIndex
+		$(selectCollectionItem(collectionIndex)); // select the collectionItem corresponding to the current collectionIndex
 		
 		//bind new collection button click event
 		$('#btnNewCollection').on('click',function(){
@@ -118,14 +118,23 @@ var popDropdown = function(){
 
 // CHANGE the current collection
 var changeCollection=function(new_index){
-	dbIndex = new_index;
+	collectionIndex = new_index;
 	
-	imageDB = DATABASE[dbIndex];
-	$("#collectionTitleSpan").html(collections[dbIndex]);
-	document.title = collections[dbIndex];
-	localStorage.setItem("last_visited_index",dbIndex); // saves the state AKA the last collection you had open
+	imageDB = DATABASE.libraries[libraryIndex].collections[collectionIndex];
+	$("#collectionTitleSpan").html(collections[collectionIndex]);
+	document.title = collections[collectionIndex];
+	
+	
+	// saves the state AKA the last collection you had open
+	lastVisited.collection = collectionIndex;
+	setLastVisited();
+	
 	if(imageDB==null || typeof imageDB=='undefined'){
-		imageDB = [];
+		imageDB = {
+			name:'[collection]',
+			date_created:generateTimestamp(),
+			items:[]
+		};
 	}
 	applyChanges();
 	List(true); // with animations
@@ -145,7 +154,7 @@ var newCollection = function(){
 			return;
 	}
 	collections.push(new_collection); // add new collection
-	localStorage.setItem("collection_names",JSON.stringify(collections)); // update the list of collection names ;
+	applyChanges();
 	popDropdown();
 	changeCollection(collections.length-1); // Switch over to the new collection
 
@@ -154,21 +163,21 @@ var newCollection = function(){
 
 // DELETE a collection
 var deleteCollection=function(){
-	var really = confirm("Are you sure you want to delete '"+collections[dbIndex]+"'?");
+	var really = confirm("Are you sure you want to delete '"+collections[collectionIndex]+"'?");
 		if (collections.length>1){
 			if(really){
 				var new_deleted = {
 					restoreType:"deleted_collection",
-					index:dbIndex,
-					collectionName:collections[dbIndex],
+					index:collectionIndex,
+					collectionName:collections[collectionIndex],
 					collectionContent:imageDB
 				};
 				_history.push(new_deleted); // push the new _history state for undo
-				DATABASE.splice(dbIndex,1); //delete the collection from DATABASE
-				collections.splice(dbIndex,1); // remove its name from collection_names
+				DATABASE.splice(collectionIndex,1); //delete the collection from DATABASE
+				collections.splice(collectionIndex,1); // remove its name from collection_names
 				localStorage.setItem("collection_names",JSON.stringify(collections));
 				localStorage.setItem("imageDB",JSON.stringify(DATABASE));
-				changeCollection(dbIndex-1); // Now that this doesn't exist, go back 1 collection 
+				changeCollection(collectionIndex-1); // Now that this doesn't exist, go back 1 collection 
 				popDropdown(); // refresh the dropdown of collections
 				
 				setTimeout(notify('"' + new_deleted.collectionName + '" deleted',"warning"),100);
@@ -189,18 +198,18 @@ var deleteCollection=function(){
 var renameCollection = function(newname){
 	
 	var new_name = $('#txtRenameCollection').val();
-		var old_name = collections[dbIndex];
+		var old_name = collections[collectionIndex];
 		// change collection name only if new name is a an actual name and not the old name
 		if(new_name !== "" && new_name !== null && new_name !== old_name){
-			collections[dbIndex] = new_name;
-			localStorage.setItem("collection_names",JSON.stringify(collections));
+			collections[collectionIndex].name = new_name;
+			applyChanges();
 			popDropdown();
-			changeCollection(dbIndex);
+			changeCollection(collectionIndex);
 			
 			//notification
 			notify('Renamed "' + old_name + '" to "' + new_name + '"',"good");
 			// store old collection name in _history
-			_history.push({restoreType:"collection_name",collection_index:dbIndex,name:old_name});
+			_history.push({restoreType:"collection_name",collection_index:collectionIndex,name:old_name});
 		}
 }
 

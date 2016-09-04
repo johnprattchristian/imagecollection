@@ -4,8 +4,8 @@ var Undo = function(){
 		var item = _history[_history.length-1]; // set item to the most recently _history
 		var itemsLeft = _history.length - 1;
 		if(item.restoreType==="deleted_image"){
-			if(dbIndex === item.index){ // check if on the same collection where the image was deleted 
-				imageDB.splice(item.indexOfImage,0,item.imageURL); // add the item back into the collection it was deleted from 
+			if(collectionIndex === item.index){ // check if on the same collection where the image was deleted 
+				imageDB.items.splice(item.indexOfImage,0,item.imageURL); // add the item back into the collection it was deleted from 
 				applyChanges();
 				List(false,function(){
 					var element = document.getElementById(""+item.indexOfImage+"");
@@ -29,8 +29,8 @@ var Undo = function(){
 		}
 		else if(item.restoreType==="added_image"){ // if last action was Add Image, then just remove the image
 		
-			if(dbIndex===item.index){
-				imageDB.splice(selected_index,1);
+			if(collectionIndex===item.index){
+				imageDB.items.splice(selected_index,1);
 				applyChanges();
 				List();
 				
@@ -39,8 +39,8 @@ var Undo = function(){
 		}
 		else if(item.restoreType==="caption"){
 			// restore the old caption:
-			notify(' "' + imageDB[item.index].caption + '" reverted back to "' + item.caption + '". ' + itemsLeft +' _history items left.',"neutral");
-			imageDB[item.index].caption = item.caption;
+			notify(' "' + imageDB.items[item.index].caption + '" reverted back to "' + item.caption + '". ' + itemsLeft +' _history items left.',"neutral");
+			imageDB.items[item.index].caption = item.caption;
 			List();
 			
 		}

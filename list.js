@@ -7,9 +7,9 @@ var Delete = function(domElement = null){
 		//FOR UNDO add item to list of deleted items FOR UNDO:
 			var new_deleted = {
 					restoreType:"deleted_image",
-					index:dbIndex,
+					index:collectionIndex,
 					indexOfImage:selected_index,
-					imageURL:imageDB[selected_index]
+					imageURL:imageDB.items[selected_index]
 				// value:[which collection,the index of the image in the collection,the src url of the image]
 			};
 			_history.push(new_deleted);
@@ -23,7 +23,7 @@ var Delete = function(domElement = null){
 			}
 		}
 		//remove the item
-		imageDB.splice(selected_index,1);
+		imageDB.items.splice(selected_index,1);
 		
 		applyChanges();
 		
@@ -54,7 +54,7 @@ var List = function(load_animation = false,callback){
 	}
 	
 	var current_column = 0; // the column to populate. iterate through the four
-	for(var i = imageDB.length - 1;i > -1;i--){			
+	for(var i = imageDB.items.length - 1;i > -1;i--){			
 		
 		var element = processURL(i);
 		// Finally, LAYOUT the images and videos in the view // 
@@ -62,7 +62,7 @@ var List = function(load_animation = false,callback){
 		$("#imageList").children().eq(current_column).append("<div class='imageBox' id='box"+i+"' style='display:"+(load_animation ? 'none' : 'block')+"' >"
 		+ element // the image or video
 		+ /*delete button*/ "<button class='btnDelete' id='delete"+i+"'>x</button>"
-		+"<div class='caption'><span class='captionText'>" + processCaption(imageDB[i])+"</span>"
+		+"<div class='caption'><span class='captionText'>" + processCaption(imageDB.items[i])+"</span>"
 		+"<button class='btnEditCaption'>&#128393;</button></div>" // add edit button to image caption
 		+"</div>"); // end the imageBox div
 		
@@ -162,7 +162,7 @@ var List = function(load_animation = false,callback){
 		$(element).children('.captionText').hide();
 		$(element).prepend('<textarea class="txtEditCaption"/>');
 		
-		$('.txtEditCaption').val(getCaption(imageDB[selected_index])) // put in the old caption
+		$('.txtEditCaption').val(getCaption(imageDB.items[selected_index])) // put in the old caption
 		.on('keydown',function(e){
 			if(!e.shiftKey && e.which == 13){
 				e.preventDefault();
@@ -206,33 +206,33 @@ var changeCaption = function(item_index,newcaption,callback){
 	var old_caption = "";
 	hideDialogue();
 	if(new_caption !== "" && new_caption !== null){
-		if(!UpToDate(imageDB[item_index])){
+		if(!UpToDate(imageDB.items[item_index])){
 			//forces new Database style on old depracated objects:
-			if(imageDB[item_index]!== new_caption)
+			if(imageDB.items[item_index]!== new_caption)
 			{
-				old_caption = imageDB[item_index];
+				old_caption = imageDB.items[item_index];
 				if(new_caption !== ""){
 					
 					// updates object to new style with .caption property:
-					imageDB[item_index] = {'url':imageDB[item_index],'caption':new_caption};
+					imageDB.items[item_index] = {'url':imageDB.items[item_index],'caption':new_caption};
 				}
 				else{
 					// if input was blank, set the caption to URL
-					imageDB[item_index] = {'url':imageDB[item_index],'caption':imageDB[item_index]};
+					imageDB.items[item_index] = {'url':imageDB.items[item_index],'caption':imageDB.items[item_index]};
 				}
 				notify("Image caption changed","neutral");
 			}
 		}
 		else{
-			if(imageDB[item_index].caption !== new_caption)
+			if(imageDB.items[item_index].caption !== new_caption)
 			{
-				old_caption = imageDB[item_index].caption;
+				old_caption = imageDB.items[item_index].caption;
 				if(new_caption !== ""){
-					imageDB[item_index].caption = new_caption; // uses the new database style with url: & caption:
+					imageDB.items[item_index].caption = new_caption; // uses the new database style with url: & caption:
 					
 				}
 				else{
-					imageDB[item_index].caption = imageDB[item_index].url;
+					imageDB.items[item_index].caption = imageDB.items[item_index].url;
 				}
 				notify("Image caption changed","neutral");
 			}

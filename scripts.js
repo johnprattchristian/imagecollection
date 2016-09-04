@@ -51,7 +51,7 @@ var MigrateDB = function(){
 		// iterate through the all the items in all the collections and add them to
 		// the newly-styled collection
 		
-		$(DATABASE[cindex]).each(function(i,item){
+		$(DATABASE.libraries[libraryIndex].collections[cindex]).each(function(i,item){
 			// shorthand the uptodate item function
 			var uptodate = UpToDate(item);
 			
@@ -84,7 +84,7 @@ $(document).ready(function(){
 	// Initial functions:
 	// Focus on the TEXT input when the page opens
 	$("#txtInput").focus();
-	$("#collectionTitleSpan").html(collections[dbIndex]);
+	$("#collectionTitleSpan").html(collections[collectionIndex]);
 	$('#dialogueParent').hide(); // Hide the export dialogue box
 	
 /* DONE INITIALIZING */
@@ -106,7 +106,7 @@ $(document).ready(function(){
 	var openDialogRenameCollection = function(){
 		showDialogue('d_RenameCollection'); // Rename collection dialogue
 		var txtbx = $('#txtRenameCollection');
-		txtbx.val(collections[dbIndex]); // set the textbox to the current collection name
+		txtbx.val(collections[collectionIndex]); // set the textbox to the current collection name
 		txtbx.focus();
 		txtbx.select();
 	}
@@ -158,12 +158,12 @@ $(document).ready(function(){
 			}
 			
 			if(validImageCheck()){ // is there actually an image at this url?
-				imageDB.push({"url":url,"caption":caption});
+				imageDB.items.push({"url":url,"caption":caption});
 				applyChanges();
 				List();
 				_history.push({
 					restoreType:"added_image",
-					index:dbIndex,
+					index:collectionIndex,
 				
 				});
 			
@@ -198,7 +198,7 @@ $(document).ready(function(){
 	});
 	
 	$('#collectionsContainer').hide();
-	selectCollectionItem(dbIndex);
+	selectCollectionItem(collectionIndex);
 	
 // KEYDOWN/PRESS Event Handlers
 	// Capture "ENTER" key for textbox (alt entering method to the submit button)
