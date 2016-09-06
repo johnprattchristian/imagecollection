@@ -116,20 +116,7 @@ var popDropdown = function(){
 		
 };
 
-// CHANGE the current collection
-var changeCollection=function(new_index){
-	if(new_index < 0){
-		changeCollection(0);
-		alert("can't move back that far in collections");
-		return;
-	}
-	collectionIndex = new_index;
-	
-	imageDB = DATABASE.libraries[libraryIndex].collections[collectionIndex];
-	$("#collectionTitleSpan").html(collections[collectionIndex].name);
-	document.title = collections[collectionIndex].name;
-	
-
+var checkThemeCache = function(){
 	if(typeof imageDB.themeCache !== 'undefined'){
 		if(imageDB.themeCache || imageDB.themeCache.sampleSize !== $('.imageBox img').length){ // colors,etc. generated for the collection. If the sample size (number of images) has changed, create a new theme color:
 			var theme = imageDB.themeCache; // an object property with different theme props in the collection
@@ -142,8 +129,20 @@ var changeCollection=function(new_index){
 			},1000);
 		}
 	}
-	else{
+};
+
+// CHANGE the current collection
+var changeCollection=function(new_index){
+	if(new_index < 0){
+		changeCollection(0);
+		log("can't move back that far in collections");
+		return;
 	}
+	collectionIndex = new_index;
+	
+	imageDB = DATABASE.libraries[libraryIndex].collections[collectionIndex];
+	$(".collection-title-bottom-span").html(collections[collectionIndex].name);
+	document.title = collections[collectionIndex].name;
 	
 	if(imageDB==null || typeof imageDB=='undefined'){
 		imageDB = {
@@ -179,11 +178,9 @@ var newCollection = function(){
 		date_created:generateTimestamp(),
 		items:[]
 	}); // add new collection
-	applyChanges();
-	popDropdown();
 	changeCollection(DATABASE.libraries[libraryIndex].collections.length-1); // Switch over to the new collection
-
-	
+	popDropdown();
+	applyChanges();
 };
 
 // DELETE a collection
@@ -194,18 +191,18 @@ var deleteCollection=function(){
 				var new_deleted = {
 					restoreType:"deleted_collection",
 					index:collectionIndex,
-					collectionName:collections[collectionIndex].name,
-					collectionContent:imageDB
+					data:imageDB,
+					parentIndex:libraryIndex
 				};
 				_history.push(new_deleted); // push the new _history state for undo
 				log('pre-slice: collections length = ' + collections.length);
 				DATABASE.libraries[libraryIndex].collections.splice(collectionIndex,1); //delete the collection from DATABASE
 				log('post-slice: collections length =' + collections.length);
+				changeCollection(collectionIndex-1); // Now that this doesn't exist, go back 1 collection
 				applyChanges();
-				changeCollection(collectionIndex-1); // Now that this doesn't exist, go back 1 collection 
 				popDropdown(); // refresh the dropdown of collections
 				
-				setTimeout(notify('"' + new_deleted.collectionName + '" deleted',"warning"),100);
+				setTimeout(notify('"' + new_deleted.data.name + '" deleted',"warning"),100);
 				return;
 				
 				
