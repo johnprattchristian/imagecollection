@@ -79,7 +79,7 @@ var popLibrariesDropdown = function(){
 
 var changeLibrary = function(index){
 	
-	if(index > -1){
+	if(index > -1 && index !== libraryIndex){
 		libraryIndex = index;
 		collectionIndex = 0;
 		
@@ -96,10 +96,13 @@ var changeLibrary = function(index){
 		changeCollection(0);
 		List();
 		
+		//$('#btnLibrariesDropdown').html(DATABASE.libraries[libraryIndex].name);
 		notify('Switched to library "' + DATABASE.libraries[libraryIndex].name + '".');
 	}
 	else{
-		alert('selected index < 0');
+		if(index < 0){
+			alert('selected index < 0');
+		}
 	}
 	
 	
@@ -108,7 +111,8 @@ var changeLibrary = function(index){
 // hide dropdown libraries when focus lost
 $(document).ready(function(){
 	$(document).on('click',function(e){
-		if(e.target !== document.getElementById('dropDownLibraries') && e.target !== $('#btnLibrariesDropdown').get(0)){
+		// if the click is not on library dropdown and not on the library button and not on one of the library dropdown children, then close the dropdown
+		if(e.target !== document.getElementById('dropDownLibraries') && e.target !== $('#btnLibrariesDropdown').get(0) && $('#dropDownLibraries').has(e.target).length === 0) {
 			$('#dropDownLibraries').hide();
 		}
 	});
