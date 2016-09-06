@@ -16,16 +16,23 @@ var Undo = function(){
 			}
 		}
 		else if(item.restoreType==="deleted_collection"){
-			DATABASE.splice(item.index,0,item.collectionContent); // add the deleted collection back into DATABASE; 0=index of collection IN DATABASE 2=all the fucking data
-
-			collections.splice(item.index,0,item.collectionName); //1 = the name of the collection
-			localStorage.setItem("collection_names",JSON.stringify(collections));
+			DATABASE.libraries[item.parentIndex].collections.splice(item.index,0,item.data);
+			
 			localStorage.setItem(CURRENT_DATABASE,JSON.stringify(DATABASE));
+			changeLibrary(item.parentIndex);
 			changeCollection(item.index);
 			popDropdown();
 			
+			notify('Collection "' + item.data.name + '" restored. ' + itemsLeft + ' items left in trash.',"good");
+		}
+		else if(item.restoreType==="deleted_library"){
+			DATABASE.libraries.splice(item.index,0,item.data);
 			
-			notify('Collection "' + item.collectionName + '" restored. ' + itemsLeft + ' items left in trash.',"good");
+			localStorage.setItem(CURRENT_DATABASE,JSON.stringify(DATABASE));
+			changeLibrary(item.index);
+			popLibrariesDropdown();
+			
+			notify('Library "' + item.data.name + '" restored. ' + itemsLeft + ' history items left.','good');
 		}
 		else if(item.restoreType==="added_image"){ // if last action was Add Image, then just remove the image
 		
