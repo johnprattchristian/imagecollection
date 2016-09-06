@@ -84,10 +84,9 @@ $(document).ready(function(){
 			
 		});
 	}
-	else{
-		collections = DATABASE.libraries[libraryIndex].collections;
-		imageDB = collections[collectionIndex]; //set imageDB to a single collection in the database
-	}
+	collections = DATABASE.libraries[libraryIndex].collections;
+	imageDB = collections[collectionIndex]; //set imageDB to a single collection in the database
+	
 	
 	// (Other globals)
 	 selected_index = -1; // the image to manipulate in the given code (for controls and the like)
