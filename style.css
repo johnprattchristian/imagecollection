@@ -198,9 +198,16 @@ h1{
 	
 }
 
-.libraryMenuItem.libraryTitle{
-	
+.libraryCounter{
+	color:gray;
+	font-size:12pt;
+	margin-left:10px;
 }
+
+.libraryCounter.hover{
+	color:darkgray;
+}
+
 
 .libraryMenuItem:hover{
 	color:white;
@@ -360,6 +367,7 @@ button:focus{
 	display:inline-block;
 	padding:10px;
 	color:white;
+	padding-right:10px;
 }
 
 .collectionItem:hover{
@@ -378,6 +386,12 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#80fcfff4', e
 
 .collectionItemClicked:hover{
 	background:rgba(70,70,70,0.8);
+}
+
+.collectionCounter{
+	color:silver;
+	font-size:10pt;
+	margin-left:10px;
 }
 
 .editCollectionItem{
@@ -420,6 +434,23 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#80fcfff4', e
 	margin-right:50px;
 }
 
+#bottomRightButtonsContainer{
+	position:absolute;
+	right:20px;
+	top:10px;
+}
+
+div.rounded.superButton{
+	padding:0px 15px;
+	display:inline-block;
+	padding:10px 15px;
+	height:auto;
+}
+
+.pseudoButtonText{
+	position:relative;
+	margin:auto auto;
+}
 
 /*  spacers */
 .spacer{

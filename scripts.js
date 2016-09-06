@@ -173,7 +173,7 @@ $(document).ready(function(){
 				imageDB.items.push({"url":url,"caption":caption});
 				applyChanges();
 				List();
-				_history.push({
+				pushHistoryItem({
 					restoreType:"added_image",
 					index:collectionIndex,
 				
@@ -183,6 +183,7 @@ $(document).ready(function(){
 				
 				// changeDynamicColor
 				
+				popDropdown();
 				setTimeout(dynamicColorBars,5000);
 			}
 			else{

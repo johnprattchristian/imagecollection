@@ -6,11 +6,18 @@ $(function(){
 			deleteLibrary();
 		}
 	});
+	
+	$('.libraryMenuItem').on('hover',function(e){
+		log('mouseover');
+		$(this).children('.libraryCounter').addClass('.hover');
+	}).on('mouseout',function(){
+		$(this).children('.libraryCounter').removeClass('.hover');
+	});
 });
 
 var deleteLibrary = function(index){
 		// push library to history to restore if needed
-		_history.push({
+		pushHistoryItem({
 			restoreType:'deleted_library',
 			index:libraryIndex,
 			data:DATABASE.libraries[libraryIndex]
@@ -50,6 +57,7 @@ var newLibrary = function(libraryName){
 		});
 		
 		applyChanges();
+		popLibrariesDropdown();
 		changeLibrary(DATABASE.libraries.length - 1);
 		notify('New library "' + libraryName + '" created.');
 	}
@@ -63,12 +71,12 @@ var popLibrariesDropdown = function(){
 	dropdown.children('.libraryMenuItem').remove();
 	$('#blueCircle').hide() // hide the blue dot until it finds a home
 	$(DATABASE.libraries).each(function(i,item){
-		dropdown.append('<div class="libraryMenuItem" name="library'+i+'"><span class="libraryTitle">'+item.name+'</span></div>');
+		dropdown.append('<div class="libraryMenuItem" name="library'+i+'"><span class="libraryTitle">'+item.name+'</span><span class="libraryCounter">'+item.collections.length+' collections</span></div>');
 		if(i === libraryIndex){
 			dropdown.children('.libraryMenuItem').last().append('<img id="blueCircle" src="blue-dot.png" height="15px" width="15px"></img>');
 		}
 	});
-	dropdown.append('<div class="libraryMenuItem btnNewLibrary">+</div>');
+	dropdown.append('<div class="libraryMenuItem btnNewLibrary">+<span class="libraryCounter">New Library</span></div>');
 	
 	$('.btnNewLibrary').on('click',function(){
 		var result = prompt('Enter a name for the library.');
