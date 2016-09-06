@@ -27,11 +27,12 @@ var generateTimestamp = function(){
 	return dateString;
 };
 
+// ONLY USE ON OLD DATABASES!
 var MigrateDB = function(){
 	
 	var newDB = new Object();
 	
-	// basically a Super database containing ALL the 
+	// basically a navbar-top database containing ALL the 
 	// user's *libraries* of *collections* of *items*,
 	// some of which could be *albums* of MORE *items*
 	newDB.id = 0;
@@ -84,7 +85,7 @@ $(document).ready(function(){
 	// Initial functions:
 	// Focus on the TEXT input when the page opens
 	$("#txtInput").focus();
-	$("#collectionTitleSpan").html(DATABASE.libraries[libraryIndex].collections[collectionIndex].name);
+	$(".collection-title-bottom-span").html(DATABASE.libraries[libraryIndex].collections[collectionIndex].name);
 	$('#dialogueParent').hide(); // Hide the export dialogue box
 	
 /* DONE INITIALIZING */
@@ -121,7 +122,7 @@ $(document).ready(function(){
 		openDialogRenameCollection();
 	});
 	
-	$('#collectionTitleSpan').on('click',function(){
+	$('.collection-title-bottom-span').on('click',function(){
 		scrollToTop();
 	});
 
