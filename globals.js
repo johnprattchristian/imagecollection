@@ -67,7 +67,7 @@ $(document).ready(function(){
 	 libraries = [];
 	 collections = [];
 	 imageDB = [];
-	if (DATABASE==null){
+	if (DATABASE==null || typeof DATABASE === 'undefined'){
 		DATABASE = new Object();
 		DATABASE.id = 0;
 		DATABASE.date_created = generateTimestamp();
