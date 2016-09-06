@@ -67,11 +67,12 @@ $(document).ready(function(){
 	 libraries = [];
 	 collections = [];
 	 imageDB = [];
-	if (DATABASE==null){
+	if (DATABASE==null || typeof DATABASE === 'undefined'){
 		DATABASE = new Object();
 		DATABASE.id = 0;
 		DATABASE.date_created = generateTimestamp();
 		// generate a new clean DATABASE with 'default' library and 1 'default' empty collection
+		DATABASE.libraries = [];
 		DATABASE.libraries.push({
 			name:'default',
 			collections:[{
