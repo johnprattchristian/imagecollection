@@ -1,5 +1,7 @@
 var iterating = false; // decide if iterating the slideshow or just jumping into fullscreen
 
+var ghostImageForZoom = new Image();
+
 // function to test if fullscreen
 var Fullscreen = function(){
 	
@@ -34,20 +36,53 @@ var goFullscreen = function(){
 
 	$('#FullScreenView').css('visibility','visible');
 };
+
+var sizeGhostImage = function(img){
+	var ratio;
+	if(widerThanTall(img)){
+		ghostImageForZoom.width = screen.width;
+		ratio = img.height / img.width;
+		ghostImageForZoom.height = screen.width * ratio;
+	}
+	else{
+		ghostImageForZoom.height = screen.height;
+		ratio = img.width / img.height;
+		ghostImageForZoom.width = screen.height * ratio;
+	}
+}
+
+var sizeGhostImageForWidth = function(element,img){
+	ghostImageForZoom.width = $(element).width();
+	ratio = img.height / img.width;
+	ghostImageForZoom.height = $(element).width() * ratio;
+}
 	
 var fullscreenImage = function(img){
 	currentFSElement = img; // this is for other functions to know on the first time using currentFSElement
 	removeFullScreenChildren();
 	var element = document.getElementById("FullScreenView");
-	//element.style.visibility="visible";
+	
 	element.style.backgroundImage='url('+img.getAttribute("src")+')';
+	element.style.backgroundSize = 'contain';
+	element.style.backgroundPosition = 'center';
+	zoomedIn = false;
+	
+	// simultaneously add image to ghostImageForZoom
+	ghostImageForZoom = new Image();
+	ghostImageForZoom.src = img.getAttribute('src');
+	
+	// figure out the correct aspect ratio and scale up/down the ghostImageForZoom to max screen height/width
+	sizeGhostImage(img);
+	
+	// make Fullscreen background black
 	$(element).css("background-color","black");
 	if (Fullscreen() == false) { // not already fullscreen, right?
 	
 		goFullscreen();
-		
+
+		$('.Notifications').hide();
 		if(getSetting('fullscreenCaptions').value === true){
-			notify(imageDB[selected_index].caption);
+			notify(imageDB.items[selected_index].caption);
 		}
 	}
 	
@@ -74,7 +109,7 @@ var fullscreenVideo = function(vid){
 		
 		goFullscreen();
 		if(getSetting('fullscreenCaptions').value){
-			notify(imageDB[selected_index].caption);
+			notify(imageDB.items[selected_index].caption);
 		}
 		
 	}
@@ -95,10 +130,10 @@ var IterateSlideshow = function(direction){
 				element = document.getElementById((parseInt(currentFSElement.getAttribute("id"))-1).toString());
 			}
 			else{ // we've reached the end of the collection:
-				element = document.getElementById((imageDB.length-1).toString()); // go back to the beginning of the collection
+				element = document.getElementById((imageDB.items.length-1).toString()); // go back to the beginning of the collection
 			}
 		}else{
-			if(nextElemId<=imageDB.length-1){ // does not exceed the collection length
+			if(nextElemId<=imageDB.items.length-1){ // does not exceed the collection length
 				element = document.getElementById((parseInt(currentFSElement.getAttribute("id"))+1).toString());
 			}
 			else{ // go back to the end of collection
@@ -117,7 +152,7 @@ var IterateSlideshow = function(direction){
 		
 		var newid = parseInt(currentFSElement.getAttribute('id'));
 		if(getSetting('fullscreenCaptions')){
-			notify(imageDB[newid].caption ? imageDB[newid].caption : imageDB[newid]);
+			notify(imageDB.items[newid].caption ? imageDB.items[newid].caption : imageDB.items[newid]);
 		}
 		
 };
@@ -178,11 +213,89 @@ $(document).ready(function(){
 	});
 	
 
+	var wheelEvent = function(){
+		
+	};
+	/*
+	$('#FullScreenView').on('wheel',function(e){
+			var ogEvent = e.originalEvent;
+			var factor = 1.05;
+			
+		//if($(this).has('video').length === 0){ // image not video
+			if(ogEvent.deltaY < 0){ // zooming in
+			
+				// scale the ghostImage
+				ghostImageForZoom.width *= factor;
+				ghostImageForZoom.height *= factor;
+				
+				
+				$(this).css({
+					backgroundSize:String(ghostImageForZoom.width + 'px ' + ghostImageForZoom.height + 'px')
+				});
+				
+				var newPosition = {
+					x:e.clientX - bgPosition(this).x * (factor-1),
+					y:0
+				};
+				
+				$(this).css('background-position',newPosition.x + 'px ' + newPosition.y + 'px');
+				
+				
+				zoomedIn = true;
+				
+			}
+			else{ // zooming out 
+			// don't let it get smaller than the screen
+				if(widerThanTall(ghostImageForZoom) ? (ghostImageForZoom.width > $(this).width()) : (ghostImageForZoom.height > $(this).height())){ // create if statement based on whether its a wide or tall image 
+					// scale the ghostImage
+					ghostImageForZoom.width /= factor;
+					ghostImageForZoom.height /= factor;
+					
+					// change backgroundImage to ghostImage size
+					$(this).css({
+						backgroundSize:String(ghostImageForZoom.width + 'px ' + ghostImageForZoom.height + 'px')
+					});
+					log($(this).css('backgroundSize'));
+				}
+				else if(ghostImageForZoom.height <= $(this).height()){
+					
+					zoomedIn = false; // not zooming anymore
+				}
+			}
+		//}
+	});
+	*/
+	var dragging = function(){
+		// just a pointer
+	}
+	// variables for dragging and zooming
+	var dragging = false,
+		originX = 0,
+		originY = 0,
+		zoomedIn = false,
+		zoomFactor = 0.1,
+		delta = {x:0,y:0};
+	
+	// drag around a zoomed in image
+	$('#FullScreenView').on('mousemove',function(e){
+		
+		if(dragging){
+			
+		
+			if( (widerThanTall(ghostImageForZoom) ? (delta.x <= 0 && delta.x >= (screen.width - ghostImageForZoom.width)) : (delta.y <= 0 && delta.y >= (screen.height - ghostImageForZoom.height)))){
+				
+				// establish distance to move
+				delta = {x:e.clientX - originX,y:e.clientY - ghostImageForZoom.height * originY};
+				console.log(delta);
+				$(this).css('backgroundPosition',String(delta.x + 'px '+(delta.y)+'px'));
+			}
+		}
+	});
 
 	//Fullscreen click events
 	$('#FullScreenView')
-		.on('click',function(e){
-			if(e.target !== document.getElementById('btnExitFullscreen')){
+		.on('mousedown',function(e){
+			if(!zoomedIn && e.target !== document.getElementById('btnExitFullscreen')){
 				if(e.which===1){
 					IterateSlideshow(1);
 				}
@@ -192,17 +305,54 @@ $(document).ready(function(){
 				else if(e.which===2){
 					
 					alert("middle button!");
-					if(document.webkitExitFullscreen){
-						e.preventDefault();
-						exitFullScreen();
-					}
+						if(document.webkitExitFullscreen){
+							// is bgSize set to 'covered'?
+							var covered = false;
+							var dragging = false,
+								originX = 0, originY = 0;
+						}
 				}
 			}
 		})
+		.on('mousedown',function(e){
+			if(!covered){
+				if(e.target !== document.getElementById('btnExitFullscreen')){
+					if(e.which===1){
+						IterateSlideshow(1);
+					}
+					else if(e.which===3){
+						IterateSlideshow(-1);
+					}
+					else if(e.which===2){
+						e.preventDefault();
+					}
+				}
+				
+			}
+			if(zoomedIn){
+				dragging = true; // only set if zoomed in
+				originX = e.clientX - bgPosition(this).x;
+				originY = (e.clientY - bgPosition(this).y) / ghostImageForZoom.height;
+			}
+
+			
+		})
+		.on('mouseup',function(e){
+			dragging = false;
+		})
 		.on('contextmenu',function(e){ // 'contextmenu' is just right click basically
 			e.preventDefault();
-			IterateSlideshow(-1);
+			//IterateSlideshow(-1);
+
+
+		})
+		.on('contextmenu',function(e){ // 'contextmenu' is just right click basically
+			e.preventDefault();
+		})
+		.on('mouseup',function(e){
+			dragging = false;
 		});
+	
 	
 	// SLIDESHOW ARROW KEY EVENTS
 	$(window).on("keydown",function(e){
@@ -234,8 +384,7 @@ $(document).ready(function(){
 	});
 	
 	$('#btnExitFullscreen').click(function(){
-	
-					exitFullScreen();
+			exitFullScreen();
 	});
 });
 		

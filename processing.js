@@ -16,16 +16,73 @@ var UpToDate = function(db_object_to_check){
 	}
 };
 
+var widerThanTall = function(img){
+	if(img.width > img.height){
+		return true;
+	}
+	else{
+		return false;
+	}
+}
+
+var getURL = function(item){
+	if(UpToDate(item)){
+		return item.url;
+	}
+	else{
+		return item;
+	}
+}
+
+var getURLType = function(url,assumeImage = true){
+	var typeString = "";
+	var extension = url.substr(url.lastIndexOf('.')+1);
+	switch(extension){ // if its an image file
+		case 'jpg':
+		case 'jpeg':
+		case 'bmp':
+		case 'tif':
+		case 'gif':
+			typeString = 'image';
+			break;
+		case 'gifv': // if its an html5 video file
+		case 'webm':
+		case 'mp4':
+		case 'mov':
+		case 'avi':
+		case 'mpeg':
+			typeString = 'video';
+			break;
+		default:
+			// assume url is an image to simplify things
+			if(assumeImage){
+				typeString = 'image';
+			}
+			else{
+				typeString = 'generic';
+			}
+			
+			$(['mp4','webm','gifv']).each(function(x,item){
+				if(url.indexOf(item)>=0){ // does the url contain a video extension?
+					typeString = 'video'
+				}
+			});
+			break;
+	}
+	
+	return typeString;
+}
+
 var processURL = function(i){
 
-	/* for(var i = 0;i<imageDB.length;i++){ */
+	/* for(var i = 0;i<imageDB.items.length;i++){ */
 	var img = "";
 	
-	if(typeof imageDB[i] === 'string'){ // is it the depracated database style
-		img = imageDB[i] ? imageDB[i] : ""; // is there something actually there at that place in the database? No? Then just put ""
+	if(typeof imageDB.items[i] === 'string'){ // is it the depracated database style
+		img = imageDB.items[i] ? imageDB.items[i] : ""; // is there something actually there at that place in the database? No? Then just put ""
 	}
-	else if(typeof imageDB[i] === 'object'){ // or the updated one with .properties?
-		img = imageDB[i].url;
+	else if(typeof imageDB.items[i] === 'object'){ // or the updated one with .properties?
+		img = imageDB.items[i].url;
 	}
 	// determine whether image or html5 video by its END extension
 	var element = "";
@@ -63,6 +120,7 @@ var processURL = function(i){
 	return element;
 };
 
+// used for getting rid of embedded HTML in captions that are being displayed
 var processCaption = function(image){
 	
 	var caption = "";
@@ -84,7 +142,12 @@ var processCaption = function(image){
 
 var getCaption = function(item){
 	if(UpToDate(item)){
-		return item.caption;
+		if(item.caption){
+			return item.caption;
+		}
+		else{
+			return undefined;
+		}
 	}
 	else{
 		return item;
@@ -99,3 +162,13 @@ var validImageCheck = function(src){
 	};
 	return valid;
 };
+
+var bgPosition = function(element){
+	var position = $(element).css('background-position').replace('px','').replace('px','').replace('%','').replace('%','').split(' ');
+	
+	return {x:parseInt(position[0]),y:parseInt(position[1])};
+}
+
+var bgSize = function(element){
+	var size = $(element).css('background-size').replace('px','').replace('px','').replace('%');
+}

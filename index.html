@@ -18,9 +18,11 @@
 <link rel="stylesheet" type="text/css" href="style.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 <!-- my scripts !-->
+<script src="/wheelzoom/wheelzoom.js"></script>
 <script type="text/javascript" src="globals.js"></script>
 <script type="text/javascript" src="settings.js"></script>
 <script type="text/javascript" src="notifications.js"></script>
+<script type="text/javascript" src="libraries.js"></script>
 <script type="text/javascript" src="collections.js"></script>
 <script type="text/javascript" src="dialogs.js"></script>
 <script type="text/javascript" src="processing.js"></script>
@@ -29,40 +31,44 @@
 <script type="text/javascript" src="list.js"></script>
 <script type="text/javascript" src="undo.js"></script>
 <script type="text/javascript" src="animations.js"></script>
+<script type="text/javascript" src="dynamic-color.js"></script>
 <script type="text/javascript" src="scripts.js"></script>
 <!--!-->
 
 <title>Image Collector</title>
 </head>
 <body>
-<div id="Super">
+<div id="navbar-top" class="clearTransparent">
 	<div id="inputForm">
-		<input type="text" id="txtInput" placeholder="Enter an image url..."/>
-		<button class="rounded superButton" id="btnSubmit">Add</button>
-		<button class="rounded superButton" id="btnUndo">Undo</button>
+		<div id="submitFormContainer">
+			<input type="text" id="txtInput" placeholder="Enter an image url..."/>
+			<button class="rounded superButton" id="btnSubmit">Add</button>
+		</div>
 		<span id="divCollections">
 		
 			<span id="collectionsUIParent">
-				<button class="rounded superButton" id="btnCollections">Collections <span id='arrow'>&#128315;</span></button>
+				<button class="rounded superButton" id="btnCollections">Collections <span id='arrow'>▼</span></button>
 				
+				<button class="rounded superButton" id="btnRenameCollection">Edit</button>
+				<button class="rounded superButton" id="btnDeleteCollection">Delete</button>
+				<button class="rounded superButton" id="btnExport">Export All</button>
 			</span>
-			<button class="rounded superButton" id="btnRenameCollection">Edit</button>
-			<button class="rounded superButton" id="btnDeleteCollection">Delete</button>
-			<button class="rounded superButton" id="btnExport">Export All</button>
 			
 		</span>
 		
 		<span id="rightSideButtonsContainer">
 		
-			
+			<button class="rounded superButton" id="btnUndo">Undo</button>
 			<button class="rounded superButton" id="btnHelp">Help</button>
 			<button class="rounded superButton" id="btnSettings">Settings</button>
+			
 		</span>
 		
 		<div id="collectionsContainer">
-					<!--collections here!-->
-					Collections here
-				</div>
+			<!--collections here!-->
+			
+			
+		</div>
 	</div>
 </div>
 
@@ -73,22 +79,50 @@
 </div>
 
 <div class="spacer" id="bottom"></div>
-<div class="collectionFooter">
-	<div style="font-size:14pt;color:white;padding:20px;" id="collectionFooter">
-		<span id="collectionTitleSpan">Fantastical Fashion</span>
+<div class="collectionFooter clearTransparent">
+	<div class="contain-collection-title-bottom">
+		<span id="collection-title-bottom">Fantastical Fashion</span>
 	</div>
 	<button id="btnEditCollection">&#128393;</button>
+	
+	<div id="bottomLeftButtonsContainer">
+		<button id="btnLibrariesDropdown" class="rounded superButton">Libraries</button>
+		<button id="btnDeleteLibrary" class="rounded superButton">< Delete</button>
+	</div>
+	<div id="dropDownLibraries">
+			<div class="libraryMenuItem">
+				<span class="libraryTitle">Default</span>
+			</div>
+			<div class="libraryMenuItem btnNewLibrary">+</div>
+			<!-- libraries go here !-->
+	</div>
+	
+	
+<div id="header">Image Collector <sup>v3</sup></div>
 </div>
 
-<div id="header">Image Collector <sup>v3</sup></div>
+
+
+
 
 
 <!-- TEMPORAL UI ELEMENTS START HERE !-->
+
+
+
+
+
+
+
+
+
+
 <!-- Notifications !-->
 <div id="regularNotifications" class="Notifications">
 
 	<span>Notification status bar.</span>
 </div>
+
 
 <!-- Dialog Boxes !-->
 <div id="dialogueParent"> <!-- contains all the dialogues !-->
@@ -128,6 +162,7 @@
 		<div id="settingsContainer">
 		
 		</div>
+		<button onclick="clearThemeCache()">clear theme cache</button>
 	</div>
 	<div class="dialogue" id="d_Help">
 		<h1>Help</h1>
@@ -171,6 +206,9 @@
 <div id="helpTipsContainer">
 
 </div>
+
+<!-- Canvas for Dynamic Color calculations !-->
+<canvas id="canvDynamicColor"></canvas>
 
 </body>
 </html>

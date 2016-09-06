@@ -1,6 +1,11 @@
 
+@font-face{
+	font-family:'helvetica';
+	src:url('/fonts/Helvetica.otf');
+}
+
 body{
-	font-family:arial;
+	font-family:helvetica;
 	color:gray;
 	//background-color:black;
 	
@@ -32,15 +37,12 @@ a:visited{
 	width:100px;
 }
 
-#Super{
+#navbar-top{
 	display:block;
 	position:fixed;
 	left:0px;
 	top:0px;
 	padding:10px 20px;
-	background-color:rgba(50,50,50,0.4);
-	/*background-color:rgba(0,0,0,0.4);*/
-	border:solid 1px silver;
 	width:100%;
 	z-index:2;
 	
@@ -52,6 +54,11 @@ h1{
 	display:block;
 }
 
+.clearTransparent{
+	background-color:rgba(50,50,50,0.4);
+	border:solid 1px silver;
+}
+
 .collectionFooter{
 	display:block;
 	position:fixed;
@@ -59,19 +66,24 @@ h1{
 	bottom:0px;
 	width:100%;
 	z-index:2;
-	background-color:rgba(50,50,50,0.4);
-	border:solid 1px silver;
-	text-shadow:1px 1px 1px rgba(0,0,0,0.5);
+	text-shadow:1px 1px 5px rgba(0,0,0,0.3);
 	text-align:center;
 	box-shadow:0px -1px 5px black;
 }
 
-#collectionFooter{
+.contain-collection-title-bottom{
+	font-size:14pt;
+	color:white;
+	padding:20px;
+}
+
+.contain-collection-title-bottom{
 	display:inline-block;
 }
 
-#collectionTitleSpan{
+.collection-title-bottom{
 	cursor:pointer;
+	text-shadow:2px 2px 2px black;
 }
 
 #btnEditCollection{
@@ -126,16 +138,86 @@ h1{
 	text-shadow: 2px 2px 2px black;
 }
 
+#regularNotifications{
+	text-shadow: 2px 2px 2px black;
+}
+
 
 #header{
 	font-size:12pt;
-	padding:20px;
-	float:right;
-	vertical-align:bottom;
-	bottom:0px;
 	z-index:3;
+	right:20px;
 	position:fixed;
 	color:darkgray;
+}
+
+#bottomLeftButtonsContainer{
+	position:absolute;
+	display:inline-block;
+	left:0px;
+	padding-top:10px;
+	padding-left:20px;
+}
+
+#btnLibrariesDropdown{
+	width:100px;
+}
+
+#dropDownLibraries{
+	display:none;
+	position:absolute;
+	bottom:64px;
+	left:0px;
+	overflow-x:hidden;
+	overflow-y:auto;
+	background-color:rgba(0,0,0,0.8);
+	box-shadow:1px -1px 5px black;
+	border:none;
+	border-bottom:none;
+}
+
+#blueCircle{
+	position:absolute;
+	right:20px;
+	width:12px;
+	height:12px;
+}
+
+.libraryMenuItem{
+	width:100%;
+	font-size:12pt;
+
+	text-shadow:1px 1px 1px black;
+	padding:15px 20px;
+	padding-right:66px;	
+	color:silver;
+	cursor:pointer;
+	text-align:left;
+	border-bottom:solid 1px rgba(100,100,100,0.4);
+	box-sizing:border-box;
+	
+}
+
+.libraryMenuItem.libraryTitle{
+	
+}
+
+.libraryMenuItem:hover{
+	color:white;
+	
+	border-bottom-color:white;
+}
+.libraryMenuItem:active{
+	color:silver;
+	background-color:rgba(255,255,255,0.5);
+}
+
+.btnNewLibrary{
+	text-align:center;
+	padding-left:0px;
+	padding-right:0px;
+}
+.btnNewLibrary:hover{
 }
 
 #header sup{
@@ -155,9 +237,11 @@ h1{
 	height:42px;
 	padding:0px 15px;
 	background-color:rgba(100,100,100,0.4);
+	/*border:solid 1px silver;*/
 	border:solid 1px silver;
 	color:white;
 	font-size:12pt;
+	margin:0px;
 	
 }
 
@@ -184,18 +268,58 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#66ffffff', e
 	background:rgba(50,50,50,0.8);
 }
 
+#btnCollections{
+	border-top-right-radius:0px;
+	border-bottom-right-radius:0px;
+}
+
+#btnRenameCollection{
+	border-radius:0px;
+}
+
+#btnDeleteCollection{
+	border-radius:0px;
+}
+
+#btnExport{
+	border-top-left-radius:0px;
+	border-bottom-left-radius:0px;
+}
+
+#submitFormContainer{
+	display:inline;
+}
+
+#submitFormContainer:focus{
+	border:solid 2px lightblue;
+}
+
 #txtInput{
 	width:40%;
 	opacity:0.9;
+	margin-right:-5px;
+}
 
+#txtInput:focus{
+	border:inset solid 2px lightblue;
+}
+
+#btnSubmit{
+	margin-left:0px;
+	left:0px;
+	border-top-left-radius:0px;
+	border-bottom-left-radius:0px;
 }
 
 #divCollections{
 	display:inline;
+	
 }
+
 
 .rounded{
 	border-radius:7px;
+	margin:0px;
 }
 
 button:focus{
@@ -286,6 +410,11 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#80fcfff4', e
 	background-color:rgba(20,100,20,0.3);
 }
 
+#collectionMenuButtonsContainer{
+	position:absolute;
+	right:100px;
+}
+
 #rightSideButtonsContainer{
 	float:right;
 	margin-right:50px;
@@ -336,6 +465,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#80fcfff4', e
 	white-space:nowrap;
 	padding:0px;
 	margin:15px 10px;
+	cursor:pointer;
 	
 }
 
