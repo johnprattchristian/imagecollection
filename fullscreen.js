@@ -82,7 +82,7 @@ var fullscreenImage = function(img){
 
 		$('.Notifications').hide();
 		if(getSetting('fullscreenCaptions').value === true){
-			notify(imageDB[selected_index].caption);
+			notify(imageDB.items[selected_index].caption);
 		}
 	}
 	
@@ -109,7 +109,7 @@ var fullscreenVideo = function(vid){
 		
 		goFullscreen();
 		if(getSetting('fullscreenCaptions').value){
-			notify(imageDB[selected_index].caption);
+			notify(imageDB.items[selected_index].caption);
 		}
 		
 	}
@@ -130,10 +130,10 @@ var IterateSlideshow = function(direction){
 				element = document.getElementById((parseInt(currentFSElement.getAttribute("id"))-1).toString());
 			}
 			else{ // we've reached the end of the collection:
-				element = document.getElementById((imageDB.length-1).toString()); // go back to the beginning of the collection
+				element = document.getElementById((imageDB.items.length-1).toString()); // go back to the beginning of the collection
 			}
 		}else{
-			if(nextElemId<=imageDB.length-1){ // does not exceed the collection length
+			if(nextElemId<=imageDB.items.length-1){ // does not exceed the collection length
 				element = document.getElementById((parseInt(currentFSElement.getAttribute("id"))+1).toString());
 			}
 			else{ // go back to the end of collection
@@ -152,7 +152,7 @@ var IterateSlideshow = function(direction){
 		
 		var newid = parseInt(currentFSElement.getAttribute('id'));
 		if(getSetting('fullscreenCaptions')){
-			notify(imageDB[newid].caption ? imageDB[newid].caption : imageDB[newid]);
+			notify(imageDB.items[newid].caption ? imageDB.items[newid].caption : imageDB.items[newid]);
 		}
 		
 };

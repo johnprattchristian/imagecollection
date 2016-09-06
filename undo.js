@@ -4,8 +4,8 @@ var Undo = function(){
 		var item = _history[_history.length-1]; // set item to the most recently _history
 		var itemsLeft = _history.length - 1;
 		if(item.restoreType==="deleted_image"){
-			if(dbIndex === item.index){ // check if on the same collection where the image was deleted 
-				imageDB.splice(item.indexOfImage,0,item.imageURL); // add the item back into the collection it was deleted from 
+			if(collectionIndex === item.index){ // check if on the same collection where the image was deleted 
+				imageDB.items.splice(item.indexOfImage,0,item.imageURL); // add the item back into the collection it was deleted from 
 				applyChanges();
 				List(false,function(){
 					var element = document.getElementById(""+item.indexOfImage+"");
@@ -16,21 +16,28 @@ var Undo = function(){
 			}
 		}
 		else if(item.restoreType==="deleted_collection"){
-			DATABASE.splice(item.index,0,item.collectionContent); // add the deleted collection back into DATABASE; 0=index of collection IN DATABASE 2=all the fucking data
-
-			collections.splice(item.index,0,item.collectionName); //1 = the name of the collection
-			localStorage.setItem("collection_names",JSON.stringify(collections));
-			localStorage.setItem("imageDB",JSON.stringify(DATABASE));
+			DATABASE.libraries[item.parentIndex].collections.splice(item.index,0,item.data);
+			
+			localStorage.setItem(CURRENT_DATABASE,JSON.stringify(DATABASE));
+			changeLibrary(item.parentIndex);
 			changeCollection(item.index);
 			popDropdown();
 			
+			notify('Collection "' + item.data.name + '" restored. ' + itemsLeft + ' items left in trash.',"good");
+		}
+		else if(item.restoreType==="deleted_library"){
+			DATABASE.libraries.splice(item.index,0,item.data);
 			
-			notify('Collection "' + item.collectionName + '" restored. ' + itemsLeft + ' items left in trash.',"good");
+			localStorage.setItem(CURRENT_DATABASE,JSON.stringify(DATABASE));
+			changeLibrary(item.index);
+			popLibrariesDropdown();
+			
+			notify('Library "' + item.data.name + '" restored. ' + itemsLeft + ' history items left.','good');
 		}
 		else if(item.restoreType==="added_image"){ // if last action was Add Image, then just remove the image
 		
-			if(dbIndex===item.index){
-				imageDB.splice(selected_index,1);
+			if(collectionIndex===item.index){
+				imageDB.items.splice(selected_index,1);
 				applyChanges();
 				List();
 				
@@ -39,14 +46,14 @@ var Undo = function(){
 		}
 		else if(item.restoreType==="caption"){
 			// restore the old caption:
-			notify(' "' + imageDB[item.index].caption + '" reverted back to "' + item.caption + '". ' + itemsLeft +' _history items left.',"neutral");
-			imageDB[item.index].caption = item.caption;
+			notify(' "' + imageDB.items[item.index].caption + '" reverted back to "' + item.caption + '". ' + itemsLeft +' _history items left.',"neutral");
+			imageDB.items[item.index].caption = item.caption;
 			List();
 			
 		}
 		else if(item.restoreType==="collection_name"){
-			var new_old_name = collections[item.collection_index];
-			collections[item.collection_index] = item.name;
+			var new_old_name = collections[item.collection_index].name;
+			collections[item.collection_index].name = item.name;
 			localStorage.setItem("collection_names",JSON.stringify(collections));
 			changeCollection(item.collection_index);
 			popDropdown();

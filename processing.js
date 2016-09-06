@@ -75,14 +75,14 @@ var getURLType = function(url,assumeImage = true){
 
 var processURL = function(i){
 
-	/* for(var i = 0;i<imageDB.length;i++){ */
+	/* for(var i = 0;i<imageDB.items.length;i++){ */
 	var img = "";
 	
-	if(typeof imageDB[i] === 'string'){ // is it the depracated database style
-		img = imageDB[i] ? imageDB[i] : ""; // is there something actually there at that place in the database? No? Then just put ""
+	if(typeof imageDB.items[i] === 'string'){ // is it the depracated database style
+		img = imageDB.items[i] ? imageDB.items[i] : ""; // is there something actually there at that place in the database? No? Then just put ""
 	}
-	else if(typeof imageDB[i] === 'object'){ // or the updated one with .properties?
-		img = imageDB[i].url;
+	else if(typeof imageDB.items[i] === 'object'){ // or the updated one with .properties?
+		img = imageDB.items[i].url;
 	}
 	// determine whether image or html5 video by its END extension
 	var element = "";

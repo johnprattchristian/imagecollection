@@ -27,11 +27,12 @@ var generateTimestamp = function(){
 	return dateString;
 };
 
+// ONLY USE ON OLD DATABASES!
 var MigrateDB = function(){
 	
 	var newDB = new Object();
 	
-	// basically a Super database containing ALL the 
+	// basically a navbar-top database containing ALL the 
 	// user's *libraries* of *collections* of *items*,
 	// some of which could be *albums* of MORE *items*
 	newDB.id = 0;
@@ -51,7 +52,7 @@ var MigrateDB = function(){
 		// iterate through the all the items in all the collections and add them to
 		// the newly-styled collection
 		
-		$(DATABASE[cindex]).each(function(i,item){
+		$(DATABASE.libraries[libraryIndex].collections[cindex]).each(function(i,item){
 			// shorthand the uptodate item function
 			var uptodate = UpToDate(item);
 			
@@ -85,7 +86,7 @@ $(document).ready(function(){
 	// Initial functions:
 	// Focus on the TEXT input when the page opens
 	$("#txtInput").focus();
-	$("#collectionTitleSpan").html(collections[dbIndex]);
+	$(".collection-title-bottom-span").html(DATABASE.libraries[libraryIndex].collections[collectionIndex].name);
 	$('#dialogueParent').hide(); // Hide the export dialogue box
 	
 /* DONE INITIALIZING */
@@ -107,7 +108,7 @@ $(document).ready(function(){
 	var openDialogRenameCollection = function(){
 		showDialogue('d_RenameCollection'); // Rename collection dialogue
 		var txtbx = $('#txtRenameCollection');
-		txtbx.val(collections[dbIndex]); // set the textbox to the current collection name
+		txtbx.val(collections[collectionIndex].name); // set the textbox to the current collection name
 		txtbx.focus();
 		txtbx.select();
 	}
@@ -122,7 +123,7 @@ $(document).ready(function(){
 		openDialogRenameCollection();
 	});
 	
-	$('#collectionTitleSpan').on('click',function(){
+	$('.collection-title-bottom-span').on('click',function(){
 		scrollToTop();
 	});
 
@@ -132,10 +133,20 @@ $(document).ready(function(){
 		
 	});
 	
+	$('#btnLibrariesDropdown').on('click',function(){
+		if($('#dropDownLibraries').css('display') === 'none'){
+			$('#dropDownLibraries').slideDown(100);
+		}
+		else{
+			$('#dropDownLibraries').slideUp(100);
+		}
+	});
+	
 	/* CALLED AT THE BEGINNING OF PROGRAM>>>>>>>>>>>>>>>>>>>>>>>>>>> */ 
 	List(true);
 	popDropdown();
-	
+	popLibrariesDropdown();
+	changeLibrary(lastVisited.library);
 	
 // MENU BAR BUTTON FUNCTIONS		
 		
@@ -159,12 +170,12 @@ $(document).ready(function(){
 			}
 			
 			if(validImageCheck()){ // is there actually an image at this url?
-				imageDB.push({"url":url,"caption":caption});
+				imageDB.items.push({"url":url,"caption":caption});
 				applyChanges();
 				List();
 				_history.push({
 					restoreType:"added_image",
-					index:dbIndex,
+					index:collectionIndex,
 				
 				});
 			
@@ -199,7 +210,7 @@ $(document).ready(function(){
 	});
 	
 	$('#collectionsContainer').hide();
-	selectCollectionItem(dbIndex);
+	selectCollectionItem(collectionIndex);
 	
 // KEYDOWN/PRESS Event Handlers
 	// Capture "ENTER" key for textbox (alt entering method to the submit button)

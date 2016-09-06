@@ -4,7 +4,7 @@ TODO:
 -----------
 
 SHORT TERM:
---------------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------
 
 - textarea and edit icon below each image (textarea hides while not editing)
 				
@@ -26,10 +26,11 @@ IN PROGRESS:
 				parse for urls within descriptions and turn them into <a>'s
 
 LONG TERM:
---------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------
 - Switch over to legit databases
 
-Change log:
+
+CHANGE LOG:
 -----------
 2015-07-12
 - Added support for video
@@ -120,3 +121,10 @@ UNDATED:
 2016-08-14
 - Completed new collection UI functionality
 - Updated styles
+
+2016-09-06 (Summary of changes up to now)
+- Revamped workflow from database>collections>items TO database>libraries>collections>items
+	- everything has name and date_created/added metadata
+		- 'items' now have 'type' metadata to scale to different types besides images/videos
+	- UI (in progress) for switching libraries
+- (in progress) Dynamic coloring for UI based on images in collection

@@ -31,9 +31,9 @@ var exportCode = function(exportType){
 	if(exportType == 'plain'){ // plain text 
 		var current_item = false;
 		for(var i = 0;i<collections.length;i++){
-			exportObject.append(collections[i]+'</br>');
-			for(var x = 0; x<DATABASE[i].length;x++){
-				current_item = DATABASE[i][x];
+			exportObject.append(collections[i].name+'</br>');
+			for(var x = 0; x<DATABASE.libraries[libraryIndex].collections[i].length;x++){
+				current_item = DATABASE.libraries[libraryIndex].collections[i][x];
 				if(UpToDate(current_item)){
 					exportObject.append('<p>'+current_item.url+'</p>');
 				}
@@ -46,7 +46,7 @@ var exportCode = function(exportType){
 	else if(exportType == 'html'){ // html
 		$(collections).each(function(d,ditem){ // each collection
 			exportObject.append('<h2>'+ditem+'</h2>'); // collection name
-			$(DATABASE[d]).each(function(i,item){ // each item in the collection
+			$(DATABASE.libraries[libraryIndex].collections[d]).each(function(i,item){ // each item in the collection
 				var url = (UpToDate(item) ? item.url : item);
 				var caption = (item.caption ? item.caption : item);
 				
@@ -144,13 +144,13 @@ $(function(){
 	thumbnail.css({height:"300px"});
 	
 	$('#txtEditCaption').val(''); // clear the textarea value for the caption then
-	if(UpToDate(imageDB[selected_index]) === false){
-		text_edit.val(imageDB[selected_index]); // supports depracated DB style with just urls 
-		thumbnail.attr('src',imageDB[selected_index]); // set the thumbnail src
+	if(UpToDate(imageDB.items[selected_index]) === false){
+		text_edit.val(imageDB.items[selected_index]); // supports depracated DB style with just urls 
+		thumbnail.attr('src',imageDB.items[selected_index]); // set the thumbnail src
 	}
 	else{
-		text_edit.val(imageDB[selected_index].caption); // uses the new database style with url: & caption:
-		thumbnail.attr('src',imageDB[selected_index].url); // set thumbnail's src
+		text_edit.val(imageDB.items[selected_index].caption); // uses the new database style with url: & caption:
+		thumbnail.attr('src',imageDB.items[selected_index].url); // set thumbnail's src
 	}
 	text_edit.focus();
 	text_edit.select();
@@ -159,8 +159,8 @@ $(function(){
 
 var parseNewCollectionName = function(new_name){
 	if(new_name!=null&&new_name!=""){
-		collections[dbIndex]=new_name;
-		localStorage.setItem("collection_names",JSON.stringify(collections));
+		DATABASE.libraries[libraryIndex].collections[collectionIndex].name=new_name;
+		applyChanges();
 		popDropdown();
 	}
 	else{
