@@ -27,7 +27,7 @@
 <title>Image Collector</title>
 </head>
 <body>
-<div id="Super" class="clearTransparent">
+<div id="navbar-top" class="clearTransparent">
 	<div id="inputForm">
 		<div id="submitFormContainer">
 			<input type="text" id="txtInput" placeholder="Enter an image url..."/>
@@ -69,19 +69,21 @@
 
 <div class="spacer" id="bottom"></div>
 <div class="collectionFooter clearTransparent">
-	<div style="font-size:14pt;color:white;padding:20px;" id="collectionFooter">
-		<span id="collectionTitleSpan">Fantastical Fashion</span>
+	<div class="contain-collection-title-bottom">
+		<span id="collection-title-bottom">Fantastical Fashion</span>
 	</div>
 	<button id="btnEditCollection">&#128393;</button>
 	
-	<button id="btnLibrariesDropdown" class="rounded superButton">Libraries</button>
+	<div id="bottomLeftButtonsContainer">
+		<button id="btnLibrariesDropdown" class="rounded superButton">Libraries</button>
+		<button id="btnDeleteLibrary" class="rounded superButton">< Delete</button>
+	</div>
 	<div id="dropDownLibraries">
-		<div class="libraryMenuItem">
-			<img class="blueCircle" src="blue-dot.png" height="15px" width="15px"/>
-			<span class="libraryTitle">Default</span>
-		</div>
-		<div class="libraryMenuItem btnNewLibrary">+</div>
-		<!-- libraries go here !-->
+			<div class="libraryMenuItem">
+				<span class="libraryTitle">Default</span>
+			</div>
+			<div class="libraryMenuItem btnNewLibrary">+</div>
+			<!-- libraries go here !-->
 	</div>
 	
 	
