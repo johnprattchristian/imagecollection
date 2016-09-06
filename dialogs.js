@@ -31,7 +31,7 @@ var exportCode = function(exportType){
 	if(exportType == 'plain'){ // plain text 
 		var current_item = false;
 		for(var i = 0;i<collections.length;i++){
-			exportObject.append(collections[i]+'</br>');
+			exportObject.append(collections[i].name+'</br>');
 			for(var x = 0; x<DATABASE.libraries[libraryIndex].collections[i].length;x++){
 				current_item = DATABASE.libraries[libraryIndex].collections[i][x];
 				if(UpToDate(current_item)){
@@ -159,8 +159,8 @@ $(function(){
 
 var parseNewCollectionName = function(new_name){
 	if(new_name!=null&&new_name!=""){
-		collections[collectionIndex].name=new_name;
-		localStorage.setItem("collection_names",JSON.stringify(collections));
+		DATABASE.libraries[libraryIndex].collections[collectionIndex].name=new_name;
+		applyChanges();
 		popDropdown();
 	}
 	else{

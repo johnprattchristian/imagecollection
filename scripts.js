@@ -84,7 +84,7 @@ $(document).ready(function(){
 	// Initial functions:
 	// Focus on the TEXT input when the page opens
 	$("#txtInput").focus();
-	$("#collectionTitleSpan").html(collections[collectionIndex].name);
+	$("#collectionTitleSpan").html(DATABASE.libraries[libraryIndex].collections[collectionIndex].name);
 	$('#dialogueParent').hide(); // Hide the export dialogue box
 	
 /* DONE INITIALIZING */
@@ -131,10 +131,20 @@ $(document).ready(function(){
 		
 	});
 	
+	$('#btnLibrariesDropdown').on('click',function(){
+		if($('#dropDownLibraries').css('display') === 'none'){
+			$('#dropDownLibraries').slideDown(100);
+		}
+		else{
+			$('#dropDownLibraries').slideUp(100);
+		}
+	});
+	
 	/* CALLED AT THE BEGINNING OF PROGRAM>>>>>>>>>>>>>>>>>>>>>>>>>>> */ 
 	List(true);
 	popDropdown();
-	
+	popLibrariesDropdown();
+	changeLibrary(lastVisited.library);
 	
 // MENU BAR BUTTON FUNCTIONS		
 		

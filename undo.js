@@ -20,7 +20,7 @@ var Undo = function(){
 
 			collections.splice(item.index,0,item.collectionName); //1 = the name of the collection
 			localStorage.setItem("collection_names",JSON.stringify(collections));
-			localStorage.setItem("imageDB",JSON.stringify(DATABASE));
+			localStorage.setItem(CURRENT_DATABASE,JSON.stringify(DATABASE));
 			changeCollection(item.index);
 			popDropdown();
 			
@@ -45,8 +45,8 @@ var Undo = function(){
 			
 		}
 		else if(item.restoreType==="collection_name"){
-			var new_old_name = collections[item.collection_index];
-			collections[item.collection_index] = item.name;
+			var new_old_name = collections[item.collection_index].name;
+			collections[item.collection_index].name = item.name;
 			localStorage.setItem("collection_names",JSON.stringify(collections));
 			changeCollection(item.collection_index);
 			popDropdown();

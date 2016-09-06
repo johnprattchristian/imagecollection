@@ -11,6 +11,7 @@
 <script type="text/javascript" src="globals.js"></script>
 <script type="text/javascript" src="settings.js"></script>
 <script type="text/javascript" src="notifications.js"></script>
+<script type="text/javascript" src="libraries.js"></script>
 <script type="text/javascript" src="collections.js"></script>
 <script type="text/javascript" src="dialogs.js"></script>
 <script type="text/javascript" src="processing.js"></script>
@@ -26,7 +27,7 @@
 <title>Image Collector</title>
 </head>
 <body>
-<div id="Super">
+<div id="Super" class="clearTransparent">
 	<div id="inputForm">
 		<div id="submitFormContainer">
 			<input type="text" id="txtInput" placeholder="Enter an image url..."/>
@@ -67,22 +68,48 @@
 </div>
 
 <div class="spacer" id="bottom"></div>
-<div class="collectionFooter">
+<div class="collectionFooter clearTransparent">
 	<div style="font-size:14pt;color:white;padding:20px;" id="collectionFooter">
 		<span id="collectionTitleSpan">Fantastical Fashion</span>
 	</div>
 	<button id="btnEditCollection">&#128393;</button>
+	
+	<button id="btnLibrariesDropdown" class="rounded superButton">Libraries</button>
+	<div id="dropDownLibraries">
+		<div class="libraryMenuItem">
+			<img class="blueCircle" src="blue-dot.png" height="15px" width="15px"/>
+			<span class="libraryTitle">Default</span>
+		</div>
+		<div class="libraryMenuItem btnNewLibrary">+</div>
+		<!-- libraries go here !-->
+	</div>
+	
+	
+<div id="header">Image Collector <sup>v3</sup></div>
 </div>
 
-<div id="header">Image Collector <sup>v3</sup></div>
+
+
+
 
 
 <!-- TEMPORAL UI ELEMENTS START HERE !-->
+
+
+
+
+
+
+
+
+
+
 <!-- Notifications !-->
 <div id="regularNotifications" class="Notifications">
 
 	<span>Notification status bar.</span>
 </div>
+
 
 <!-- Dialog Boxes !-->
 <div id="dialogueParent"> <!-- contains all the dialogues !-->
@@ -122,6 +149,7 @@
 		<div id="settingsContainer">
 		
 		</div>
+		<button onclick="clearThemeCache()">clear theme cache</button>
 	</div>
 	<div class="dialogue" id="d_Help">
 		<h1>Help</h1>

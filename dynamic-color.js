@@ -4,6 +4,35 @@ $(document).ready(function(){
 	imageArray = [];
 });
 
+var clearThemeCache = function(){
+	$(DATABASE.libraries[libraryIndex].collections).each(function(i,item){
+		if(typeof item.themeCache !== 'undefined'){
+			item.themeCache.sampleSize = 0; // force it to recreate the theme by remove the sampleSize
+		}
+	});
+	applyChanges();
+	alert('theme cache cleared');
+}
+
+var changeBarColors = function(rgba){
+	if(typeof rgba === 'string'){
+		$('#Super').css('background',rgba);
+		$('.collectionFooter').css('background',rgba);
+		imageDB.themeCache.colors.navBars = rgba;
+		// set the sampleSize
+		imageDB.themeCache.sampleSize = $('.imageBox img').length;
+		console.log('color '+rgba+' has been cached');
+	}
+	else{
+		log('the rgba themCache color retrieved was not a string?')
+		// if cannot retrieve cached navBars color, just do a neutral color
+		imageDB.themeCache.colors.navBars = 'rgba(50,50,50,0.6)';
+	}
+	
+	applyChanges();
+	
+}
+
 var dynamicColorBars = function(){
 	var width = $('.column').width();
 	var canv = document.getElementById('canvDynamicColor');
@@ -82,8 +111,7 @@ var dynamicColorBars = function(){
 	// turn it into an rgba string
 	var rgba = 'rgba('+color.r+','+color.g+','+color.b+','+opacity+')';
 	
-	$('#Super').css('background',rgba);
-	$('.collectionFooter').css('background',rgba);
+	changeBarColors(rgba);
 	
 	console.log('rgba is ' + rgba);
 };

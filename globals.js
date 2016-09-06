@@ -26,11 +26,15 @@ global_volume = 0.3;
 
 // Function for applying changes to given current Collection 
 var applyChanges=function(){
-		DATABASE.libraries[libraryIndex].collections[libraryIndex] = imageDB;
+		console.log('applying changes. collection.length = ' + collections.length);
+		DATABASE.libraries[libraryIndex].collections[collectionIndex] = imageDB;
+		//DATABASE.libraries[libraryIndex].collections = collections;
 		localStorage.setItem(CURRENT_DATABASE,JSON.stringify(DATABASE)); //save the entire database
 };
 
-var setLastVisited = function(){
+var setLastVisited = function(library = libraryIndex,collection = collectionIndex){
+	lastVisited.library = library;
+	lastVisited.collection = collection;
 	localStorage.setItem('last_visited_index',JSON.stringify(lastVisited));
 };
 
@@ -39,7 +43,7 @@ $(document).ready(function(){
 	// Database Index
 	lastVisited = JSON.parse(localStorage.getItem("last_visited_index"));
 	// which library and collection to fetch?
-	if(typeof lastIndex === 'object' && lastIndex.collection || typeof libraryIndex === 'undefined'){
+	if(typeof lastVisited === 'object'){
 		collectionIndex = lastVisited.collection;
 		if(collectionIndex==null || collectionIndex == -1){
 			collectionIndex = 0;
@@ -48,6 +52,11 @@ $(document).ready(function(){
 		if(libraryIndex===null || libraryIndex === -1 || typeof libraryIndex === 'undefined'){
 			libraryIndex = 0;
 		}
+	}
+	else{
+		collectionIndex = 0;
+		libraryIndex = 0;
+		lastVisited = {collection:0,library:0};
 	}
 	
 	// The DATABASE array for all the collection data
@@ -75,12 +84,9 @@ $(document).ready(function(){
 		});
 	}
 	else{
-		imageDB = DATABASE.libraries[libraryIndex].collections[collectionIndex]; //set imageDB to a single collection in the database
+		collections = DATABASE.libraries[libraryIndex].collections;
+		imageDB = collections[collectionIndex]; //set imageDB to a single collection in the database
 	}
-	
-	
-	// Collections array for easy access
-	collections = DATABASE.libraries[libraryIndex].collections;	
 	
 	// (Other globals)
 	 selected_index = -1; // the image to manipulate in the given code (for controls and the like)

@@ -18,7 +18,7 @@ var showCollections = function(animation = true,slidespeed = 50){
 	var button = $('#btnCollections');
 	
 	button.addClass('pressed');
-	button.children('span').html('&#128314;');
+	button.children('span').html('&#9650;');
 	//button.css({backgroundColor:'gray'});
 	container.slideDown(slidespeed);
 	$('.spacer#top').animate({height:'130px'},slidespeed);
@@ -91,8 +91,8 @@ var popDropdown = function(){
 		container.children('.collectionItem').each(function(i,item){
 			$(item).remove();
 		});
-		for(var c in collections){
-			$(container).append('<span class="collectionItem">'+collections[c].name+'</span>');
+		for(var c in DATABASE.libraries[libraryIndex].collections){
+			$(container).append('<span class="collectionItem">'+DATABASE.libraries[libraryIndex].collections[c].name+'</span>');
 		}
 		// bind click event to collectionItems:
 		$('.collectionItem').on('click',function(){
@@ -118,16 +118,32 @@ var popDropdown = function(){
 
 // CHANGE the current collection
 var changeCollection=function(new_index){
+	if(new_index < 0){
+		changeCollection(0);
+		alert("can't move back that far in collections");
+		return;
+	}
 	collectionIndex = new_index;
 	
 	imageDB = DATABASE.libraries[libraryIndex].collections[collectionIndex];
 	$("#collectionTitleSpan").html(collections[collectionIndex].name);
 	document.title = collections[collectionIndex].name;
 	
-	
-	// saves the state AKA the last collection you had open
-	lastVisited.collection = collectionIndex;
-	setLastVisited(); // sets the localStorage last_visited_index object
+
+	if(typeof imageDB.themeCache !== 'undefined'){
+		if(imageDB.themeCache || imageDB.themeCache.sampleSize !== $('.imageBox img').length){ // colors,etc. generated for the collection. If the sample size (number of images) has changed, create a new theme color:
+			var theme = imageDB.themeCache; // an object property with different theme props in the collection
+			changeBarColors(theme.colors.navBars);
+		}
+		else{
+			setTimeout(function(){
+				log('generating new theme for ' + imageDB.name);
+				dynamicColorBars();
+			},1000);
+		}
+	}
+	else{
+	}
 	
 	if(imageDB==null || typeof imageDB=='undefined'){
 		imageDB = {
@@ -136,7 +152,11 @@ var changeCollection=function(new_index){
 			items:[]
 		};
 	}
-	applyChanges();
+	
+	// saves the state AKA the last collection you had open
+	lastVisited.collection = collectionIndex;
+	setLastVisited(); // sets the localStorage last_visited_index object
+	
 	List(true); // with animations
 	$('#txtInput').focus();
 };
@@ -150,20 +170,25 @@ var newCollection = function(){
 	// if its bad input, just do nothing:
 	if(new_collection==""||new_collection==null){ // force the user to give the collection a name
 			//$('#dropdown').prop("selectedIndex",(localStorage.getItem("last_visited_index"))); // a little trick to jump back out of the "new collection..." menu item
+			log('collection not created');
 			$('#btnCollections').click();
 			return;
 	}
-	collections.push(new_collection); // add new collection
+	DATABASE.libraries[libraryIndex].collections.push({
+		name:new_collection,
+		date_created:generateTimestamp(),
+		items:[]
+	}); // add new collection
 	applyChanges();
 	popDropdown();
-	changeCollection(collections.length-1); // Switch over to the new collection
+	changeCollection(DATABASE.libraries[libraryIndex].collections.length-1); // Switch over to the new collection
 
 	
 };
 
 // DELETE a collection
 var deleteCollection=function(){
-	var really = confirm("Are you sure you want to delete '"+collections[collectionIndex].name+"'?");
+	var really = confirm("Are you sure you want to delete '"+DATABASE.libraries[libraryIndex].collections[collectionIndex].name+"'?");
 		if (collections.length>1){
 			if(really){
 				var new_deleted = {
@@ -173,10 +198,10 @@ var deleteCollection=function(){
 					collectionContent:imageDB
 				};
 				_history.push(new_deleted); // push the new _history state for undo
-				DATABASE.splice(collectionIndex,1); //delete the collection from DATABASE
-				collections.splice(collectionIndex,1); // remove its name from collection_names
-				localStorage.setItem("collection_names",JSON.stringify(collections));
-				localStorage.setItem("imageDB",JSON.stringify(DATABASE));
+				log('pre-slice: collections length = ' + collections.length);
+				DATABASE.libraries[libraryIndex].collections.splice(collectionIndex,1); //delete the collection from DATABASE
+				log('post-slice: collections length =' + collections.length);
+				applyChanges();
 				changeCollection(collectionIndex-1); // Now that this doesn't exist, go back 1 collection 
 				popDropdown(); // refresh the dropdown of collections
 				
@@ -198,10 +223,10 @@ var deleteCollection=function(){
 var renameCollection = function(newname){
 	
 	var new_name = $('#txtRenameCollection').val();
-		var old_name = collections[collectionIndex].name;
+		var old_name = DATABASE.libraries[libraryIndex].collections[collectionIndex].name;
 		// change collection name only if new name is a an actual name and not the old name
 		if(new_name !== "" && new_name !== null && new_name !== old_name){
-			collections[collectionIndex].name.name = new_name;
+			DATABASE.libraries[libraryIndex].collections[collectionIndex].name = new_name;
 			applyChanges();
 			popDropdown();
 			changeCollection(collectionIndex);
