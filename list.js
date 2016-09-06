@@ -37,7 +37,7 @@ var Delete = function(domElement = null){
 		notify("Image deleted","warning");
 };
 
-var tm_afterlistcallback = 0;
+var tm_afterlistcallback = 0; // timeOut for after the list is completed. wait until perform callback
 var List = function(load_animation = false,callback){
 	// Populate images
 	clearTimeout(tm_afterlistcallback);
