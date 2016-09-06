@@ -141,7 +141,7 @@ var changeCollection=function(new_index){
 	collectionIndex = new_index;
 	
 	imageDB = DATABASE.libraries[libraryIndex].collections[collectionIndex];
-	$(".collection-title-bottom-span").html(collections[collectionIndex].name);
+	$(".collection-title-bottom-span").html(DATABASE.libraries[libraryIndex].collections[collectionIndex].name);
 	document.title = collections[collectionIndex].name;
 	
 	if(imageDB==null || typeof imageDB=='undefined'){
