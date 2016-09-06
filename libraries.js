@@ -21,6 +21,17 @@ var deleteLibrary = function(index){
 		notify('Deleted user library "' + DATABASE.libraries[libraryIndex].name + '".','warning');
 		
 		DATABASE.libraries.splice(libraryIndex,1); // remove the library from the local copy of the db
+		if(DATABASE.libraries.length < 1){
+			// if left with no libraries, create a default one at index 0 before switching libraries
+			DATABASE.libraries.splice(0,0,{
+				name:'Library1',
+				date_created:generateTimestamp(),
+				collections:[{
+					name:'My Collection',
+					date_created:generateTimestamp(),
+					items:[]
+			}]});
+		}
 		
 		// switch the library to one that exists, either backwards 1 or just library 0.
 		popLibrariesDropdown();
