@@ -16,8 +16,8 @@ var clearThemeCache = function(){
 
 var changeBarColors = function(rgba){
 	if(typeof rgba === 'string'){
-		$('#Super').css('background',rgba);
-		$('.collectionFooter').css('background',rgba);
+		$('#navbar-top').css('background',rgba);
+		$('.navbar-bottom').css('background',rgba);
 		imageDB.themeCache.colors.navBars = rgba;
 		// set the sampleSize
 		imageDB.themeCache.sampleSize = $('.imageBox img').length;
