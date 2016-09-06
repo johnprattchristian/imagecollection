@@ -128,3 +128,5 @@ UNDATED:
 		- 'items' now have 'type' metadata to scale to different types besides images/videos
 	- UI (in progress) for switching libraries
 - (in progress) Dynamic coloring for UI based on images in collection
+- Begin implementing history dropdown
+- Create counters for library, collection, and history buttons
