@@ -1,3 +1,35 @@
+// click handler for delete library button
+$(function(){
+	$('#btnDeleteLibrary').on('click',function(){
+		var yes = confirm('Are you sure you want to delete this library: "'+DATABASE.libraries[libraryIndex].name+'"?');
+		if(yes){
+			deleteLibrary();
+		}
+	});
+});
+
+var deleteLibrary = function(index){
+		// push library to history to restore if needed
+		_history.push({
+			restoreType:'deleted_library',
+			index:libraryIndex,
+			data:DATABASE.libraries[libraryIndex]
+		});
+		log('pushed ' + history[history.length-1] + ' to history.');
+		
+		// notify user of deletion
+		notify('Deleted user library "' + DATABASE.libraries[libraryIndex].name + '".','warning');
+		
+		DATABASE.libraries.splice(libraryIndex,1); // remove the library from the local copy of the db
+		
+		// switch the library to one that exists, either backwards 1 or just library 0.
+		popLibrariesDropdown();
+		changeLibrary(libraryIndex > 0 ? libraryIndex - 1 : 0);
+		
+		applyChanges(); // apply changes to perma db
+	
+}
+
 var newLibrary = function(libraryName){
 	if(libraryName !== '' && libraryName.length > 1){
 		DATABASE.libraries.push({
