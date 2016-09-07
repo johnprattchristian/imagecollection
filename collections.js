@@ -222,7 +222,11 @@ var renameCollection = function(newname){
 			//notification
 			notify('Renamed "' + old_name + '" to "' + new_name + '"',"good");
 			// store old collection name in _history
-			pushHistoryItem({restoreType:"collection_name",collection_index:collectionIndex,name:old_name});
+			pushHistoryItem({
+				restoreType:"collection_name",
+				index:collectionIndex,
+				name:old_name
+			});
 		}
 }
 

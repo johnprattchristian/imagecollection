@@ -115,6 +115,21 @@ var popHistoryDropdown = function(){
 						subText = 'unknown'
 					}
 					break;
+				case 'caption':
+					var caption = '';
+					if(typeof imageDB.items[item.index] !== 'undefined' && imageDB.items[item.index].caption !== null){
+						caption = '"' + imageDB.items[item.index].caption + '"';
+					}
+					else{
+						caption = 'CAPTION';
+					}
+					text = '"'+item.caption+'" to ' + caption;
+					subText = item.restoreType;
+					break;
+				case 'collection_name':
+					text = '"'+item.name+'" to "'+imageDB.name+'"';
+					subText = item.restoreType;
+					break;
 				default:
 					text = 'History item';
 					subText = item.restoreType;
@@ -139,7 +154,14 @@ var popHistoryDropdown = function(){
 		}).on('mouseup',function(){
 			$(this).add($(this).siblings()).removeClass('pressed');
 		}).on('click',function(){
-			
+			var index = parseInt($(this).attr('name').replace('history',''));
+			var noOfItems = _history.length - index;
+			log('restoring back to history item #'+index+'...');
+			// restore all history back to this point
+			for(var i = _history.length;i > index;i--){
+				Undo();
+			}
+			notify('Restored ' + noOfItems + ' history items.','good');
 		});
 		
 		
@@ -203,10 +225,10 @@ var Undo = function(){
 			
 		}
 		else if(item.restoreType==="collection_name"){
-			var new_old_name = collections[item.collection_index].name;
-			collections[item.collection_index].name = item.name;
+			var new_old_name = collections[item.index].name;
+			collections[item.index].name = item.name;
 			localStorage.setItem("collection_names",JSON.stringify(collections));
-			changeCollection(item.collection_index);
+			changeCollection(item.index);
 			popDropdown();
 			
 			notify('Reverted collection "' + new_old_name + '" back to "' + item.name + '".','neutral');

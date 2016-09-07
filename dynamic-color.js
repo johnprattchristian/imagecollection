@@ -41,7 +41,7 @@ var dynamicColorBars = function(){
 		images.push(item);
 	});
 	canv.height = '0px';
-	canv.style.display = 'block';
+	canv.style.display = 'none';
 	canv.style.border = 'solid 1px black';
 	
 	var blockSize = {width:300,height:300}; // size of blocks to sample from each image
