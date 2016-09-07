@@ -11,6 +11,10 @@ $(function(){
 		}
 	});
 	
+	$('.dropDownHistory').on('mouseleave',function(){
+		$(this).children().removeClass('highlight').removeClass('pressed');
+	});
+	
 	/*$(document).on('click',function(e){
 		if(e.target !== document.getElementById('btnHistory') && $('.dropDownHistory').has(e.target).length < 1){
 			$('.dropDownHistory').hide();
@@ -100,7 +104,7 @@ var popHistoryDropdown = function(){
 					subText = 'collection';
 					break;
 				case 'deleted_image':
-					text = 'Deleted "' + (item.data !== null ? (item.data.caption ? item.data.caption : 'item') : 'item') + '"';
+					text = 'Deleted "' + (item.data !== null && typeof item.data !== 'undefined' ? (item.data.caption ? item.data.caption : 'item') : 'item') + '"';
 					// choose subtext based on item type:
 					if(item.data){
 						if(item.data.type){
@@ -122,11 +126,20 @@ var popHistoryDropdown = function(){
 		});
 		
 		// bind click for each history item
-		$('.dropDownHistory .dropDownMenuItem').on('hover',function(){
+		$('.dropDownHistory .dropDownMenuItem').on('mousemove',function(){
 			console.log('hovering over history item.');
+			$('.dropDownHistory .dropDownMenuItem').removeClass('highlight');
+			$(this).addClass('highlight');
 			$(this).nextAll().addClass('highlight');
+		}).on('mouseleave',function(){
+			$(this).removeClass('highlight');
+		}).on('mousedown',function(){
+			$(this).add($(this).nextAll()).addClass('pressed');
+			
+		}).on('mouseup',function(){
+			$(this).add($(this).siblings()).removeClass('pressed');
 		}).on('click',function(){
-				
+			
 		});
 		
 		
