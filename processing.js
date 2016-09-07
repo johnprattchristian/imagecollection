@@ -1,11 +1,16 @@
 // Checks for Depracated database objects that only have a [url] instead of [{url:"",...}]
-var UpToDate = function(db_object_to_check){ 
-	if(typeof db_object_to_check === 'string'){ // NOT up to date 
-		return false;
-	}
-	else if(typeof db_object_to_check === 'object'){ // YES up to date
-		if(typeof db_object_to_check.url !== 'undefined' && typeof db_object_to_check.caption !== 'undefined'){
-			return true;
+var UpToDate = function(db_object_to_check){
+	if(db_object_to_check !== null){
+		if(typeof db_object_to_check === 'string'){ // NOT up to date 
+			return false;
+		}
+		else if(typeof db_object_to_check === 'object'){ // YES up to date
+			if(typeof db_object_to_check.url !== 'undefined' && typeof db_object_to_check.caption !== 'undefined'){
+				return true;
+			}
+			else{
+				return false;
+			}
 		}
 		else{
 			return false;
@@ -82,6 +87,9 @@ var processURL = function(i){
 		img = imageDB.items[i] ? imageDB.items[i] : ""; // is there something actually there at that place in the database? No? Then just put ""
 	}
 	else if(typeof imageDB.items[i] === 'object'){ // or the updated one with .properties?
+		if(imageDB.items[i] == null){
+			return "<div>Error</div>";
+		}
 		img = imageDB.items[i].url;
 	}
 	// determine whether image or html5 video by its END extension

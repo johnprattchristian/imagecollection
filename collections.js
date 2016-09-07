@@ -29,22 +29,12 @@ var hideCollections = function(animation = true,slidespeed = 50){
 	var container = $('#collectionsContainer');
 	var button = $('#btnCollections');
 	
-
-	if(collectionsButtonClicked==false){
-		button.toggleClass('pressed');
-		button.children('span').html('▲');
-		//button.css({backgroundColor:'gray'});
-		container.slideDown(slidespeed);
-		
-		$('.spacer#top').animate({height:'130px'},slidespeed);
-		collectionsButtonClicked = true;
-	}	
-	else{
-		button.toggleClass('pressed');
-		button.children('span').html('▼');
-		//button.css({backgroundColor:'black'});
-
-	}
+	button.removeClass('pressed');
+	//button.css({backgroundColor:'gray'});
+	
+	button.children('span').html('▼');
+	//button.css({backgroundColor:'black'});
+	
 	//button.css({backgroundColor:'black'});
 	if(animation){
 		container.slideUp(slidespeed);
@@ -92,7 +82,7 @@ var popDropdown = function(){
 			$(item).remove();
 		});
 		for(var c in DATABASE.libraries[libraryIndex].collections){
-			$(container).append('<span class="collectionItem">'+DATABASE.libraries[libraryIndex].collections[c].name+'</span>');
+			$(container).append('<span class="collectionItem">'+DATABASE.libraries[libraryIndex].collections[c].name+'<span class="collectionCounter">'+DATABASE.libraries[libraryIndex].collections[c].items.length+'</span></span>');
 		}
 		// bind click event to collectionItems:
 		$('.collectionItem').on('click',function(){
@@ -180,6 +170,7 @@ var newCollection = function(){
 	}); // add new collection
 	changeCollection(DATABASE.libraries[libraryIndex].collections.length-1); // Switch over to the new collection
 	popDropdown();
+	popLibrariesDropdown();
 	applyChanges();
 };
 
@@ -194,14 +185,14 @@ var deleteCollection=function(){
 					data:imageDB,
 					parentIndex:libraryIndex
 				};
-				_history.push(new_deleted); // push the new _history state for undo
+				pushHistoryItem(new_deleted); // push the new _history state for undo
 				log('pre-slice: collections length = ' + collections.length);
 				DATABASE.libraries[libraryIndex].collections.splice(collectionIndex,1); //delete the collection from DATABASE
 				log('post-slice: collections length =' + collections.length);
 				changeCollection(collectionIndex-1); // Now that this doesn't exist, go back 1 collection
 				applyChanges();
 				popDropdown(); // refresh the dropdown of collections
-				
+				popLibrariesDropdown();
 				setTimeout(notify('"' + new_deleted.data.name + '" deleted',"warning"),100);
 				return;
 				
@@ -231,7 +222,7 @@ var renameCollection = function(newname){
 			//notification
 			notify('Renamed "' + old_name + '" to "' + new_name + '"',"good");
 			// store old collection name in _history
-			_history.push({restoreType:"collection_name",collection_index:collectionIndex,name:old_name});
+			pushHistoryItem({restoreType:"collection_name",collection_index:collectionIndex,name:old_name});
 		}
 }
 

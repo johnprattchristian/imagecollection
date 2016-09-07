@@ -29,7 +29,7 @@
 <script type="text/javascript" src="fullscreen.js"></script>
 <script type="text/javascript" src="volume.js"></script>
 <script type="text/javascript" src="list.js"></script>
-<script type="text/javascript" src="undo.js"></script>
+<script type="text/javascript" src="history.js"></script>
 <script type="text/javascript" src="animations.js"></script>
 <script type="text/javascript" src="dynamic-color.js"></script>
 <script type="text/javascript" src="scripts.js"></script>
@@ -41,13 +41,13 @@
 <div id="navbar-top" class="clearTransparent">
 	<div id="inputForm">
 		<div id="submitFormContainer">
-			<input type="text" id="txtInput" placeholder="Enter an image url..."/>
+			<input type="text" id="txtInput" placeholder="Enter an image url + a caption separated by a space..."/>
 			<button class="rounded superButton" id="btnSubmit">Add</button>
 		</div>
 		<span id="divCollections">
 		
 			<span id="collectionsUIParent">
-				<button class="rounded superButton" id="btnCollections">Collections <span id='arrow'>▼</span></button>
+				<button class="rounded superButton toggleButton" id="btnCollections">Collections <span id='arrow'>▼</span></button>
 				
 				<button class="rounded superButton" id="btnRenameCollection">Edit</button>
 				<button class="rounded superButton" id="btnDeleteCollection">Delete</button>
@@ -58,7 +58,6 @@
 		
 		<span id="rightSideButtonsContainer">
 		
-			<button class="rounded superButton" id="btnUndo">Undo</button>
 			<button class="rounded superButton" id="btnHelp">Help</button>
 			<button class="rounded superButton" id="btnSettings">Settings</button>
 			
@@ -86,15 +85,23 @@
 	<button id="btnEditCollection">&#128393;</button>
 	
 	<div id="bottomLeftButtonsContainer">
-		<button id="btnLibrariesDropdown" class="rounded superButton">Libraries</button>
-		<button id="btnDeleteLibrary" class="rounded superButton">< Delete</button>
+		<button id="btnLibrariesDropdown" class="rounded superButton toggleButton">Libraries</button>
+		<button id="btnDeleteLibrary" class="rounded superButton">Delete Library</button>
 	</div>
-	<div id="dropDownLibraries">
-			<div class="libraryMenuItem">
-				<span class="libraryTitle">Default</span>
+	<div class="dropDown aboveBottomBar" id="dropDownLibraries">
+			<div class="dropDownMenuItem">
+				<span class="dropDownMenuItemText">Default</span>
 			</div>
-			<div class="libraryMenuItem btnNewLibrary">+</div>
+			<div class="dropDownMenuItem btnNewLibrary">+</div>
 			<!-- libraries go here !-->
+	</div>
+	
+	<div id="bottomRightButtonsContainer">
+		<button class="rounded superButton" id="btnUndo">Undo</button>
+		<div id="btnHistory" class="rounded superButton toggleButton"><span class='.pseudoButtonText'>History</span></div>
+	</div>
+	<div class="dropDown aboveBottomBar dropDownHistory">
+		<!--history items here!-->
 	</div>
 	
 	

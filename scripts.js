@@ -146,6 +146,7 @@ $(document).ready(function(){
 	List(true);
 	popDropdown();
 	popLibrariesDropdown();
+	popHistoryDropdown();
 	changeLibrary(lastVisited.library);
 	
 // MENU BAR BUTTON FUNCTIONS		
@@ -170,10 +171,10 @@ $(document).ready(function(){
 			}
 			
 			if(validImageCheck()){ // is there actually an image at this url?
-				imageDB.items.push({"url":url,"caption":caption});
+				imageDB.items.push({"url":url,"caption":caption,"type":getURLType(url)});
 				applyChanges();
 				List();
-				_history.push({
+				pushHistoryItem({
 					restoreType:"added_image",
 					index:collectionIndex,
 				
@@ -183,6 +184,7 @@ $(document).ready(function(){
 				
 				// changeDynamicColor
 				
+				popDropdown();
 				setTimeout(dynamicColorBars,5000);
 			}
 			else{
@@ -198,6 +200,16 @@ $(document).ready(function(){
 	
 	$("#btnUndo").on("click",function(){
 		Undo();
+	});
+	
+	$('.toggleButton').on('click',function(){
+		log('toggleButton pressed');
+		if(!$(this).hasClass('pressed')){
+			$(this).addClass('pressed');
+		}
+		else{
+			$(this).removeClass('pressed');
+		}
 	});
 	
 	var collectionsButtonClicked = false;

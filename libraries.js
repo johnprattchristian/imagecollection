@@ -6,11 +6,28 @@ $(function(){
 			deleteLibrary();
 		}
 	});
+	
+	// hover over menu item
+	$('.libraryMenuItem').on('hover',function(e){
+		log('hover');
+		$(this).children('.menuItemSubtext').addClass('hover');
+	}).on('mouseout',function(){
+		$(this).children('.menuItemSubtext').removeClass('hover');
+	});
+	
+	// when losing focus, hide dropdown
+	$(document).on('click',function(e){
+		// if the click is not on library dropdown and not on the library button and not on one of the library dropdown children, then close the dropdown
+		if(e.target !== document.getElementById('dropDownLibraries') && e.target !== $('#btnLibrariesDropdown').get(0) && $('#dropDownLibraries').has(e.target).length === 0) {
+			$('#dropDownLibraries').hide();
+			$('#btnLibrariesDropdown').removeClass('pressed');
+		}
+	});
 });
 
 var deleteLibrary = function(index){
 		// push library to history to restore if needed
-		_history.push({
+		pushHistoryItem({
 			restoreType:'deleted_library',
 			index:libraryIndex,
 			data:DATABASE.libraries[libraryIndex]
@@ -50,6 +67,7 @@ var newLibrary = function(libraryName){
 		});
 		
 		applyChanges();
+		popLibrariesDropdown();
 		changeLibrary(DATABASE.libraries.length - 1);
 		notify('New library "' + libraryName + '" created.');
 	}
@@ -60,21 +78,23 @@ var newLibrary = function(libraryName){
 
 var popLibrariesDropdown = function(){
 	var dropdown = $('#dropDownLibraries');
-	dropdown.children('.libraryMenuItem').remove();
+	dropdown.children('.dropDownMenuItem').remove();
 	$('#blueCircle').hide() // hide the blue dot until it finds a home
 	$(DATABASE.libraries).each(function(i,item){
-		dropdown.append('<div class="libraryMenuItem" name="library'+i+'"><span class="libraryTitle">'+item.name+'</span></div>');
+		dropdown.append('<div class="dropDownMenuItem" name="library'+i+'"><span class="dropDownMenuItemText">'+item.name+'</span><span class="menuItemSubtext">'+item.collections.length+' collections</span></div>');
 		if(i === libraryIndex){
 			dropdown.children('.libraryMenuItem').last().append('<img id="blueCircle" src="blue-dot.png" height="15px" width="15px"></img>');
 		}
 	});
-	dropdown.append('<div class="libraryMenuItem btnNewLibrary">+</div>');
+	dropdown.append('<div class="dropDownMenuItem last btnNewLibrary">New Library</div>');
 	
 	$('.btnNewLibrary').on('click',function(){
+		setTimeout(function(){
 		var result = prompt('Enter a name for the library.');
 		if(result !== null){
 			newLibrary(result);
 		}
+		},100)
 	});
 	
 	$('.libraryMenuItem').not('.btnNewLibrary').on('click',function(){
@@ -118,13 +138,3 @@ var changeLibrary = function(index){
 	
 	
 }
-
-// hide dropdown libraries when focus lost
-$(document).ready(function(){
-	$(document).on('click',function(e){
-		// if the click is not on library dropdown and not on the library button and not on one of the library dropdown children, then close the dropdown
-		if(e.target !== document.getElementById('dropDownLibraries') && e.target !== $('#btnLibrariesDropdown').get(0) && $('#dropDownLibraries').has(e.target).length === 0) {
-			$('#dropDownLibraries').hide();
-		}
-	});
-});

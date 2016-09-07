@@ -7,12 +7,13 @@ var Delete = function(domElement = null){
 		//FOR UNDO add item to list of deleted items FOR UNDO:
 			var new_deleted = {
 					restoreType:"deleted_image",
-					index:collectionIndex,
-					indexOfImage:selected_index,
-					imageURL:imageDB.items[selected_index]
+					parentIndex:collectionIndex,
+					index:selected_index,
+					data:imageDB.items[selected_index]
+					//,thumbnails:generateHistoryThumbs([$(domElement).children('img,video').get(0)]) // send an array of 1 image as the argument
 				// value:[which collection,the index of the image in the collection,the src url of the image]
 			};
-			_history.push(new_deleted);
+			pushHistoryItem(new_deleted);
 		//
 		if(audio_playing_index>=0){
 			if(selected_index<audio_playing_index){
@@ -26,6 +27,7 @@ var Delete = function(domElement = null){
 		imageDB.items.splice(selected_index,1);
 		
 		applyChanges();
+		popDropdown();
 		
 		var currentscroll = $(window).scrollTop();
 		$(domElement).fadeOut('fast',function(){
@@ -239,7 +241,7 @@ var changeCaption = function(item_index,newcaption,callback){
 		}
 		
 		// store old caption in _history:
-		_history.push({restoreType:'caption',index:item_index,caption:old_caption});
+		pushHistoryItem({restoreType:'caption',index:item_index,caption:old_caption});
 		
 		applyChanges();
 		$('#box'+item_index).find('.captionText').html(new_caption);
