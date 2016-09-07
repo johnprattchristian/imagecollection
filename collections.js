@@ -29,22 +29,12 @@ var hideCollections = function(animation = true,slidespeed = 50){
 	var container = $('#collectionsContainer');
 	var button = $('#btnCollections');
 	
-
-	if(collectionsButtonClicked==false){
-		button.toggleClass('pressed');
-		button.children('span').html('▲');
-		//button.css({backgroundColor:'gray'});
-		container.slideDown(slidespeed);
-		
-		$('.spacer#top').animate({height:'130px'},slidespeed);
-		collectionsButtonClicked = true;
-	}	
-	else{
-		button.toggleClass('pressed');
-		button.children('span').html('▼');
-		//button.css({backgroundColor:'black'});
-
-	}
+	button.removeClass('pressed');
+	//button.css({backgroundColor:'gray'});
+	
+	button.children('span').html('▼');
+	//button.css({backgroundColor:'black'});
+	
 	//button.css({backgroundColor:'black'});
 	if(animation){
 		container.slideUp(slidespeed);

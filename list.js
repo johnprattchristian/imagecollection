@@ -10,6 +10,7 @@ var Delete = function(domElement = null){
 					parentIndex:collectionIndex,
 					index:selected_index,
 					data:imageDB.items[selected_index]
+					//,thumbnails:generateHistoryThumbs([$(domElement).children('img,video').get(0)]) // send an array of 1 image as the argument
 				// value:[which collection,the index of the image in the collection,the src url of the image]
 			};
 			pushHistoryItem(new_deleted);
