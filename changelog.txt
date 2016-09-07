@@ -130,3 +130,7 @@ UNDATED:
 - (in progress) Dynamic coloring for UI based on images in collection
 - Begin implementing history dropdown
 - Create counters for library, collection, and history buttons
+
+2016-09-07
+- History UI/functionality implemented
+	- restore multiple history items with quick highlighting
