@@ -169,11 +169,11 @@ h1{
 	padding-left:20px;
 }
 
-#btnLibrariesDropdown{
+#btnLibraries{
 	width:100px;
 }
 
-#btnLibrariesDropdown .pressed{
+#btnLibraries .pressed{
 	background-color:rgba(0,0,0,0.8);
 }
 
