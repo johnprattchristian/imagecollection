@@ -61,6 +61,10 @@ var notify = function(text,type){
 	notifs.children().text(text); // sets the notification text
 	notifs.children('span').html(text);
 	
+	var reg = $('#regularNotifications');
+	var regwidth = Math.round(reg.width());
+	reg.css('left',Math.round((window.innerWidth / 2) - regwidth /2 - 40)+'px');
+	
 	ntimeout = setTimeout(function(){
 		notifs.fadeOut(400);
 	},fadeoutDelay);

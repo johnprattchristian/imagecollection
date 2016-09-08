@@ -40,6 +40,10 @@ var setLastVisited = function(library = libraryIndex,collection = collectionInde
 
 $(document).ready(function(){
 	
+	window.onbeforeunload = function(){
+		applyChanges();
+	}
+	
 	// Database Index
 	lastVisited = JSON.parse(localStorage.getItem("last_visited_index"));
 	// which library and collection to fetch?
