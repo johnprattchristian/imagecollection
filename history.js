@@ -1,16 +1,10 @@
 var btnHistoryClicked = false;
 $(function(){
 	$('#btnHistory').on('click',function(){
-		if(!btnHistoryClicked){
-			$('.dropDownHistory').slideDown(100);
-			btnHistoryClicked = true;
-		}
-		else{
-			$('.dropDownHistory').slideUp(100);
-			btnHistoryClicked = false;
-		}
+		$('.dropDownHistory').slideToggle(100);
 	});
 	
+	// resset highlighting
 	$('.dropDownHistory').on('mouseleave',function(){
 		$(this).children().removeClass('highlight').removeClass('pressed');
 	});
@@ -158,9 +152,7 @@ var popHistoryDropdown = function(){
 			var noOfItems = _history.length - index;
 			log('restoring back to history item #'+index+'...');
 			// restore all history back to this point
-			for(var i = _history.length;i > index;i--){
-				Undo();
-			}
+			Undo(noOfItems);
 			notify('Restored ' + noOfItems + ' history items.','good');
 		});
 		
@@ -168,77 +160,107 @@ var popHistoryDropdown = function(){
 	}
 	else{
 		list.append('<div class="dropDownMenuItem last"><span class="dropDownMenuItemText">History is empty.</span></div>');
+		if($('#btnHistory').hasClass('pressed')){
+			setTimeout(function(){
+				$('#btnHistory').click();
+			},500);
+		}
 	}
 }
 
-var Undo = function(){
+var Undo = function(numberOfItems = 1){
 	if (_history[0]!=null){
 		var item = _history[_history.length-1]; // set item to the most recently _history
 		var itemsLeft = _history.length - 1;
-		if(item.restoreType==="deleted_image"){
-			if(collectionIndex !== item.parentIndex){
-				changeCollection(item.parentIndex);
-			}
-			imageDB.items.splice(item.index,0,item.data); // add the item back into the collection it was deleted from 
-			applyChanges();
-			List(false,function(){
-				var element = document.getElementById(""+item.index+"");
-				jumpToElementByScrollPosition(element,100,highlightRestore(element));
-			});
-			// notification. Update on trash, how many items left. If empty, just say that.				
-			notify("Image restored. " + (_history.length - 1 > 0 ? itemsLeft + ' items left in trash.' : ' Trash is empty.'),"good");
-		}
-		else if(item.restoreType==="deleted_collection"){
-			DATABASE.libraries[item.parentIndex].collections.splice(item.index,0,item.data);
-			
-			localStorage.setItem(CURRENT_DATABASE,JSON.stringify(DATABASE));
-			changeLibrary(item.parentIndex);
-			changeCollection(item.index);
-			popDropdown();
-			
-			notify('Collection "' + item.data.name + '" restored. ' + itemsLeft + ' items left in trash.',"good");
-		}
-		else if(item.restoreType==="deleted_library"){
-			DATABASE.libraries.splice(item.index,0,item.data);
-			
-			localStorage.setItem(CURRENT_DATABASE,JSON.stringify(DATABASE));
-			changeLibrary(item.index);
-			popLibrariesDropdown();
-			
-			notify('Library "' + item.data.name + '" restored. ' + itemsLeft + ' history items left.','good');
-		}
-		else if(item.restoreType==="added_image"){ // if last action was Add Image, then just remove the image
 		
-			if(collectionIndex===item.index){
-				imageDB.items.splice(selected_index,1);
-				applyChanges();
-				List();
+		// lowers processing for multiple undos at once
+		for(var x = 0;x < numberOfItems;x++){
+			if(item.restoreType==="deleted_image"){
+				if(collectionIndex !== item.parentIndex){
+					changeCollection(item.parentIndex);
+				}
+				imageDB.items.splice(item.index,0,item.data); // add the item back into the collection it was deleted from 
+				// applyChanges(); unnecessary
 				
-				notify("Image removed. "+ itemsLeft +" more Undo items.","neutral");
+				// only call List() and animate on last deleted_image being restored
+				doIfLastOfRestoreType(x,item.restoreType,function(){
+					List(false,function(){
+						var element = document.getElementById(""+item.index+"");
+						jumpToElementByScrollPosition(element,100,highlightRestore(element));
+					});
+				
+					// notification. Update on trash, how many items left. If empty, just say that.				
+					notify("Image restored. " + (_history.length - 1 > 0 ? itemsLeft + ' items left in trash.' : ' Trash is empty.'),"good");
+				});
+			}
+			else if(item.restoreType==="deleted_collection"){
+				DATABASE.libraries[item.parentIndex].collections.splice(item.index,0,item.data);
+				
+				//localStorage.setItem(CURRENT_DATABASE,JSON.stringify(DATABASE));
+				
+				// only do all this if its the last collection being restored in the multi-Undo
+				doIfLastOfRestoreType(x,item.restoreType,function(){
+					changeLibrary(item.parentIndex);
+					changeCollection(item.index);
+					popDropdown();
+					notify('Collection "' + item.data.name + '" restored. ' + itemsLeft + ' items left in trash.',"good");
+				});
+			}
+			else if(item.restoreType==="deleted_library"){
+				DATABASE.libraries.splice(item.index,0,item.data);
+				
+				doIfLastOfRestoreType(x,item.restoreType,function(){
+					changeLibrary(item.index);
+					popLibrariesDropdown();				
+					notify('Library "' + item.data.name + '" restored. ' + itemsLeft + ' history items left.','good');
+				});
+			}
+			else if(item.restoreType==="added_image"){ // if last action was Add Image, then just remove the image
+			
+				if(collectionIndex===item.index){
+					imageDB.items.splice(selected_index,1);
+					//applyChanges();
+					
+					doIfLastOfRestoreType(x,item.restoreType,function(){
+						List();
+						
+						notify("Image removed. "+ itemsLeft +" more Undo items.","neutral");
+					});
+				}
+			}
+			else if(item.restoreType==="caption"){
+				// restore the old caption:
+				
+				imageDB.items[item.index].caption = item.caption;
+				
+				doIfLastOfRestoreType(x,item.restoreType,function(){
+					List();
+					notify(' "' + imageDB.items[item.index].caption + '" reverted back to "' + item.caption + '". ' + itemsLeft +' _history items left.',"neutral");
+				});
+			}
+			else if(item.restoreType==="collection_name"){
+				var new_old_name = collections[item.index].name;
+				DATABASE.libraries[libraryIndex].collections[item.index].name = item.name;
+				//localStorage.setItem("collection_names",JSON.stringify(collections));
+				doIfLastOfRestoreType(x,item.restoreType,function(){
+					changeCollection(item.index);
+					popDropdown();
+					notify('Reverted collection "' + new_old_name + '" back to "' + item.name + '".','neutral');
+				});
+			}
+			else{
+				return;
 			}
 		}
-		else if(item.restoreType==="caption"){
-			// restore the old caption:
-			notify(' "' + imageDB.items[item.index].caption + '" reverted back to "' + item.caption + '". ' + itemsLeft +' _history items left.',"neutral");
-			imageDB.items[item.index].caption = item.caption;
-			List();
-			
-		}
-		else if(item.restoreType==="collection_name"){
-			var new_old_name = collections[item.index].name;
-			collections[item.index].name = item.name;
-			localStorage.setItem("collection_names",JSON.stringify(collections));
-			changeCollection(item.index);
-			popDropdown();
-			
-			notify('Reverted collection "' + new_old_name + '" back to "' + item.name + '".','neutral');
-			
-		}
-		else{
-			return;
-		}
+	log('Undo ' + item.restoreType + '. ' + (typeof item.data !== 'undefined' && item.data !== null ? (item.data.type ? item.data.type : 'no data type') : 'item.'));
 	_history.splice(-1,1); // take the item out of UNDO list
 	drawHistoryCountFlag();
 	$('.dropDownHistory').children().last().slideUp(200,popHistoryDropdown); // refresh the history list
+	}
+};
+
+var doIfLastOfRestoreType = function(currentIndex,restoreType,funct){
+	if(currentIndex === lastIndexOfRestoreType(_history,restoreType)){
+		funct();
 	}
 };

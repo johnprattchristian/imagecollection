@@ -180,3 +180,39 @@ var bgPosition = function(element){
 var bgSize = function(element){
 	var size = $(element).css('background-size').replace('px','').replace('px','').replace('%');
 }
+
+var lastIndexOfObjProp = function(array,propname){
+	var counter = 0;
+	
+	//iterate through array looking for an object with that property name
+	for(var i = 0;i < array.length - 1;i++){
+		if(typeof array[i][propname] !== 'undefined'){
+			counter = i;
+		}
+	}
+	
+	// if no object with that property is found, return index of -1.
+	if(counter == 0){
+		return -1;
+	}
+	else{
+		return counter; // return the last index in the array of an object with the given property
+	}
+};
+
+var lastIndexOfRestoreType = function(array,type){
+	var counter = 0;
+	for(var i = 0;i < array.length - 1;i++){
+		if(typeof array[i].restoreType !== 'undefined' && array[i].restoreType === type){
+			counter = i;
+		}
+	}
+
+	// if found none of object.type that matched, return -1
+	if(counter == 0){
+		return -1;
+	}
+	else{
+		return counter;
+	}
+};
