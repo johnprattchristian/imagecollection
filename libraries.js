@@ -15,12 +15,24 @@ $(function(){
 		$(this).children('.menuItemSubtext').removeClass('hover');
 	});
 	
+	$('#btnLibraries').on('click',function(){
+		if($('#dropDownLibraries').css('display') === 'none'){
+			$('.dropDown').hide();
+			$('.toggleButton').removeClass('pressed');
+			$('#dropDownLibraries').slideDown(100);
+		}
+		else{
+			$('#dropDownLibraries').slideUp(100);
+		}
+	});
+	
+	
 	// when losing focus, hide dropdown
 	$(document).on('click',function(e){
 		// if the click is not on library dropdown and not on the library button and not on one of the library dropdown children, then close the dropdown
-		if(e.target !== document.getElementById('dropDownLibraries') && e.target !== $('#btnLibrariesDropdown').get(0) && $('#dropDownLibraries').has(e.target).length === 0) {
+		if(e.target !== document.getElementById('dropDownLibraries') && e.target !== $('#btnLibraries').get(0) && $('#dropDownLibraries').has(e.target).length === 0) {
 			$('#dropDownLibraries').hide();
-			$('#btnLibrariesDropdown').removeClass('pressed');
+			$('#btnLibraries').removeClass('pressed');
 		}
 	});
 });
@@ -127,7 +139,7 @@ var changeLibrary = function(index){
 		changeCollection(0);
 		List();
 		
-		//$('#btnLibrariesDropdown').html(DATABASE.libraries[libraryIndex].name);
+		//$('#btnLibraries').html(DATABASE.libraries[libraryIndex].name);
 		notify('Switched to library "' + DATABASE.libraries[libraryIndex].name + '".');
 	}
 	else{
