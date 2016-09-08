@@ -1,7 +1,7 @@
 
 @font-face{
 	font-family:'helvetica';
-	src:url('/fonts/Helvetica.otf');
+	src:url('./fonts/Helvetica.otf');
 }
 
 body{
@@ -138,8 +138,18 @@ h1{
 	text-shadow: 2px 2px 2px black;
 }
 
-#regularNotifications{
+
+#regularNotifications.Notifications{
 	text-shadow: 2px 2px 2px black;
+	position:fixed;
+	z-index:3;
+	left:0px;
+	width:auto;
+	padding:20px 50px;
+}
+
+#regularNotifications.Notifications span{
+	text-align:center;
 }
 
 
