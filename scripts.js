@@ -133,15 +133,6 @@ $(document).ready(function(){
 		
 	});
 	
-	$('#btnLibrariesDropdown').on('click',function(){
-		if($('#dropDownLibraries').css('display') === 'none'){
-			$('#dropDownLibraries').slideDown(100);
-		}
-		else{
-			$('#dropDownLibraries').slideUp(100);
-		}
-	});
-	
 	/* CALLED AT THE BEGINNING OF PROGRAM>>>>>>>>>>>>>>>>>>>>>>>>>>> */ 
 	List(true);
 	popDropdown();
@@ -172,7 +163,7 @@ $(document).ready(function(){
 			
 			if(validImageCheck()){ // is there actually an image at this url?
 				imageDB.items.push({"url":url,"caption":caption,"type":getURLType(url)});
-				applyChanges();
+				//applyChanges();
 				List();
 				pushHistoryItem({
 					restoreType:"added_image",
@@ -206,6 +197,7 @@ $(document).ready(function(){
 		log('toggleButton pressed');
 		if(!$(this).hasClass('pressed')){
 			$(this).addClass('pressed');
+
 		}
 		else{
 			$(this).removeClass('pressed');

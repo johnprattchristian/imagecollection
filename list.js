@@ -26,7 +26,7 @@ var Delete = function(domElement = null){
 		//remove the item
 		imageDB.items.splice(selected_index,1);
 		
-		applyChanges();
+		//applyChanges();
 		popDropdown();
 		
 		var currentscroll = $(window).scrollTop();
