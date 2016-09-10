@@ -165,11 +165,11 @@ $(document).ready(function(){
 				imageDB.items.push({"url":url,"caption":caption,"type":getURLType(url)});
 				//applyChanges();
 				List();
-				pushHistoryItem({
+				/*pushHistoryItem({
 					restoreType:"added_image",
 					index:collectionIndex,
 				
-				});
+				});*///Adding image no long a history item
 			
 				notify('"'+text+'" added.','good');
 				
