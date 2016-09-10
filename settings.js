@@ -9,8 +9,8 @@ var initializeSettings = function(){
 	_settings = JSON.parse(localStorage.getItem("user_settings"));
 	if(_settings === null || _settings === {}){
 		_settings = [
-			{item:'fullscreenCaptions',value:true},
-			{item:'notificationColors',value:true}
+			{item:'fullscreenCaptions',value:true,label:'Fullscreen Notifications'},
+			{item:'notificationColors',value:true,label:'Notification Colors'}
 		]
 		saveSettings();
 	}
@@ -59,7 +59,7 @@ var settingsDialogue = function(){
 			case 'boolean':
 				settingItem = $("<label><input type='checkbox' value='"+item.item+"'" +
 				""+
-				(item.value === true ? 'checked' : '') + ">"+item.item+"</label></input>");
+				(item.value === true ? 'checked' : '') + ">"+item.label+"</label></input>");
 				
 				break;
 			default:

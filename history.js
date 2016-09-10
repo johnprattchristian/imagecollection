@@ -40,6 +40,7 @@ var drawHistoryCountFlag = function(){
 	}
 	ctx.font = '9pt Arial';
 	ctx.fillStyle = 'white';
+	// draw the number to the button:
 	ctx.fillText(''+_history.length + '',6,15);
 }
 
@@ -153,7 +154,6 @@ var popHistoryDropdown = function(){
 			log('restoring back to history item #'+index+'...');
 			// restore all history back to this point
 			Undo(noOfItems);
-			notify('Restored ' + noOfItems + ' history items.','good');
 		});
 		
 		
@@ -169,13 +169,21 @@ var popHistoryDropdown = function(){
 }
 
 var Undo = function(numberOfItems = 1){
-	if (_history[0]!=null){
-		var item = _history[_history.length-1]; // set item to the most recently _history
-		var itemsLeft = _history.length - 1;
+	if (_history[0]!==null){
 		
+		var undoItems = _history.slice(0);
+		undoItems = undoItems.splice(-numberOfItems);
+		var itemsLeft = _history.length - numberOfItems;
 		// lowers processing for multiple undos at once
 		for(var x = 0;x < numberOfItems;x++){
+			var item = undoItems[(undoItems.length - 1)-x]; // set item to the x iteration of undoItems
+			var itemsLeft = _history.length - 1;
+				
+			log('undoItems :');
+			log(undoItems);	
+			
 			if(item.restoreType==="deleted_image"){
+				// go to the collection that the image was deleted from 
 				if(collectionIndex !== item.parentIndex){
 					changeCollection(item.parentIndex);
 				}
@@ -183,12 +191,11 @@ var Undo = function(numberOfItems = 1){
 				// applyChanges(); unnecessary
 				
 				// only call List() and animate on last deleted_image being restored
-				doIfLastOfRestoreType(x,item.restoreType,function(){
+				doIfLastOfRestoreType(undoItems,x,item.restoreType,function(){
 					List(false,function(){
 						var element = document.getElementById(""+item.index+"");
 						jumpToElementByScrollPosition(element,100,highlightRestore(element));
 					});
-				
 					// notification. Update on trash, how many items left. If empty, just say that.				
 					notify("Image restored. " + (_history.length - 1 > 0 ? itemsLeft + ' items left in trash.' : ' Trash is empty.'),"good");
 				});
@@ -199,7 +206,7 @@ var Undo = function(numberOfItems = 1){
 				//localStorage.setItem(CURRENT_DATABASE,JSON.stringify(DATABASE));
 				
 				// only do all this if its the last collection being restored in the multi-Undo
-				doIfLastOfRestoreType(x,item.restoreType,function(){
+				doIfLastOfRestoreType(undoItems,x,item.restoreType,function(){
 					changeLibrary(item.parentIndex);
 					changeCollection(item.index);
 					popDropdown();
@@ -209,7 +216,7 @@ var Undo = function(numberOfItems = 1){
 			else if(item.restoreType==="deleted_library"){
 				DATABASE.libraries.splice(item.index,0,item.data);
 				
-				doIfLastOfRestoreType(x,item.restoreType,function(){
+				doIfLastOfRestoreType(undoItems,x,item.restoreType,function(){
 					changeLibrary(item.index);
 					popLibrariesDropdown();				
 					notify('Library "' + item.data.name + '" restored. ' + itemsLeft + ' history items left.','good');
@@ -221,7 +228,7 @@ var Undo = function(numberOfItems = 1){
 					imageDB.items.splice(selected_index,1);
 					//applyChanges();
 					
-					doIfLastOfRestoreType(x,item.restoreType,function(){
+					doIfLastOfRestoreType(undoItems,x,item.restoreType,function(){
 						List();
 						
 						notify("Image removed. "+ itemsLeft +" more Undo items.","neutral");
@@ -233,7 +240,7 @@ var Undo = function(numberOfItems = 1){
 				
 				imageDB.items[item.index].caption = item.caption;
 				
-				doIfLastOfRestoreType(x,item.restoreType,function(){
+				doIfLastOfRestoreType(undoItems,x,item.restoreType,function(){
 					List();
 					notify(' "' + imageDB.items[item.index].caption + '" reverted back to "' + item.caption + '". ' + itemsLeft +' _history items left.',"neutral");
 				});
@@ -242,7 +249,7 @@ var Undo = function(numberOfItems = 1){
 				var new_old_name = collections[item.index].name;
 				DATABASE.libraries[libraryIndex].collections[item.index].name = item.name;
 				//localStorage.setItem("collection_names",JSON.stringify(collections));
-				doIfLastOfRestoreType(x,item.restoreType,function(){
+				doIfLastOfRestoreType(undoItems,x,item.restoreType,function(){
 					changeCollection(item.index);
 					popDropdown();
 					notify('Reverted collection "' + new_old_name + '" back to "' + item.name + '".','neutral');
@@ -251,16 +258,29 @@ var Undo = function(numberOfItems = 1){
 			else{
 				return;
 			}
+			
+			// notify of multiple undos if more than 1
+			if(numberOfItems > 1){
+				notify('Restored ' + numberOfItems + ' history items.','good');
+			}
+			
+			log('Undo ' + item.restoreType + '. ' + (typeof item.data !== 'undefined' && item.data !== null ? (item.data.type ? item.data.type : 'no data type') : 'item.'));
+			
+			// cut out the last _history item
+			//undoItems.splice(-1);  dont splice this, because the one that matters _history is spliced
+			_history.splice(-1); // take the item out of full history list
+			log('history.length: ' + _history.length);
+			
+			drawHistoryCountFlag();
+			$('.dropDownHistory').children().last().slideUp(200,popHistoryDropdown); // refresh the history list
 		}
-	log('Undo ' + item.restoreType + '. ' + (typeof item.data !== 'undefined' && item.data !== null ? (item.data.type ? item.data.type : 'no data type') : 'item.'));
-	_history.splice(-1,1); // take the item out of UNDO list
-	drawHistoryCountFlag();
-	$('.dropDownHistory').children().last().slideUp(200,popHistoryDropdown); // refresh the history list
 	}
 };
 
-var doIfLastOfRestoreType = function(currentIndex,restoreType,funct){
-	if(currentIndex === lastIndexOfRestoreType(_history,restoreType)){
+var doIfLastOfRestoreType = function(array,currentIndex,restoreType,funct){
+	var lastIndex = lastIndexOfRestoreType(array,restoreType);
+	if(currentIndex === lastIndex){
+		log('is last of restore type!');
 		funct();
 	}
 };

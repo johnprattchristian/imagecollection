@@ -201,18 +201,14 @@ var lastIndexOfObjProp = function(array,propname){
 };
 
 var lastIndexOfRestoreType = function(array,type){
-	var counter = 0;
-	for(var i = 0;i < array.length - 1;i++){
+	var counter = -1; // init as a non-index number
+	for(var i = 0;i < array.length;i++){
 		if(typeof array[i].restoreType !== 'undefined' && array[i].restoreType === type){
 			counter = i;
 		}
 	}
 
 	// if found none of object.type that matched, return -1
-	if(counter == 0){
-		return -1;
-	}
-	else{
-		return counter;
-	}
+
+	return counter;
 };
