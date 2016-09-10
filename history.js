@@ -197,7 +197,7 @@ var Undo = function(numberOfItems = 1){
 						jumpToElementByScrollPosition(element,100,highlightRestore(element));
 					});
 					// notification. Update on trash, how many items left. If empty, just say that.				
-					notify("Image restored. " + (_history.length - 1 > 0 ? itemsLeft + ' items left in trash.' : ' Trash is empty.'),"good");
+					notify("Image restored. " + (_history.length - 1 > 0 ? itemsLeft + ' history items left.' : ' History is empty.'),"good");
 				});
 			}
 			else if(item.restoreType==="deleted_collection"){
@@ -210,7 +210,7 @@ var Undo = function(numberOfItems = 1){
 					changeLibrary(item.parentIndex);
 					changeCollection(item.index);
 					popDropdown();
-					notify('Collection "' + item.data.name + '" restored. ' + itemsLeft + ' items left in trash.',"good");
+					notify('Collection "' + item.data.name + '" restored. ' + itemsLeft + ' history items left.',"good");
 				});
 			}
 			else if(item.restoreType==="deleted_library"){
@@ -231,7 +231,7 @@ var Undo = function(numberOfItems = 1){
 					doIfLastOfRestoreType(undoItems,x,item.restoreType,function(){
 						List();
 						
-						notify("Image removed. "+ itemsLeft +" more Undo items.","neutral");
+						notify("Image removed. "+ itemsLeft +" history items left.","neutral");
 					});
 				}
 			}
@@ -242,7 +242,7 @@ var Undo = function(numberOfItems = 1){
 				
 				doIfLastOfRestoreType(undoItems,x,item.restoreType,function(){
 					List();
-					notify(' "' + imageDB.items[item.index].caption + '" reverted back to "' + item.caption + '". ' + itemsLeft +' _history items left.',"neutral");
+					notify(' "' + imageDB.items[item.index].caption + '" reverted back to "' + item.caption + '". ' + itemsLeft +' history items left.',"neutral");
 				});
 			}
 			else if(item.restoreType==="collection_name"){
@@ -262,14 +262,14 @@ var Undo = function(numberOfItems = 1){
 			// notify of multiple undos if more than 1
 			if(numberOfItems > 1){
 				notify('Restored ' + numberOfItems + ' history items.','good');
+				if(_history.length == 0){
+					notify('History is empty.','good');
+				}
 			}
-			
-			log('Undo ' + item.restoreType + '. ' + (typeof item.data !== 'undefined' && item.data !== null ? (item.data.type ? item.data.type : 'no data type') : 'item.'));
 			
 			// cut out the last _history item
 			//undoItems.splice(-1);  dont splice this, because the one that matters _history is spliced
 			_history.splice(-1); // take the item out of full history list
-			log('history.length: ' + _history.length);
 			
 			drawHistoryCountFlag();
 			$('.dropDownHistory').children().last().slideUp(200,popHistoryDropdown); // refresh the history list
