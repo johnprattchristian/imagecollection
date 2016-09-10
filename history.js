@@ -9,6 +9,14 @@ $(function(){
 		$(this).children().removeClass('highlight').removeClass('pressed');
 	});
 	
+	$(document).on('click',function(e){
+		log('clicked');
+		if($('.dropDownHistory').css('display')!=='none' && $('.dropDownHistory').has(e.target).length == 0 && !$('.dropDownHistory').is(e.target) && !$('#btnHistory').is(e.target) && $('#btnHistory').has(e.target).length == 0){
+			$('.dropDownHistory').hide();
+			$('#btnHistory').removeClass('pressed');
+		}
+	});
+	
 	/*$(document).on('click',function(e){
 		if(e.target !== document.getElementById('btnHistory') && $('.dropDownHistory').has(e.target).length < 1){
 			$('.dropDownHistory').hide();
