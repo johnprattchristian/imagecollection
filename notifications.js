@@ -21,12 +21,20 @@ var pushNotification = function(message,type){
 	});
 }
 
+var alreadyNotifying = false;
 var displayNotification = function(message,type){
 	// if the only notification is the one we just pushed from notify()
 	// then start a new cycle
-		message = message;
-		ntype = type;
+
+	ntype = type;
+	var wait = 0;
 	
+	// if there's already a notification, then wait half a second
+	if(!Fullscreen() && alreadyNotifying){
+		wait = 500;
+	}
+	setTimeout(function(){
+		alreadyNotifying = true;
 		$('.Notifications').stop(true,true);
 		$('.Notifications').hide();
 		notifs = $('.Notifications');
@@ -84,14 +92,15 @@ var displayNotification = function(message,type){
 		reg.css('left',Math.round((window.innerWidth / 2) - regwidth /2 - 40)+'px');
 
 		ntimeout = setTimeout(function(){
+			alreadyNotifying = false; // notification has ended
 			notifs.fadeOut(400);
-			notifQue.splice(0,1);
+			/*notifQue.splice(0,1);
 			if(notifQue.length > 0){ // if there's more notifications, display them
 				displayNotification();
-			};
+			};*/
 		},fadeoutDelay);
 		
-	
+	},wait);
 }
 
 var notify = function(text,type){
