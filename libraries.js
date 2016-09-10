@@ -95,7 +95,7 @@ var popLibrariesDropdown = function(){
 	$(DATABASE.libraries).each(function(i,item){
 		dropdown.append('<div class="dropDownMenuItem" name="library'+i+'"><span class="dropDownMenuItemText">'+item.name+'</span><span class="menuItemSubtext">'+item.collections.length+' collections</span></div>');
 		if(i === libraryIndex){
-			dropdown.children('.libraryMenuItem').last().append('<img id="blueCircle" src="blue-dot.png" height="15px" width="15px"></img>');
+			dropdown.children('.dropDownMenuItem').last().append('<img id="blueCircle" src="blue-dot.png" height="15px" width="15px"></img>');
 		}
 	});
 	dropdown.append('<div class="dropDownMenuItem last btnNewLibrary">New Library</div>');
@@ -109,13 +109,14 @@ var popLibrariesDropdown = function(){
 		},100)
 	});
 	
-	$('.libraryMenuItem').not('.btnNewLibrary').on('click',function(){
+	$('#dropDownLibraries .dropDownMenuItem').not('.btnNewLibrary').on('click',function(){4
+		log('library menu item clicked');
 		var newIndex = parseInt($(this).attr('name').replace('library',''));
 		$('#blueCircle').remove();
 		$(this).append('<img id="blueCircle" src="blue-dot.png"></img>');
 		setTimeout(function(){
 			changeLibrary(newIndex);
-			$('#dropDownLibraries').hide(); // hide the dropdown
+			$('#btnLibraries').click(); // hide the dropdown
 		},50);
 	});
 };
