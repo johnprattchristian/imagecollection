@@ -181,6 +181,8 @@ var bgSize = function(element){
 	var size = $(element).css('background-size').replace('px','').replace('px','').replace('%');
 }
 
+// Last Index of ... functions (used for History functions)
+
 var lastIndexOfObjProp = function(array,propname){
 	var counter = 0;
 	
@@ -212,3 +214,61 @@ var lastIndexOfRestoreType = function(array,type){
 
 	return counter;
 };
+
+// Resolving a date even if there isn't one on the db item:
+// (useful for sorting without errors?)
+var getDateAdded = function(item,assignIfNone = false){
+	if(typeof item.date_added !== 'undefined' && item.date_added !== null){
+		if(typeof item.date_added === 'string'){
+			return parseInt(item.date_added);
+		}
+		else{
+			var date = '';
+			try{
+				date = parseInt(item.date_added);
+				return date;
+			}
+			catch(ex){
+				log(ex);
+			}
+			finally{
+				
+			}
+		}
+	}
+	else{
+		// search for a reference item that DOES have a date
+		if(searchForItemWithDate(imageDB.indexOf(item)) !== false){ // if the search succeeded:
+			// copy the date of that item as a reference date for this unknown-date item
+			var thatDate = parseInt(thatItem.date_added)+1;
+			//assign thatDate to parameter item
+			if(assignIfNone){
+				item.date_added = thatDate;
+			}
+			return thatDate;
+		}
+		else{
+			// if even the search for a reference item failed, just return a brand new time signature and, if desired, write it to the database item
+			var newDateAdded = generateTimestamp();
+			if(assignIfNone){
+				item.date_added = newDateAdded;
+			}
+			return parseInt(newDateAdded);
+			
+		}
+	}
+}
+
+
+// search for a db item that has a date and return that item
+/*var searchForItemWithDate = function(startIndex){
+	var found = false;
+	for(var i = startIndex;found === false;i++){
+		var thatItem = imageDB[i];
+		if(thatItem.hasOwnProperty('date_added'){
+			found = true;
+			return thatItem;
+		}
+	}
+	return false;
+}*/

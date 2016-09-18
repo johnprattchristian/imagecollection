@@ -237,12 +237,13 @@ var changeCaption = function(item_index,newcaption,callback){
 					imageDB.items[item_index].caption = imageDB.items[item_index].url;
 				}
 				notify("Image caption changed","neutral");
+				
+				
 			}
 		}
 		
 		// store old caption in _history:
 		pushHistoryItem({restoreType:'caption',index:item_index,caption:old_caption});
-		
 		applyChanges();
 		$('#box'+item_index).find('.captionText').html(new_caption);
 	}
