@@ -274,4 +274,10 @@ $(function(){
 		log((stillGoingUp ? 'going up. so far: ' : 'going down: ') + howManyThisDirection );
 		*/
 	});
+	
+	$(window).on('resize',function(e){
+		$('#collectionsContainer').width(window.innerWidth);
+	}).on('load',function(){
+		$('#collectionsContainer').width(window.innerWidth);
+	});
 });
