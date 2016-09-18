@@ -242,5 +242,11 @@ $(document).ready(function(){
 	});
 	
 
-	
+	$(window).on('resize',function(e){
+		$('#collectionsContainer').width(window.innerWidth);
+		$('#navbar-top').width(window.innerWidth);
+	}).on('load',function(){
+		$('#collectionsContainer').width(window.innerWidth);
+		$('#navbar-top').width(window.innerWidth);
+	});
 });
