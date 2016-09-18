@@ -162,7 +162,7 @@ $(document).ready(function(){
 			}
 			
 			if(validImageCheck()){ // is there actually an image at this url?
-				imageDB.items.push({"url":url,"caption":caption,"type":getURLType(url)});
+				imageDB.items.push({"url":url,"caption":caption,"type":getURLType(url),"date_added":generateTimestamp()});
 				//applyChanges();
 				List();
 				/*pushHistoryItem({
