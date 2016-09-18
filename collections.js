@@ -99,7 +99,7 @@ var popDropdown = function(){
 		
 		//bind new collection button click event
 		$('#btnNewCollection').on('click',function(){
-			newCollection();
+			setTimeout(newCollection,20);
 		});
 		
 		
