@@ -20,7 +20,7 @@ var generateTimestamp = function(){
 				+(hour < 10 ? "0" + hour.toString() : hour.toString())
 				+(minute < 10 ? "0" + minute.toString() : minute.toString())
 				+(second < 10 ? "0" + second.toString() : second.toString())
-				+(milli < 10 ? "0" + milli.toString() : milli.toString());
+				+(milli < 100 ? (milli >= 10 ? "0" : "00") + milli.toString() : milli.toString());
 				
 	log('timestamp generated: ' + dateString);
 	
