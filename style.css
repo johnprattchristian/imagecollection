@@ -406,6 +406,7 @@ button:focus{
 	top:64px;
 	box-sizing:border-box;
 	padding-top:15px;
+	height:50px;
 	width:100%;
 	
 	
