@@ -20,12 +20,52 @@ var generateTimestamp = function(){
 				+(hour < 10 ? "0" + hour.toString() : hour.toString())
 				+(minute < 10 ? "0" + minute.toString() : minute.toString())
 				+(second < 10 ? "0" + second.toString() : second.toString())
-				+(milli < 10 ? "0" + milli.toString() : milli.toString());
+				+(milli < 100 ? (milli >= 10 ? "0" : "00") + milli.toString() : milli.toString());
 				
 	log('timestamp generated: ' + dateString);
 	
 	return dateString;
 };
+
+var updateUIColor = function(){
+	var opacity = 0.6;
+	if(typeof imageDB.UIColor === 'string' && imageDB.UIColor !== 'none'){
+		var colorWithAlpha = applyOpacityToUIColor(imageDB.UIColor,opacity);
+		$('#navbar-top,.collectionFooter').css('background-color',colorWithAlpha);
+		
+		var toarray = rgbStringToArray(imageDB.UIColor);
+		var valueThresh = 150;
+		if( (toarray[0] + toarray[1] + toarray[2]) / 3 > valueThresh){
+			updateFontTheme('dark');
+			var darkenedColor = darkenColorArray(rgbStringToArray(imageDB.UIColor),0.5,'string');
+			$('.rounded.superButton').css('background-color',darkenedColor);
+		}
+		else{
+			updateFontTheme();
+		}
+		
+	}
+	else{
+		$('#navbar-top,.collectionFooter').css('background-color','');
+		updateFontTheme();
+	}
+}
+
+var updateFontTheme = function(lightOrDark = 'light'){
+	if(lightOrDark === 'dark'){
+		$('.collectionItem').css('color','black');
+		$('.collection-title-bottom').css({color:'black',textShadow:'none',fontWeight:'bold'});
+		$('.superButton').css('color','black');
+		$('.collectionCounter').css('color','dimgray');
+	}
+	else{ // anything else
+		$('.collectionItem').css('color','');
+		$('.collection-title-bottom').css({color:'',textShadow:'',fontWeight:''});
+		$('.rounded.superButton').css('background-color','');
+		$('.superButton').css('color','');
+		$('.collectionCounter').css('color','');
+	}
+}
 
 // ONLY USE ON OLD DATABASES!
 var MigrateDB = function(){
@@ -106,11 +146,59 @@ $(document).ready(function(){
 	});	
 	
 	var openDialogRenameCollection = function(){
-		showDialogue('d_RenameCollection'); // Rename collection dialogue
+		showDialogue('d_EditCollection'); // Rename collection dialogue
 		var txtbx = $('#txtRenameCollection');
 		txtbx.val(collections[collectionIndex].name); // set the textbox to the current collection name
 		txtbx.focus();
 		txtbx.select();
+		
+		// color options enum
+		var colorPalette = [
+			'000000',
+			'ffffff',
+			'cc3333',
+			'ff6600',
+			'ff9900',
+			'ffcc00',
+			'ffff33',
+			'99ff33',
+			'339933',
+			'00ff66',
+			'0099ff', //blue
+			'0066ff', //deepblue
+			'9900ff', //purple
+			'cc66ff',//lightpurple
+			'ff33ff',
+			'ff0099',//hotpink
+			'ff3333',//soft red 
+		];
+		// generate colors
+		var container = $('.contain-color-options');
+		var preview = $('.color-preview');
+		if(typeof imageDB.UIColor === 'string'){
+			preview.css('background-color',imageDB.UIColor);
+		}
+		
+		container.html('');
+		for(var c in colorPalette){
+			var color = colorPalette[c];
+			var colorbox = $('<div></div>');
+			colorbox.addClass('color-option');
+			colorbox.css('background-color','#'+color);
+			container.append(colorbox);
+		}
+		container.append('<div id="no-color" class="color-option"></div>')
+		
+		$('.color-option').on('click',function(){
+			if($(this).is('#no-color')){
+				preview.css('background-color','');
+				preview.attr('data-color','none');
+				return true;
+			}
+			preview.css('background-color',$(this).css('background-color'));
+			preview.attr('data-color',$(this).css('background-color'));
+		});
+		
 	}
 	
 	$("#btnRenameCollection").bind("click",function(){
@@ -162,7 +250,7 @@ $(document).ready(function(){
 			}
 			
 			if(validImageCheck()){ // is there actually an image at this url?
-				imageDB.items.push({"url":url,"caption":caption,"type":getURLType(url)});
+				imageDB.items.push({"url":url,"caption":caption,"type":getURLType(url),"date_added":generateTimestamp()});
 				//applyChanges();
 				List();
 				/*pushHistoryItem({
@@ -216,6 +304,8 @@ $(document).ready(function(){
 	$('#collectionsContainer').hide();
 	selectCollectionItem(collectionIndex);
 	
+	updateUIColor();
+	
 // KEYDOWN/PRESS Event Handlers
 	// Capture "ENTER" key for textbox (alt entering method to the submit button)
 	$("#txtInput").on("keydown",function(e){
@@ -242,5 +332,11 @@ $(document).ready(function(){
 	});
 	
 
-	
+	$(window).on('resize',function(e){
+		$('#collectionsContainer').width(window.innerWidth);
+		$('#navbar-top').width(window.innerWidth);
+	}).on('load',function(){
+		$('#collectionsContainer').width(window.innerWidth);
+		$('#navbar-top').width(window.innerWidth);
+	});
 });

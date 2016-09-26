@@ -238,20 +238,18 @@ $(document).ready(function(){
 		changeCaption($('#txtEditCaption').val());
 	});
 	
-	var submitRenameCollection = function(){
+	var submitEditCollection = function(){
 		renameCollection($('#txtRenameCollection').val());
 		log('txtrename value is ' + $('#txtRenameCollection').val());
+		
+		imageDB['UIColor'] = $('.color-preview').attr('data-color');
+		applyChanges();
+		updateUIColor();
 		hideDialogue();
 	}
 	
-	$("#txtRenameCollection").on("keydown",function(e){
-		if(e.which === 13){
-			submitRenameCollection();
-		}
-	});
-	
-	$('#btnOK_RenameCollection').click(function(){
-		submitRenameCollection();
+	$('#btnOK_EditCollection').click(function(){
+		submitEditCollection();
 	});
 	
 	// magically resize Edit Caption thumbnail img

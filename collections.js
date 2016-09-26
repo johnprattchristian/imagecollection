@@ -4,7 +4,7 @@ var tm_containerSlideUp = 0;
 var selectCollectionItem = function(index){
 	// clearTimeout(tm_containerSlideUp);
 	$('.collectionItem').removeClass('collectionItemClicked');
-	$('.collectionItem').eq(index).addClass('collectionItemClicked');
+	$('.collectionItem[data-collection-index="'+index+'"]').addClass('collectionItemClicked');
 	/*tm_containerSlideUp = setTimeout(function(){
 		toggleCollections(100);
 	},100);*/
@@ -20,7 +20,12 @@ var showCollections = function(animation = true,slidespeed = 50){
 	button.addClass('pressed');
 	button.children('span').html('&#9650;');
 	//button.css({backgroundColor:'gray'});
-	container.slideDown(slidespeed);
+	if(animation){
+		container.slideDown(slidespeed);
+	}
+	else{
+		container.show();
+	}
 	$('.spacer#top').animate({height:'130px'},slidespeed);
 	collectionsButtonClicked = true;
 };
@@ -52,10 +57,10 @@ var toggleCollections = function(slidespeed = 50,trueSlideUp_falseSlideDown){
 	var container = $('#collectionsContainer');
 	
 	if(collectionsButtonClicked==false || trueSlideUp_falseSlideDown === false){
-		showCollections(undefined,50);
+		showCollections(false,50);
 	}	
 	else if(collectionsButtonClicked==true || trueSlideUp_falseSlideDown == true){
-		hideCollections(undefined,50);
+		hideCollections(true,50);
 	}
 };
 
@@ -76,33 +81,57 @@ var popDropdown = function(){
 		// New Code:
 		
 		var container = $('#collectionsContainer');
-			
+		container.children().each(function(i,item){
+				$(item).remove();
+			});
 		
-		container.children('.collectionItem').each(function(i,item){
-			$(item).remove();
-		});
-		for(var c in DATABASE.libraries[libraryIndex].collections){
-			$(container).append('<span class="collectionItem">'+DATABASE.libraries[libraryIndex].collections[c].name+'<span class="collectionCounter">'+DATABASE.libraries[libraryIndex].collections[c].items.length+'</span></span>');
+		// allow different sorting of collections, such as alphabetical,
+		// sort type is embedded in current library as a property
+		var sort = typeof libraries[libraryIndex].sort === 'string' ? libraries[libraryIndex].sort : 'date_newold';
+		
+		// pass to the sort function to sort based on the sortType
+		var sorted = sortGeneric(libraries[libraryIndex].collections,sort);
+		for(var i in sorted){
+			var item = sorted[i];
+			$(container).append('<span class="collectionItem" data-collection-index="'+item.index+'">'+item.name+'<span class="collectionCounter">'+item.item_count+'</span></span>');
 		}
+		
+		
 		// bind click event to collectionItems:
 		$('.collectionItem').on('click',function(){
-			selectCollectionItem($(this).index());
-			changeCollection($(this).index());
+			selectCollectionItem(parseInt($(this).attr('data-collection-index')));
+			var newIndex = parseInt($(this).attr('data-collection-index'));
+			changeCollection(newIndex);
 		});
-		
-		
-		
-		// append "new collection" button to the end:
-		$(container).append('<span id="btnNewCollection" class="collectionItem">+</span>');
 		
 		$(selectCollectionItem(collectionIndex)); // select the collectionItem corresponding to the current collectionIndex
 		
+		// New collection
+		// append "new collection" button to the end:
+		$(container).append('<span id="btnNewCollection" class="collectionItem">+</span>');
+		
 		//bind new collection button click event
 		$('#btnNewCollection').on('click',function(){
-			newCollection();
+			setTimeout(newCollection,20);
 		});
 		
+		// Sorting
+		// create sorting list box
+		$(container).append('<select id="select_sorting">'
+		+'<option data-sort="date_newold">New→Old</option>'
+		+'<option data-sort="date_oldnew">Old→New</option>'
+		+'<option data-sort="alpha_az">A→Z</option>'
+		+'<option data-sort="alpha_za">Z→A</option>'
+		+'<option data-sort="itemcount_longshort">3,2,1</option>'
+		+'<option data-sort="itemcount_shortlong">1,2,3</option>'
+		+'</select>');
 		
+		$('#select_sorting').children('option[data-sort="'+sort+'"]').prop('selected',true);
+		$('#select_sorting').on('change',function(){
+			var selectedSorting = $('#select_sorting option:selected');
+			log(selectedSorting);
+			changeCollectionSorting($('#select_sorting option:selected').attr('data-sort'));
+		});
 		
 };
 
@@ -133,6 +162,7 @@ var changeCollection=function(new_index){
 	imageDB = DATABASE.libraries[libraryIndex].collections[collectionIndex];
 	$(".collection-title-bottom").html(DATABASE.libraries[libraryIndex].collections[collectionIndex].name);
 	document.title = collections[collectionIndex].name;
+	updateUIColor();
 	
 	if(imageDB==null || typeof imageDB=='undefined'){
 		imageDB = {
@@ -230,6 +260,18 @@ var renameCollection = function(newname){
 		}
 }
 
+var changeCollectionSorting = function(type,libIndex = libraryIndex){
+	if(sortTypes.indexOf(type) > -1){
+		libraries[libIndex].sort = type;
+		applyChanges();
+		popDropdown();
+	}
+	else{
+		log('cannot change sorting. invalid sortType: ' + type);
+	}
+}
+
+
 $(function(){
 	$(document).on('mousedown',function (e){
 		var container = $("#collectionsContainer");
@@ -274,4 +316,6 @@ $(function(){
 		log((stillGoingUp ? 'going up. so far: ' : 'going down: ') + howManyThisDirection );
 		*/
 	});
+	
+
 });
