@@ -30,12 +30,18 @@ var generateTimestamp = function(){
 var updateUIColor = function(){
 	var opacity = 0.6;
 	if(typeof imageDB.UIColor === 'string' && imageDB.UIColor !== 'none'){
+		
+		var toarray = rgbStringToArray(imageDB.UIColor); // turn rgbstring into array of ints
+		var averageVal = (toarray[0] + toarray[1] + toarray[2]) / 3; // average 'brightness' of all values
+		var valueThresh = 150;
+		// calculate a new opacity based on how bright the color is.
+		// brighter gets more transparent
+		//opacity = ((averageVal<40?averageVal+200:(averageVal>valueThresh?averageVal-40:averageVal)) / 255);
 		var colorWithAlpha = applyOpacityToUIColor(imageDB.UIColor,opacity);
 		$('#navbar-top,.collectionFooter').css('background-color',colorWithAlpha);
 		
-		var toarray = rgbStringToArray(imageDB.UIColor);
-		var valueThresh = 150;
-		if( (toarray[0] + toarray[1] + toarray[2]) / 3 > valueThresh){
+		
+		if( averageVal > valueThresh){
 			updateFontTheme('dark');
 			var darkenedColor = darkenColorArray(rgbStringToArray(imageDB.UIColor),0.5,'string');
 			$('.rounded.superButton').css('background-color',darkenedColor);
@@ -147,6 +153,7 @@ $(document).ready(function(){
 	
 	var openDialogRenameCollection = function(){
 		showDialogue('d_EditCollection'); // Rename collection dialogue
+		$('#d_EditCollection #dialogue_title').html('Edit "'+imageDB.name+'"');
 		var txtbx = $('#txtRenameCollection');
 		txtbx.val(collections[collectionIndex].name); // set the textbox to the current collection name
 		txtbx.focus();
@@ -177,7 +184,13 @@ $(document).ready(function(){
 		var preview = $('.color-preview');
 		if(typeof imageDB.UIColor === 'string'){
 			preview.css('background-color',imageDB.UIColor);
+			preview.attr('data-color',imageDB.UIColor);
 		}
+		else{
+			preview.css('background-color','');
+			preview.attr('data-color','none');
+		}
+	
 		
 		container.html('');
 		for(var c in colorPalette){
