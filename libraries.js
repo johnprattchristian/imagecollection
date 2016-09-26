@@ -128,6 +128,7 @@ var changeLibrary = function(index){
 		collectionIndex = 0;
 		
 			// change the global variables to reflect the change
+		
 		collections = DATABASE.libraries[index].collections;
 		imageDB = collections[collectionIndex];
 		

@@ -39,7 +39,6 @@
 				
 				<!--<button class="rounded superButton" id="btnRenameCollection">Edit</button>!-->
 				<button class="rounded superButton" id="btnDeleteCollection">Delete Collection</button>
-				<button class="rounded superButton" id="btnExport">Export All</button>
 			</span>
 			
 		</span>
@@ -75,6 +74,7 @@
 	<div id="bottomLeftButtonsContainer">
 		<button id="btnLibraries" class="rounded superButton toggleButton">Libraries</button>
 		<button id="btnDeleteLibrary" class="rounded superButton">Delete Library</button>
+		<button class="rounded superButton" id="btnExport">Export</button>
 	</div>
 	<div class="dropDown aboveBottomBar" id="dropDownLibraries">
 			<div class="dropDownMenuItem">
@@ -122,6 +122,8 @@
 
 <!-- Dialog Boxes !-->
 <div id="dialogueParent"> <!-- contains all the dialogues !-->
+
+	<!--Export libraries!-->
 	<div class="dialogue" id="d_Export">
 		<h1 style="display:inline">Export all your collections</h1>
 		<select id="selectExportType">
@@ -135,6 +137,8 @@
 		<div id="exportCode">
 		</div>
 	</div>
+	
+	<!--Edit Captions!-->
 	<div class="dialogue" id="d_EditCaption">
 		<h1>Caption</h1>
 		<button class="closeButton">x</button>
@@ -145,20 +149,34 @@
 			<textarea type="text" id="txtEditCaption"></textarea>
 		<button class="okbutton" id="btnOK_Edit">OK</button>
 	</div>
-	<div class="dialogue" id="d_RenameCollection">
+	
+	<!--Edit Collection!-->
+	<div class="dialogue" id="d_EditCollection">
 		<h1 id="dialogue_title">Rename Collection</h1>
 		<button class="closeButton">x</button>
-			<span id="span_instructions" style="display:block">Change the collection name.</span><br>
+		<div class="dialog-content">
+			<span class="instructions-span">Change the collection name.</span><br>
 			<input type="text" id="txtRenameCollection"></input>
-		<button class="okbutton" id="btnOK_RenameCollection">OK</button>
+			
+			<!--Collection color!-->
+			<div class="contain-colors">
+			<span class="instructions-span">Choose a theme for this collection</span>
+				<!--Colors go here!-->
+				<div class="color-preview" data-color="none"></div>
+				<div class="contain-color-options">
+				<!--<span class="color-option">!-->
+				</div>
+			</div>
+		</div>
+		<button class="okbutton" id="btnOK_EditCollection">OK</button>
 	</div>
 	<div class="dialogue" id="d_Settings">
 		<h1>Settings</h1><button class="closeButton">x</button>
-		<span id="span_instructions">Change your preferences below.</span>
+		<span class="instructions-span">Change your preferences below.</span>
 		<div id="settingsContainer">
 		
 		</div>
-		<button onclick="clearThemeCache()">clear theme cache</button>
+		<button onclick="resetCollectionThemes()">Reset collection themes</button>
 	</div>
 	<div class="dialogue" id="d_Help">
 		<h1>Help</h1>

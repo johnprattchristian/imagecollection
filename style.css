@@ -54,6 +54,13 @@ h1{
 	display:block;
 }
 
+.loading-animation{
+	position:absolute;
+	top:50%;
+	left:50%;
+	z-index:50;
+}
+
 .clearTransparent{
 	background-color:rgba(50,50,50,0.4);
 	border:solid 1px silver;
@@ -341,11 +348,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#66ffffff', e
 	border-radius:0px;
 }
 
-#btnExport{
-	border-top-left-radius:0px;
-	border-bottom-left-radius:0px;
-}
-
 #submitFormContainer{
 	display:inline;
 }
@@ -572,7 +574,7 @@ div.rounded.superButton{
 	margin:09px;
 }
 
-.imageBox img,video{
+.imageBox .media-item{
 
 	/*max-height:700px;*/
 	width:100%;
@@ -920,6 +922,42 @@ textarea#txtEditCaption{
 	border-radius:10px;
 	margin-bottom:20px;
 	top:20px;
+}
+
+.instructions-span{
+	margin-bottom:30px;
+}
+
+.contain-colors{
+	display:block;
+	margin-top:30px;
+}
+
+.contain-color-options{
+	border:solid 1px gray;
+	width:300px;
+	height:100px;
+}
+
+.color-preview{
+	width:100px;
+	height:60px;
+	border:solid 1px silver;
+}
+
+.color-option{
+	display:inline-block;
+	width:30px;
+	height:30px;
+}
+
+.color-option#no-color{
+	background:url('./images/redx.png');
+	background-position:center;
+	background-size:20px 20px;
+	background-repeat:no-repeat;
+	border:solid 1px gray;
+	box-sizing:border-box;
 }
 
 #helpIndexTabStrip{

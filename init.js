@@ -21,12 +21,16 @@ var collections,
 	audio_playing_index,
 	global_volume,
 	helpTips = []; // an array of helpTip objects with "done already" properties
-	
+
+// used for collection and collection item sorting
+var sortTypes = ['date_newold','date_oldnew','alpha_az','alpha_za','itemcount_longshort','itemcount_shortlong'];	
+
 global_volume = 0.3;
 
 // Function for applying changes to given current Collection 
 var applyChanges=function(){
 		console.log('applying changes. collection.length = ' + collections.length);
+		DATABASE.libraries = libraries;
 		DATABASE.libraries[libraryIndex].collections[collectionIndex] = imageDB;
 		//DATABASE.libraries[libraryIndex].collections = collections;
 		localStorage.setItem(CURRENT_DATABASE,JSON.stringify(DATABASE)); //save the entire database
@@ -88,6 +92,7 @@ $(document).ready(function(){
 			
 		});
 	}
+	libraries = DATABASE.libraries;
 	collections = DATABASE.libraries[libraryIndex].collections;
 	imageDB = collections[collectionIndex]; //set imageDB to a single collection in the database
 	

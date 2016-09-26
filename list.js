@@ -61,9 +61,10 @@ var List = function(load_animation = false,callback){
 		var element = processURL(i);
 		// Finally, LAYOUT the images and videos in the view // 
 		// Give image and corresponding controls the same id for easy access:
-		$("#imageList").children().eq(current_column).append("<div class='imageBox' id='box"+i+"' style='display:"+(load_animation ? 'none' : 'block')+"' >"
+		$("#imageList").children().eq(current_column).append("<div class='imageBox' data-item-index='"+i+"' style='display:"+(load_animation ? 'block' : 'block')+"' >"
+		+ '<img class="loading-animation" src="./images/loading.gif">'
 		+ element // the image or video
-		+ /*delete button*/ "<button class='btnDelete' id='delete"+i+"'>x</button>"
+		+ /*delete button*/ "<button class='btnDelete' data-delete-item-index='"+i+"'>x</button>"
 		+"<div class='caption'><span class='captionText'>" + processCaption(imageDB.items[i])+"</span>"
 		+"<button class='btnEditCaption'>&#128393;</button></div>" // add edit button to image caption
 		+"</div>"); // end the imageBox div
@@ -83,14 +84,17 @@ var List = function(load_animation = false,callback){
 	updateVolumes();
 	
 	// Put bindings on all elements after calling List():
+
 	
-	
-	$('#imageList video').on('loadeddata',function(){
-		$(this).parent().fadeIn(1000);
+	$('#imageList video.media-item').css('opacity',0.4).on('loadeddata',function(){
+		//$(this).parent().fadeIn(1000);
+		$(this).siblings('.loading-animation').remove();
+		$(this).css('opacity',1);
+		
 		if (typeof this.webkitAudioDecodedByteCount !== "undefined") {
 			// non-zero if video has audio track
 			if (this.webkitAudioDecodedByteCount > 0){
-				var thisId = this.getAttribute('id');
+				var thisId = this.getAttribute('data-index');
 				// create unmute button:
 				var unmuteButton = $('<button/>',{id:'unmute'+thisId});
 				unmuteButton.addClass('btnUnmute')
@@ -127,8 +131,10 @@ var List = function(load_animation = false,callback){
 		$(unmuteVideo).prop('muted',false);
 	}
 
-	$('.imageBox img').on('load',function(){
-			$(this).parent().fadeIn(500);
+	$('.imageBox img.media-item').css('opacity',0.4).on('load',function(){
+			//$(this).parent().fadeIn(500);
+			$(this).siblings('.loading-animation').remove();
+			$(this).css('opacity',1);
 			//pushImageToDynamicColor(this);
 		}).on('error',function(){
 			$(this).parent().show();
@@ -140,6 +146,9 @@ var List = function(load_animation = false,callback){
 			notify("Some images could not be loaded.",'warning');
 	});
 	
+	$('iframe.media-item').on('load',function(){
+		$(this).siblings('.loading-animation').remove();
+	});
 
 		
 	// mouseenter / mouseleave imageBox binds for fading captions
@@ -155,7 +164,7 @@ var List = function(load_animation = false,callback){
 
 	// bind delete buttons events
 	$(".btnDelete").bind("click",function(){
-		selected_index = parseInt($(this).attr("id").replace("delete",""));
+		selected_index = parseInt($(this).attr("data-delete-item-index"));
 		Delete($(this).parent());
 	});
 	
@@ -181,20 +190,20 @@ var List = function(load_animation = false,callback){
 	
 	// Edit caption button binds
 	$(".btnEditCaption").bind("click",function(){
-		selected_index = parseInt($(this).closest('.imageBox').attr("id").replace("box","")); // gets the image's index for editing
+		selected_index = parseInt($(this).closest('.imageBox').attr("data-item-index")); // gets the image's index for editing
 		editImageCaption($(this).parent().get(0));
 	});
 	
 	//DOUBLE CLICK IMAGE binds -- fullscreen 
 	$("img").bind("dblclick",function(e){
 		e.preventDefault();
-		selected_index = parseInt($(this).attr("id")); // this is so we can display a notification
+		selected_index = parseInt($(this).attr("data-index")); // this is so we can display a notification
 		fullscreenImage(this);
 	});
 	$("video").bind("dblclick",function(e){
 		e.preventDefault();
-		selected_index = parseInt($(this).attr("id"));
-		fullscreenVideo(this);			
+		selected_index = parseInt($(this).attr("data-index"));
+		fullscreenVideo(this);		
 	});
 	
 	tm_afterlistcallback = setTimeout(callback,100);

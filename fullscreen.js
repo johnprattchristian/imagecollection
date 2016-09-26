@@ -120,24 +120,25 @@ var fullscreenVideo = function(vid){
 
 var IterateSlideshow = function(direction){
 		removeFullScreenChildren(); // get rid of whatever videos/images are already in the fsview
-		var nextElemId = parseInt(currentFSElement.getAttribute("id"))-direction; // the id of the element to switch to
+		var nextElemIndex = parseInt(currentFSElement.getAttribute("data-index"))-direction; // the id of the element to switch to
 		var element = null;
 		iterating = true;
 		
 		
 		if (direction>0){
-			if(nextElemId > -1){ // if not reached the end of the collection, proceed (direction increment correlates with id decrement)
-				element = document.getElementById((parseInt(currentFSElement.getAttribute("id"))-1).toString());
+			if(nextElemIndex > -1){ // if not reached the end of the collection, proceed (direction increment correlates with id decrement)
+				element = $('.media-item[data-index="'+(parseInt(currentFSElement.dataset.index)-1)+'"]').get(0);
 			}
 			else{ // we've reached the end of the collection:
-				element = document.getElementById((imageDB.items.length-1).toString()); // go back to the beginning of the collection
+				// go back to the beginning of the collection
+				element = $('.media-item[data-index="'+(imageDB.items.length-1)+'"]').get(0);
 			}
 		}else{
-			if(nextElemId<=imageDB.items.length-1){ // does not exceed the collection length
-				element = document.getElementById((parseInt(currentFSElement.getAttribute("id"))+1).toString());
+			if(nextElemIndex<=imageDB.items.length-1){ // does not exceed the collection length
+				element = $('.media-item[data-index="'+(parseInt(currentFSElement.dataset.index)+1) + '"]').get(0);
 			}
 			else{ // go back to the end of collection
-				element = document.getElementById("0");
+				element = $('.media-item[data-index="0"]').get(0);
 			}
 		}
 		// Decide what to do whether image is an IMG or a VIDEO
@@ -150,7 +151,7 @@ var IterateSlideshow = function(direction){
 			
 		}
 		
-		var newid = parseInt(currentFSElement.getAttribute('id'));
+		var newid = parseInt(currentFSElement.getAttribute('data-index'));
 		if(getSetting('fullscreenCaptions')){
 			notify(imageDB.items[newid].caption ? imageDB.items[newid].caption : imageDB.items[newid]);
 		}
@@ -208,6 +209,9 @@ $(document).ready(function(){
 				jumpToElementByScrollPosition(currentFSElement,zoomOutSlideshow(currentFSElement));
 				
 				
+			}
+			else{
+				console.log(document.fullscreenElement);
 			}
 
 	});
