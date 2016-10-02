@@ -39,41 +39,44 @@ var getURL = function(item){
 	}
 }
 
+var extEnumVideo = ['gifv','webm','mp4','avi','mpeg'];
+var extEnumImage = ['jpg','jpeg','bmp','tif','gif','png'];
+
+// used for evaluating input in realtime to make a 'smart' submit type
+var isURL = function(string){
+	string = string.toLowerCase();
+	if(string.includes('youtube.com/watch?v=')){
+		return true;
+	}
+	for(var x in extEnumImage){
+			var ext = extEnumImage[x];
+			if(string.includes('.'+ext)){
+				return true;
+			}
+	}
+	for(var x in extEnumVideo){
+		var ext = extEnumVideo[x];
+		if(string.includes('.'+ext)){
+			return true;
+		}
+	}
+	return false;
+}
+
 var getURLType = function(url,assumeImage = true){
 	var typeString = "";
 	if(!url.includes('youtube.com/watch?v=')){
-		var extension = url.substr(url.lastIndexOf('.')+1);
-		switch(extension){ // if its an image file
-			case 'jpg':
-			case 'jpeg':
-			case 'bmp':
-			case 'tif':
-			case 'gif':
-				typeString = 'image';
-				break;
-			case 'gifv': // if its an html5 video file
-			case 'webm':
-			case 'mp4':
-			case 'mov':
-			case 'avi':
-			case 'mpeg':
-				typeString = 'video';
-				break;
-			default:
-				// assume url is an image to simplify things
-				if(assumeImage){
-					typeString = 'image';
-				}
-				else{
-					typeString = 'generic';
-				}
-				
-				$(['mp4','webm','gifv']).each(function(x,item){
-					if(url.indexOf(item)>=0){ // does the url contain a video extension?
-						typeString = 'video'
-					}
-				});
-				break;
+		for(var x in extEnumImage){
+			var ext = extEnumImage[x];
+			if(url.includes('.'+ext)){
+				return 'image';
+			}
+		}
+		for(var x in extEnumVideo){
+			var ext = extEnumVideo[x];
+			if(url.includes('.'+ext)){
+				return 'video';
+			}
 		}
 	}
 	else{

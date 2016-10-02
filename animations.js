@@ -17,12 +17,15 @@ var zoomOutSlideshow = function(element,bigversion){
 	//clearTimeout(tmHideHighlight);
 	var highlight = $('#highlight');
 	var $element = $(element);
+	var speed = 200;
 	
 	$element.parent().css('visibility','hidden');
 	clearTimeout(tmStartAnimation);
 	tmStartAnimation = setTimeout(function(){
+		// clone the image so we can animate it
 		var $elementClone = $element.clone(false);
 		$elementClone.off()
+		// set starting properties
 		.css({
 			height:'100%',
 			width:'auto',
@@ -30,7 +33,6 @@ var zoomOutSlideshow = function(element,bigversion){
 			visibility:'visible'
 		}).appendTo(highlight);
 	
-		// clone the element into the highlight animation div
 		if($element.is('img')){
 			highlight.children().on('load',function(){
 				// the position / size to animate TO:
@@ -46,7 +48,7 @@ var zoomOutSlideshow = function(element,bigversion){
 						height:animatePos.height,
 						top:animatePos.top,
 						left:animatePos.left
-				},400,function(){
+				},speed,function(){
 					highlight.hide().children().remove(); // hide the "highlight" element and delete the image on it
 					$element.parent().css('visibility','visible'); // makes it so controls only appear after animation
 				});

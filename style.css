@@ -56,8 +56,8 @@ h1{
 
 .loading-animation{
 	position:absolute;
-	top:50%;
-	left:50%;
+	top:40%;
+	left:40%;
 	z-index:50;
 }
 
@@ -91,6 +91,30 @@ h1{
 .collection-title-bottom{
 	cursor:pointer;
 	text-shadow:2px 2px 2px black;
+}
+
+.collection-title-bottom.dark{
+	color:black;
+	font-weight:bold;
+	text-shadow:none;
+}
+
+#sortItemsParent{
+	padding:10px 15px;
+	padding-right:0px;
+	display:inline-block;
+	margin-left:10px;
+	border:solid 1px silver;
+	color:silver;
+}
+#sortItemsParent:hover{
+	opacity:1;
+}
+
+#sortItemsDropdown{
+	padding:5px;
+	margin:0px 15px;
+	margin-left:5px;
 }
 
 #btnEditCollection{
@@ -182,6 +206,10 @@ h1{
 
 #btnLibraries .pressed{
 	background-color:rgba(0,0,0,0.8);
+}
+
+#btnHistory{
+	text-shadow:none;
 }
 
 .dropDownHistory{
@@ -325,6 +353,25 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#66ffffff', e
 	background-color:rgba(90,90,90,0.6);
 }
 
+.superButton.dark{
+	background:white;
+	color:black;
+	border:solid 1px dimgray;
+}
+
+.superButton.dark:hover{
+	background:silver;
+}
+
+.superButton.dark.pressed{
+	background:dimgray;
+	color:whitesmoke;
+}
+
+.superButton.dark.pressed:hover{
+	background:gray;
+}
+
 .pressed{
 	background:rgba(50,50,50,0.8);
 }
@@ -336,8 +383,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#66ffffff', e
 }
 
 #btnCollections{
-	border-top-right-radius:0px;
-	border-bottom-right-radius:0px;
 }
 
 #btnRenameCollection{
@@ -345,7 +390,13 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#66ffffff', e
 }
 
 #btnDeleteCollection{
-	border-radius:0px;
+}
+
+#btnSubmit{
+	margin-left:0px;
+	left:0px;
+	border-bottom-left-radius:0px;
+	border-top-left-radius:0px;
 }
 
 #submitFormContainer{
@@ -366,11 +417,14 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#66ffffff', e
 	border:inset solid 2px lightblue;
 }
 
-#btnSubmit{
-	margin-left:0px;
-	left:0px;
-	border-top-left-radius:0px;
-	border-bottom-left-radius:0px;
+.superDropdown{
+	background:none;
+	color:whitesmoke;
+}
+
+.superDropdown option{
+	padding:10px;
+	background:rgba(50,50,50,1);
 }
 
 #divCollections{
@@ -410,9 +464,10 @@ button:focus{
 	padding-top:15px;
 	height:50px;
 	width:100%;
-	
-	
-	
+}
+
+#collectionsContainer.dark{
+	color:black;
 }
 
 .collectionItem{
@@ -426,6 +481,31 @@ button:focus{
 	padding-right:10px;
 }
 
+.collectionItem.dark{
+	color:black;
+}
+.collectionItem.dark:hover{
+	background:silver;
+}
+.collectionItem.dark.collectionItemClicked{
+	color:whitesmoke;
+}
+.collectionItem.dark.collectionItemClicked .collectionCounter{
+	color:silver;
+}
+.collectionItem.dark.collectionItemClicked:hover{
+	background:dimgray;
+}
+
+
+
+#btnNewCollection.dark{
+	color:black;
+}
+#btnNewCollection.dark:hover{
+	background:rgba(0,0,0,0.5);
+}
+
 .collectionItem:hover{
 	
 		/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#fcfff4+0,e9e9ce+100&0.5+0,0.69+100;Wax+3D+%232 */
@@ -434,6 +514,10 @@ background: -webkit-radial-gradient(center, ellipse cover,  rgba(255,255,255,0.5
 background: radial-gradient(ellipse at center,  rgba(255,255,255,0.5) 0%,rgba(233,233,233,0.69) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#80fcfff4', endColorstr='#b0e9e9ce',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 
+}
+
+.collectionItem.dark:hover{
+	
 }
 
 .collectionItemClicked{
@@ -448,6 +532,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#80fcfff4', e
 	color:silver;
 	font-size:10pt;
 	margin-left:10px;
+}
+
+.collectionCounter.dark{
+	color:dimgray;
 }
 
 .editCollectionItem{
@@ -480,6 +568,29 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#80fcfff4', e
 	background-color:rgba(20,100,20,0.3);
 }
 
+#sortCollectionsDropdown{
+	background:rgba(255,255,255,0.1);
+	border-radius:5px;
+	color:whitesmoke;
+}
+#sortCollectionsDropdown:active{
+	background:rgba(0,0,0,0.1);
+}
+#sortCollectionsDropdown option{
+	background:rgba(50,50,50,0.9);
+}
+#sortCollectionsDropdown.dark{
+	background:rgba(0,0,0,0.1);
+	border-width:1px;
+	border-color:gray;
+	color:black;
+}
+#sortCollectionsDropdown.dark option{
+	background:rgba(255,255,255,0.5);
+	color:black;
+}
+
+
 #collectionMenuButtonsContainer{
 	position:absolute;
 	right:100px;
@@ -494,6 +605,17 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#80fcfff4', e
 	position:absolute;
 	right:20px;
 	top:10px;
+}
+
+.fillPreview{
+	background-repeat:no-repeat;
+	position:fixed;
+	top:0px;
+	left:0px;
+	height:100%;
+	width:100%;
+	display:none;
+	z-index:100;
 }
 
 div.rounded.superButton{
@@ -519,7 +641,6 @@ div.rounded.superButton{
 .spacer#top{
 	top:0px;
 	left:0px;
-	height:120px;
 }
 .spacer#bottom{
 	
@@ -545,15 +666,16 @@ div.rounded.superButton{
 	/*max-height:500px;*/
 	width:auto;
 	max-width:700px;
-	display:none;
+	display:block;
 	vertical-align:top;
 	
 	/* border:solid 1px red; */
 	white-space:nowrap;
 	padding:0px;
 	margin:15px 10px;
-	cursor:pointer;
 	
+		/*border-radius:15px;*/
+	overflow:hidden;
 }
 
 .loadError{
@@ -573,13 +695,11 @@ div.rounded.superButton{
 	padding:0px;
 	margin:09px;
 }
-
 .imageBox .media-item{
 
 	/*max-height:700px;*/
 	width:100%;
 	
-	/*border-radius:15px;
 	/* border:solid 10px red; 
 	*/
 }
@@ -889,6 +1009,24 @@ span.captionText{
 	font-size:14pt;
 }
 
+.setting-category-header{
+	text-transform:capitalize;
+	margin-top:0px;
+	text-align:center;
+	font-size:14pt;
+	font-weight:bolder;
+}
+
+.setting-category-container{
+	display:inline-block;
+	border:solid 1px gray;
+	padding: 10px;
+	margin: 5px;
+}
+
+.setting-category-container:hover{
+	background:rgba(255,255,255,0.1);
+}
 
 textarea#txtEditCaption{
 	display:block;
