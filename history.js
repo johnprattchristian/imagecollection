@@ -52,35 +52,6 @@ var drawHistoryCountFlag = function(){
 	ctx.fillText(''+_history.length + '',6,15);
 }
 
-var generateHistoryThumbs = function(imgArray){
-	var thumbnailer = document.createElement('canvas');
-	var thumbs = [];
-	
-	thumbnailer.setAttribute('width','50px');
-	thumbnailer.setAttribute('height','50px');
-	thumbnailer.style.visibility = 'hidden';
-	thumbnailer.setAttribute('id','canvHistoryThumbGenerate');
-	$(thumbnailer).appendTo('body');
-	log('thumbnailer appended to body.');
-	
-	
-	for(var i in imgArray){
-		thumbCtx = thumbnailer.getContext('2d');
-		thumbCtx.drawImage(imgArray[i],0,0,thumbnailer.width,thumbnailer.height);
-		log('image drawn to thumbnailer canvas.');
-		var thumbImage = new Image();
-		var dataURL = thumbnailer.toDataURL();
-		console.log('thumbnailer url generated:' + dataURL);
-		thumbImage.src = dataURL;
-		// give thumb time to throw an error while loading
-		thumbs.push(thumbImage);
-		log('thumbs item pushed: ' + thumbImage);
-	}
-	
-	// return array of thumbnails
-	return thumbs;
-}
-
 var pushHistoryItem = function(item){
 	_history.push(item);
 	drawHistoryCountFlag();
@@ -96,6 +67,7 @@ var popHistoryDropdown = function(){
 		$(_history).each(function(i,item){
 			var text = ''; // primary text
 			var subText = ''; // the grayed-out text
+			var thumbDom = $('<div class="historyItemThumb"></div>');
 			// change the text based on type of history item
 			switch(item.restoreType){
 				case 'deleted_library':
@@ -105,6 +77,7 @@ var popHistoryDropdown = function(){
 				case 'deleted_collection':
 					text = 'Deleted "'+item.data.name+'"';
 					subText = 'collection';
+					thumbDom.css('background-image','url("'+'./images/collection-icon.png'+'")');
 					break;
 				case 'deleted_image':
 					text = 'Deleted "' + (item.data !== null && typeof item.data !== 'undefined' ? (item.data.caption ? item.data.caption : 'item') : 'item') + '"';
@@ -112,6 +85,20 @@ var popHistoryDropdown = function(){
 					if(item.data){
 						if(item.data.type){
 							subText = item.data.type; // let the subtext say whatever type of image,video,etc. it is via data.type
+						}
+						if(typeof item.data.type !== 'undefined'){
+							if(typeof item.data.url !== 'undefined'){
+								if(item.data.type === 'image'){
+									thumbDom.css('background-image','url('+item.data.url+')');
+								}
+								else if(item.data.type === 'video'){
+									thumbDom.css('background-image','url("./images/video-icon-dimgray.png")');
+								}
+							}
+							if(item.data.type === 'plain_text'){
+								thumbDom.css('background-image','url("./images/text-icon-dimgray.png")');
+								text = 'Deleted text "'+item.data.content+'"';
+							}
 						}
 					}
 					else{
@@ -140,7 +127,7 @@ var popHistoryDropdown = function(){
 			}
 			
 			// append the menu item
-			list.append('<div class="dropDownMenuItem" name="history'+i+'"><span class="dropDownMenuItemText">'+text+'</span><span class="menuItemSubtext">'+subText+'</span></div>');
+			list.append('<div class="dropDownMenuItem" name="history'+i+'">'+thumbDom.prop('outerHTML')+'<div class="historyItemRightSide"><span class="dropDownMenuItemText">'+text+'</span><span class="menuItemSubtext">'+subText+'</span></div></div>');
 		});
 		
 		// bind click for each history item
@@ -282,6 +269,8 @@ var Undo = function(numberOfItems = 1){
 			drawHistoryCountFlag();
 			$('.dropDownHistory').children().last().slideUp(200,popHistoryDropdown); // refresh the history list
 		}
+	// update collections after restoring images
+	popDropdown();
 	}
 };
 

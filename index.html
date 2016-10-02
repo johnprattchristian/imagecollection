@@ -6,6 +6,7 @@
 <link rel="icon" href="favicon.ico" type="image/x-icon">
 <link rel="stylesheet" type="text/css" href="style.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script src="./scripts/clipboard.js"></script>
 <!-- my scripts !-->
 <script type="text/javascript" src="init.js"></script>
 <script type="text/javascript" src="settings.js"></script>
@@ -28,11 +29,11 @@
 <div id="navbar-top" class="clearTransparent">
 	<div id="inputForm">
 		<div id="submitFormContainer">
-			<input type="text" id="txtInput" placeholder="Enter an image URL (+ a caption separated by a space if you want)"/>
 			<select class="superDropdown" id="submitTypeDropdown">
 				<option data-type="url_caption">Image/Video</option>
 				<option data-type="plain_text">Text</option>
 			</select>
+			<input type="text" id="txtInput" placeholder="Enter an image URL (+ a caption separated by a space if you want)"/>
 			<button class="rounded superButton" id="btnSubmit">+</button>
 		</div>
 		<span id="divCollections">
@@ -41,7 +42,7 @@
 				<button class="rounded superButton toggleButton" id="btnCollections">Collections <span id='arrow'>▼</span></button>
 				
 				<!--<button class="rounded superButton" id="btnRenameCollection">Edit</button>!-->
-				<button class="rounded superButton" id="btnDeleteCollection">Delete Collection</button>
+				<!--<button class="rounded superButton" id="btnDeleteCollection">Delete Collection</button>!-->
 			</span>
 			
 		</span>
@@ -73,7 +74,8 @@
 	<div class="contain-collection-title-bottom">
 		<span class="collection-title-bottom">Fantastical Fashion</span>
 	</div>
-	<button id="btnEditCollection">&#128393;</button>
+	<div id="btnEditCollection"></div>
+	<div id="btnTrash" class="2"></div>
 	
 	<div id="bottomLeftButtonsContainer">
 		<button id="btnLibraries" class="rounded superButton toggleButton">Libraries</button>

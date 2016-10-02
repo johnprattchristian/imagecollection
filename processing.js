@@ -276,12 +276,18 @@ var sortGeneric = function(items,sortType){
 	// push relevant info for each item to the sort array
 	for(var i in items){
 		var item = items[i];
+		if(item === null){
+			// garbage collections are gotten rid of
+			libraries[libraryIndex].collections.splice(i,1);
+			applyChanges();
+			continue;
+		}
 		
 		// set the sortArray item if properties are applicable to what we're sorting
 		// (collections, images, etc.)
 		sortArray.push({
 			index:i,
-			name:typeof item.name === 'string'?item.name:null,
+			name:typeof item.name === 'string' && item.name !== null?item.name:null,
 			date:getItemDateGeneric(item)!==false?getItemDateGeneric(item):generateTimestamp(),
 			item_count:typeof item.items !== 'undefined'?item.items.length:null
 		});

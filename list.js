@@ -41,6 +41,9 @@ var Delete = function(domElement = null){
 
 var tm_afterlistcallback = 0; // timeOut for after the list is completed. wait until perform callback
 var List = function(load_animation = false,callback){
+	
+	var gifRegEx = /(?!gifv)(gif)/g;
+	
 	// Populate images
 	clearTimeout(tm_afterlistcallback);
 
@@ -72,9 +75,14 @@ var List = function(load_animation = false,callback){
 		if(item.type==='image' || item.type ==='video' || item.type === 'youtube'){
 			var element = processURL(i);
 			var loading_img = '<img class="loading-animation" src="./images/loading.gif">';
-			var caption = "<div class='caption'><span class='captionText'>" + processCaption(imageDB.items[i])
+			var caption = "<div class='caption imageBoxUI'><span class='captionText'>" + processCaption(imageDB.items[i])
 			+"</span><button class='btnEditCaption'>&#128393;</button></div>"; // add edit button to image caption
-			newBox.append(element).append(loading_img).append(caption);
+			newBox.append(element).append(caption)
+			newBox.append('<div class="btnCopyURL imageBoxUI" data-clipboard-text="'+getURL(item)+'"></div>');
+			if(gifRegEx.test(item.url)===false){
+				$(element).css('opacity',0.4);
+				newBox.append(loading_img);
+			}
 		}
 		else if(item.type==='plain_text'){
 			var textContentDiv = $('<div class="textItemContainer">'+item.content+'</div>');
@@ -89,7 +97,7 @@ var List = function(load_animation = false,callback){
 			});
 		}
 		// add controls like DELETE
-		newBox.append("<button class='btnDelete' data-item-index='"+i+"'>x</button>");
+		newBox.append("<button class='btnDelete imageBoxUI' data-item-index='"+i+"'>x</button>");
 		
 		// append this item to the current iterating column
 		$("#imageList .column").eq(current_column).append(newBox);
@@ -154,8 +162,10 @@ var List = function(load_animation = false,callback){
 		var unmuteVideo = document.getElementById(audio_playing_index);
 		$(unmuteVideo).prop('muted',false);
 	}
-
-	$('.imageBox img.media-item').css('opacity',0.4).on('load',function(){
+	
+	
+	
+	$('.imageBox img.media-item').on('load',function(){
 			//$(this).parent().fadeIn(500);
 			$(this).siblings('.loading-animation').remove();
 			$(this).css('opacity',1);
@@ -174,16 +184,29 @@ var List = function(load_animation = false,callback){
 		$(this).siblings('.loading-animation').remove();
 	});
 
-		
+	$('.imageBoxUI').hide();
 	// mouseenter / mouseleave imageBox binds for fading captions
 	$('.imageBox').bind('mousemove',function(e){
-			$(this).children('.caption').show();
+			$(this).children('.imageBoxUI').show();
 	});
 	
 	$('.imageBox').bind('mouseleave',function(e){
 		if($(this).has('.txtEditCaption').length === 0){
-			$(this).children('.caption').fadeOut(100);
+			$(this).children('.imageBoxUI').fadeOut(100);
 		}
+	});
+	
+	var copyURLbuttons = new Clipboard('.btnCopyURL');
+
+	copyURLbuttons.on('success', function(e) {
+		console.info('Copied: ',e.text);
+		e.clearSelection();
+	});
+	
+	$('.btnCopyURL').bind('click',function(){
+		selected_index = parseInt($(this).parent().attr('data-item-index'));
+		
+		notify('Copied URL');
 	});
 
 	// bind delete buttons events
@@ -234,6 +257,7 @@ var List = function(load_animation = false,callback){
 		e.preventDefault();
 	});*/
 	
+	var fillPreviewOpacity = 0.6;
 	$('img.media-item').bind('contextmenu',function(e){
 		e.preventDefault();
 	})
@@ -243,7 +267,7 @@ var List = function(load_animation = false,callback){
 					var fillPreview = $('.fillPreview');
 				fillPreview.css({
 					background:'url("'+$(this).attr('src')+'") no-repeat center ',
-					backgroundColor:'rgba(0,0,0,0.9',
+					backgroundColor:'rgba(0,0,0,'+fillPreviewOpacity+')',
 					backgroundSize:'contain',
 					cursor:'none'
 				}).show();

@@ -117,21 +117,9 @@ h1{
 	margin-left:5px;
 }
 
-#btnEditCollection{
-	background:transparent;
-	border:none;
-	color:white;
-	cursor:pointer;
-	text-shadow:2px 2px 0px black;
-	font-size:12pt;
-	margin-left:-25px;
-
-	
-}
-
 #btnEditCollection:hover{
 	color:white;
-	font-weight:bold
+	font-weight:bold;
 }
 
 #btnEditCollection:active{
@@ -217,13 +205,36 @@ h1{
 	max-height:500px;
 }
 
-.dropDownHistory .dropDownMenuItem{
-	padding:20px;
+.historyItemThumb{
+	display:inline-block;
+	border:solid 2px gray;
+	background-size:contain;
+	background-repeat:no-repeat;
+	background-position:center;
+	background-color:black;
+	width:50px;
+	height:50px;
+	vertical-align:middle;
+}
+
+.historyItemRightSide{
+	display:inline-block;
+	vertical-align:middle;
+	margin-left:10px;
 	text-align:left;
 	width:300px;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
+}
+
+.dropDownHistory .dropDownMenuItem{
+	/*padding:20px;
+	text-align:left;
+	width:300px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;*/
 }
 
 .dropDownHistory .dropDownMenuItem .menuItemSubtext{
@@ -328,6 +339,10 @@ h1{
 	padding:10px;
 }
 
+.dark{
+	color:black;
+}
+
 .superButton{
 	height:42px;
 	padding:0px 15px;
@@ -389,7 +404,61 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#66ffffff', e
 	border-radius:0px;
 }
 
-#btnDeleteCollection{
+#btnEditCollection{
+	width:1em;
+	height:1em;
+	background:url('./images/pencil-75.png');
+	background-position:center;
+	background-repeat:no-repeat;
+	background-size:contain;
+	color:rgba(0,0,0,0);
+	cursor:pointer;
+	display:inline-block;
+	vertical-align:text-top;
+	margin-left:-10px;
+}
+
+#btnEditCollection:hover{
+	background-image:url('./images/pencil-white.png');
+}
+
+#btnEditCollection.dark{
+	background-image:url('./images/pencil-50.png');
+	
+}
+
+#btnEditCollection.dark:hover{
+	background-image:url('./images/pencil-black.png');
+	
+}
+
+
+
+#btnTrash{
+	width:1em;
+	height:1em;
+	background:url('./images/trash-75.png');
+	background-position:center;
+	background-repeat:no-repeat;
+	background-size:contain;
+	color:rgba(0,0,0,0);
+	cursor:pointer;
+	display:inline-block;
+	vertical-align:text-top;
+}
+
+#btnTrash:hover{
+	background-image:url('./images/trash-white.png');
+}
+
+#btnTrash.dark{
+	background-image:url('./images/trash-50.png');
+	
+}
+
+#btnTrash.dark:hover{
+	background-image:url('./images/trash-black.png');
+	
 }
 
 #btnSubmit{
@@ -425,6 +494,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#66ffffff', e
 .superDropdown option{
 	padding:10px;
 	background:rgba(50,50,50,1);
+}
+
+.superDropdown option:hover{
+	background:rgba(100,100,100,1);
 }
 
 #divCollections{
@@ -854,6 +927,30 @@ span.captionText{
 	width:50px;
 }
 
+.btnCopyURL{
+	display:inline-block;
+	position:absolute;
+	left:10px;
+	top:10px;
+	height:1.2em;
+	width:1.2em;
+	vertical-align:top;
+	z-index:1; /* put on top of image */
+	background-image:url('./images/copy-silver.png');
+	background-size:contain;
+	background-position:center;
+	background-repeat:no-repeat;
+	cursor:pointer;
+}
+
+.btnCopyURL:hover{
+	background-image:url('./images/copy-offwhite.png');
+}
+
+.btnCopyURL:active{
+	background-image:url('./images/copy-white.png');
+}
+
 .btnDelete{
 	display:inline-block;
 	position:absolute;
@@ -1019,7 +1116,7 @@ span.captionText{
 
 .setting-category-container{
 	display:inline-block;
-	border:solid 1px gray;
+	/*border:solid 1px gray;*/
 	padding: 10px;
 	margin: 5px;
 }

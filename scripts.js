@@ -65,6 +65,7 @@ var updateFontTheme = function(lightOrDark = 'light'){
 		$('.superButton').addClass('dark');
 		$('.collectionCounter').addClass('dark');
 		$('#sortCollectionsDropdown').addClass('dark');
+		$('#btnTrash,#btnEditCollection').addClass('dark');
 	}
 	else{ // anything else
 		$('#collectionsContainer').removeClass('dark');
@@ -74,6 +75,7 @@ var updateFontTheme = function(lightOrDark = 'light'){
 		$('.superButton').removeClass('dark');
 		$('.collectionCounter').removeClass('dark');
 		$('#sortCollectionsDropdown').removeClass('dark');
+		$('#btnTrash,#btnEditCollection').removeClass('dark');
 	}
 }
 
@@ -159,7 +161,7 @@ $(document).ready(function(){
 	
 	var openDialogRenameCollection = function(){
 		showDialogue('d_EditCollection'); // Rename collection dialogue
-		$('#d_EditCollection #dialogue_title').html('<span style="font-weight:lighter">edit collection </span>'+imageDB.name+'');
+		$('#d_EditCollection #dialogue_title').html('<span style="font-weight:lighter;color:gray">Edit collection </span>'+imageDB.name+'');
 		var txtbx = $('#txtRenameCollection');
 		txtbx.val(collections[collectionIndex].name); // set the textbox to the current collection name
 		txtbx.focus();
@@ -235,7 +237,7 @@ $(document).ready(function(){
 	});
 
 	
-	$("#btnDeleteCollection").on("click",function(){
+	$("#btnDeleteCollection, #btnTrash").on("click",function(){
 		deleteCollection();
 		
 	});
@@ -254,10 +256,12 @@ $(document).ready(function(){
 		
 		var text = $("#txtInput").val(); // Only go through with it if there's text in the textbox
 		
+		var submitType = $('#submitTypeDropdown option:selected').attr('data-type');
+		
 		// check if actually input
 		if(text!=null&&text!=""){
 			// decide what kind of submitted content (image/video url, text, etc.)
-			switch ($('#submitTypeDropdown option:selected').attr('data-type')){
+			switch (submitType){
 				case 'url_caption':
 					var url,
 						caption; // in case a caption is included in-line

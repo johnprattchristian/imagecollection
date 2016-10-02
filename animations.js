@@ -89,8 +89,6 @@ var zoomOutSlideshow = function(element,bigversion){
 		//wrap it in <center> for easy centering:
 		}).wrap('<center/>').show();
 	},0);
-	// Wait 10ms, and then hide and remove() the highlight element
-	//tmHideHighlight = setTimeout(function(){highlight.fadeOut('slow',function(){highlight.remove()})},100); 
 };
 
 var tm_highlightFadeOut = 0;
