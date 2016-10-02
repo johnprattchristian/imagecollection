@@ -80,10 +80,8 @@ var getURLType = function(url,assumeImage = true){
 		}
 	}
 	else{
-		typeString = 'youtube'
+		return 'youtube';
 	}
-	
-	return typeString;
 }
 
 var processURL = function(i){
@@ -252,17 +250,22 @@ var getDateAdded = function(item,assignIfNone = false){
 }
 
 var getItemDateGeneric = function(item){
-	if(typeof item === 'object'){
+	if(item !== null){
+		var date = false;
 		if(typeof item.date_created === 'string'){
-			return item.date_created;
+			date =  item.date_created;
 		}
 		else if(typeof item.date_added === 'string'){
-			return item.date_added;
+			date = item.date_added;
+		}
+		else if(typeof item.date === 'string'){
+			date = item.date;
 		}
 		else{
 			log('could not resolve date for ',item);
 		}
 	}
+	return date;
 	
 }
 
@@ -274,11 +277,13 @@ var sortGeneric = function(items,sortType){
 	for(var i in items){
 		var item = items[i];
 		
+		// set the sortArray item if properties are applicable to what we're sorting
+		// (collections, images, etc.)
 		sortArray.push({
 			index:i,
-			name:item.name,
-			date:getItemDateGeneric(item),
-			item_count:item.items.length
+			name:typeof item.name === 'string'?item.name:null,
+			date:getItemDateGeneric(item)!==false?getItemDateGeneric(item):generateTimestamp(),
+			item_count:typeof item.items !== 'undefined'?item.items.length:null
 		});
 	}
 	
@@ -287,14 +292,14 @@ var sortGeneric = function(items,sortType){
 			sortArray.sort(function(a,b){
 				var date1 = a.date,
 					date2 = b.date;
-				return date1 < date2 ? -1 : date1 > date2 ? 1 : 0;
+				return date1 < date2 ? -1 : date1 > date2 ? 1 : (a.index < b.index ? -1 : a.index > b.index? 1 : 0);
 			});
 			break;
 		case 'date_newold':
 			sortArray.sort(function(a,b){
 				var date1 = a.date,
 					date2 = b.date;
-				return date1 > date2 ? -1 : date1 < date2 ? 1 : 0;
+				return date1 > date2 ? -1 : date1 < date2 ? 1 : (a.index < b.index ? -1 : a.index > b.index? 1 :0);
 			});
 			break;
 		case 'alpha_az':
