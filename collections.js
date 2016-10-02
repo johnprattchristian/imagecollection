@@ -1,4 +1,6 @@
-//POPULATE the Dropdown of Collections
+// declare good heights for the spacer that seperates the imageList from the top of the document
+var spacerBigHeight = '130px',
+	spacerSmallHeight = '80px';
 
 var tm_containerSlideUp = 0;
 var selectCollectionItem = function(index){
@@ -26,7 +28,7 @@ var showCollections = function(animation = true,slidespeed = 50){
 	else{
 		container.show();
 	}
-	$('.spacer#top').animate({height:'130px'},slidespeed);
+	$('.spacer#top').animate({height:spacerBigHeight},slidespeed);
 	collectionsButtonClicked = true;
 };
 
@@ -43,11 +45,11 @@ var hideCollections = function(animation = true,slidespeed = 50){
 	//button.css({backgroundColor:'black'});
 	if(animation){
 		container.slideUp(slidespeed);
-		$('.spacer#top').animate({height:'90px'},slidespeed);
+		$('.spacer#top').animate({height:spacerSmallHeight},slidespeed);
 	}
 	else{
 		container.hide();
-		$('.spacer#top').css('height','90px');
+		$('.spacer#top').css('height',spacerSmallHeight);
 	}
 	collectionsButtonClicked = false;
 };
@@ -117,7 +119,7 @@ var popDropdown = function(){
 		
 		// Sorting
 		// create sorting list box
-		$(container).append('<select id="select_sorting">'
+		$(container).append('<label>Sorting: </label><select id="sortCollectionsDropdown">'
 		+'<option data-sort="date_newold">New→Old</option>'
 		+'<option data-sort="date_oldnew">Old→New</option>'
 		+'<option data-sort="alpha_az">A→Z</option>'
@@ -126,12 +128,14 @@ var popDropdown = function(){
 		+'<option data-sort="itemcount_shortlong">1,2,3</option>'
 		+'</select>');
 		
-		$('#select_sorting').children('option[data-sort="'+sort+'"]').prop('selected',true);
-		$('#select_sorting').on('change',function(){
-			var selectedSorting = $('#select_sorting option:selected');
+		$('#sortCollectionsDropdown').children('option[data-sort="'+sort+'"]').prop('selected',true);
+		$('#sortCollectionsDropdown').on('change',function(){
+			var selectedSorting = $('#sortCollectionsDropdown option:selected');
 			log(selectedSorting);
-			changeCollectionSorting($('#select_sorting option:selected').attr('data-sort'));
+			changeCollectionSorting($('#sortCollectionsDropdown option:selected').attr('data-sort'));
 		});
+		
+		updateUIColor();
 		
 };
 
