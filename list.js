@@ -27,7 +27,7 @@ var Delete = function(domElement = null){
 		imageDB.items.splice(selected_index,1);
 		
 		//applyChanges();
-		popDropdown();
+		popDropdown(); // change the collection count
 		
 		var currentscroll = $(window).scrollTop();
 		$(domElement).fadeOut('fast',function(){
@@ -44,7 +44,7 @@ var List = function(load_animation = false,callback){
 	// Populate images
 	clearTimeout(tm_afterlistcallback);
 
-	$("#imageList").html("");
+	$('.column').remove();
 	
 	// refresh images array for dynamicColorBars
 	images = [];
@@ -56,19 +56,43 @@ var List = function(load_animation = false,callback){
 	}
 	
 	var current_column = 0; // the column to populate. iterate through the four
-	for(var i = imageDB.items.length - 1;i > -1;i--){			
-		
-		var element = processURL(i);
+	// set a default sort type	
+	
+	// iterate the collection and display images
+	for(var i = imageDB.items.length -1;i > -1;i--){
+	//for(var x = sortedArray.length - 1;x>-1;x--){
+		var item = imageDB.items[i];
 		// Finally, LAYOUT the images and videos in the view // 
 		// Give image and corresponding controls the same id for easy access:
-		$("#imageList").children().eq(current_column).append("<div class='imageBox' data-item-index='"+i+"' style='display:"+(load_animation ? 'block' : 'block')+"' >"
-		+ '<img class="loading-animation" src="./images/loading.gif">'
-		+ element // the image or video
-		+ /*delete button*/ "<button class='btnDelete' data-delete-item-index='"+i+"'>x</button>"
-		+"<div class='caption'><span class='captionText'>" + processCaption(imageDB.items[i])+"</span>"
-		+"<button class='btnEditCaption'>&#128393;</button></div>" // add edit button to image caption
-		+"</div>"); // end the imageBox div
 		
+		// create new container box
+		var newBox = $('<div class="imageBox" data-item-index="'+i+'"></div');
+		
+		// appendings for only images and videos
+		if(item.type==='image' || item.type ==='video' || item.type === 'youtube'){
+			var element = processURL(i);
+			var loading_img = '<img class="loading-animation" src="./images/loading.gif">';
+			var caption = "<div class='caption'><span class='captionText'>" + processCaption(imageDB.items[i])
+			+"</span><button class='btnEditCaption'>&#128393;</button></div>"; // add edit button to image caption
+			newBox.append(element).append(loading_img).append(caption);
+		}
+		else if(item.type==='plain_text'){
+			var textContentDiv = $('<div class="textItemContainer">'+item.content+'</div>');
+			newBox.append(textContentDiv);
+			textContentDiv.css({
+				'font-size' : '20pt',
+				color: item.colors.foreground,
+				background: item.colors.background,
+				padding:'100px',
+				'white-space' : 'pre-wrap',
+				'text-align' : 'center'
+			});
+		}
+		// add controls like DELETE
+		newBox.append("<button class='btnDelete' data-item-index='"+i+"'>x</button>");
+		
+		// append this item to the current iterating column
+		$("#imageList .column").eq(current_column).append(newBox);
 		
 		//alert($('.column').attr('id'));
 		// iterate to the next column
@@ -164,7 +188,7 @@ var List = function(load_animation = false,callback){
 
 	// bind delete buttons events
 	$(".btnDelete").bind("click",function(){
-		selected_index = parseInt($(this).attr("data-delete-item-index"));
+		selected_index = parseInt($(this).attr("data-item-index"));
 		Delete($(this).parent());
 	});
 	
@@ -195,15 +219,45 @@ var List = function(load_animation = false,callback){
 	});
 	
 	//DOUBLE CLICK IMAGE binds -- fullscreen 
-	$("img").bind("dblclick",function(e){
+	$("img.media-item").bind("dblclick",function(e){
 		e.preventDefault();
 		selected_index = parseInt($(this).attr("data-index")); // this is so we can display a notification
 		fullscreenImage(this);
 	});
-	$("video").bind("dblclick",function(e){
+	$("video.media-item").bind("dblclick",function(e){
 		e.preventDefault();
 		selected_index = parseInt($(this).attr("data-index"));
 		fullscreenVideo(this);		
+	});
+	
+	/*$('body').on('contextmenu',function(e){
+		e.preventDefault();
+	});*/
+	
+	$('img.media-item').bind('contextmenu',function(e){
+		e.preventDefault();
+	})
+	.on('mousedown',function(e){
+		if(e.which===3){
+			if(getSetting('quickPreview').value===true){
+					var fillPreview = $('.fillPreview');
+				fillPreview.css({
+					background:'url("'+$(this).attr('src')+'") no-repeat center ',
+					backgroundColor:'rgba(0,0,0,0.9',
+					backgroundSize:'contain',
+					cursor:'none'
+				}).show();
+			}
+		}
+	})
+	.on('mouseup',function(e){
+			$('.fillPreview').hide();
+	});
+	
+	$('.fillPreview').on('mouseup',function(e){
+		$(this).hide();
+	}).on('mousemove',function(e){
+		e.preventDefault();
 	});
 	
 	tm_afterlistcallback = setTimeout(callback,100);
@@ -254,6 +308,6 @@ var changeCaption = function(item_index,newcaption,callback){
 		// store old caption in _history:
 		pushHistoryItem({restoreType:'caption',index:item_index,caption:old_caption});
 		applyChanges();
-		$('#box'+item_index).find('.captionText').html(new_caption);
+		$('.imageBox[data-item-index="'+item_index+'"]').find('.captionText').html(new_caption);
 	}
 };
