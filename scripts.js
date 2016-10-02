@@ -59,17 +59,21 @@ var updateUIColor = function(){
 
 var updateFontTheme = function(lightOrDark = 'light'){
 	if(lightOrDark === 'dark'){
-		$('.collectionItem').css('color','black');
-		$('.collection-title-bottom').css({color:'black',textShadow:'none',fontWeight:'bold'});
-		$('.superButton').css('color','black');
-		$('.collectionCounter').css('color','dimgray');
+		$('#collectionsContainer').addClass('dark');
+		$('.collectionItem').addClass('dark');
+		$('.collection-title-bottom').addClass('dark');
+		$('.superButton').addClass('dark');
+		$('.collectionCounter').addClass('dark');
+		$('#sortCollectionsDropdown').addClass('dark');
 	}
 	else{ // anything else
-		$('.collectionItem').css('color','');
-		$('.collection-title-bottom').css({color:'',textShadow:'',fontWeight:''});
-		$('.rounded.superButton').css('background-color','');
-		$('.superButton').css('color','');
-		$('.collectionCounter').css('color','');
+		$('#collectionsContainer').removeClass('dark');
+		$('.collectionItem').removeClass('dark');
+		$('.collection-title-bottom').removeClass('dark');
+		$('.rounded.superButton').removeClass('dark');
+		$('.superButton').removeClass('dark');
+		$('.collectionCounter').removeClass('dark');
+		$('#sortCollectionsDropdown').removeClass('dark');
 	}
 }
 
@@ -134,8 +138,10 @@ $(document).ready(function(){
 	$("#txtInput").focus();
 	$(".collection-title-bottom").html(DATABASE.libraries[libraryIndex].collections[collectionIndex].name);
 	$('#dialogueParent').hide(); // Hide the export dialogue box
+	$('.spacer#top').css('height',spacerSmallHeight);
 	
 /* DONE INITIALIZING */
+
 	$('#btnHelp').click(function(){
 		showDialogue('d_Help');
 		helpDialogue();
@@ -153,7 +159,7 @@ $(document).ready(function(){
 	
 	var openDialogRenameCollection = function(){
 		showDialogue('d_EditCollection'); // Rename collection dialogue
-		$('#d_EditCollection #dialogue_title').html('Edit "'+imageDB.name+'"');
+		$('#d_EditCollection #dialogue_title').html('<span style="font-weight:lighter">edit collection </span>'+imageDB.name+'');
 		var txtbx = $('#txtRenameCollection');
 		txtbx.val(collections[collectionIndex].name); // set the textbox to the current collection name
 		txtbx.focus();
@@ -248,43 +254,76 @@ $(document).ready(function(){
 		
 		var text = $("#txtInput").val(); // Only go through with it if there's text in the textbox
 		
+		// check if actually input
 		if(text!=null&&text!=""){
-			var url,
-				caption; // in case a caption is included in-line
+			// decide what kind of submitted content (image/video url, text, etc.)
+			switch ($('#submitTypeDropdown option:selected').attr('data-type')){
+				case 'url_caption':
+					var url,
+						caption; // in case a caption is included in-line
+					
+					// decide if there's a caption after a " " in the text
+					if(text.indexOf(' ') > -1){
+						url = text.slice(0,text.indexOf(' ')); // the url is the first part
+						caption = text.slice(text.indexOf(' ')+1);
+					}
+					else{
+						url = text;
+						caption = text;
+					}
+					
+					if(validImageCheck()){ // is there actually an image at this url?
+						imageDB.items.push({"url":url,"caption":caption,"type":getURLType(url),"date_added":generateTimestamp()});
+						log('added image');
+						//applyChanges();
+						
+					}
+					else{
+						alert("Cannot find image at that URL! :( ");
+					}
+					break;
+				case 'plain_text':
+					var textItem = {
+						type:'plain_text',
+						content:text,
+						colors:{
+							background:'white',
+							foreground:imageDB.UIColor
+						},
+						date_added:generateTimestamp()
+					}
+					imageDB.items.push(textItem);
+					log('added text');
+				default:
+					break;
+			}
 			
-			// decide if there's a caption after a " " in the text
-			if(text.indexOf(' ') > -1){
-				url = text.slice(0,text.indexOf(' ')); // the url is the first part
-				caption = text.slice(text.indexOf(' ')+1);
-			}
-			else{
-				url = text;
-				caption = text;
-			}
-			
-			if(validImageCheck()){ // is there actually an image at this url?
-				imageDB.items.push({"url":url,"caption":caption,"type":getURLType(url),"date_added":generateTimestamp()});
-				//applyChanges();
-				List();
-				/*pushHistoryItem({
-					restoreType:"added_image",
-					index:collectionIndex,
-				
-				});*///Adding image no long a history item
-			
-				notify('"'+text+'" added.','good');
-				
-				// changeDynamicColor
-				
-				popDropdown();
-				setTimeout(dynamicColorBars,5000);
-			}
-			else{
-				alert("Cannot find image at that URL! :( ");
-			}
+			List();
+			notify('"'+text+'" added.','good');
+			popDropdown();
 		}
 		
 	};
+	
+	$('#submitTypeDropdown').on('change',function(){
+		var txtinput = $('#txtInput');
+		var selectedOpt = $(this).children('option:selected');
+		
+		// change placeholder text in input depending on the type of content 
+		// being submitted
+		switch(selectedOpt.attr('data-type')){
+			case 'url_caption':
+				txtinput.attr('placeholder','Enter an image URL (+ a caption separated by a space if you want)');
+				break;
+			case 'plain_text':
+				txtinput.attr('placeholder','Enter some text...');
+				break;
+			default:
+				break;
+		}
+		
+		txtinput.focus();
+	});
 		
 	$("#btnSubmit").on("click",function(){
 		Add();
@@ -305,6 +344,18 @@ $(document).ready(function(){
 		}
 	});
 	
+	$('#sortItemsDropdown option[data-sort="'+imageDB.sort+'"]').attr('selected',true);
+	$('#sortItemsDropdown').on('change',function(){
+		// get the new sort type from dropdown/droplets
+		var newSortType = $('#sortItemsDropdown option:selected').attr('data-sort');
+		log('new item sort: '+newSortType);
+		
+		// apply sort type to this collection
+		imageDB['sort'] = newSortType;
+		applyChanges();
+		List();
+	});
+	
 	var collectionsButtonClicked = false;
 	var slidespeed = 50;
 	
@@ -318,6 +369,20 @@ $(document).ready(function(){
 	selectCollectionItem(collectionIndex);
 	
 	updateUIColor();
+	
+	$('#txtInput').on('input',function(e){
+		log('inputted');
+		if(isURL($(this).val())){
+			$('#submitTypeDropdown option').attr('selected',false);
+			$('#submitTypeDropdown option[data-type="url_caption"]').attr('selected',true);
+			console.log('is url');
+		}
+		else{
+			$('#submitTypeDropdown option').attr('selected',false);
+			$('#submitTypeDropdown option[data-type="plain_text"]').attr('selected',true);
+			log('is text');
+		}
+	});
 	
 // KEYDOWN/PRESS Event Handlers
 	// Capture "ENTER" key for textbox (alt entering method to the submit button)
@@ -352,4 +417,18 @@ $(document).ready(function(){
 		$('#collectionsContainer').width(window.innerWidth);
 		$('#navbar-top').width(window.innerWidth);
 	});
+	
+	/*$(window).on('scroll',function(e){
+		var sortParent = $('#sortItemsParent');
+		if($(this).scrollTop() === 0){
+			if(sortParent.css('display')==='none'){
+				sortParent.delay(200).slideDown(200);
+			}
+		}
+		else{
+			if(sortParent.css('display')!=='none'){
+				sortParent.hide();
+			}
+		}
+	});*/
 });
