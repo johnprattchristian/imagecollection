@@ -23,7 +23,11 @@ var collections,
 	helpTips = []; // an array of helpTip objects with "done already" properties
 
 // used for collection and collection item sorting
-var sortTypes = ['date_newold','date_oldnew','alpha_az','alpha_za','itemcount_longshort','itemcount_shortlong'];	
+var sortTypes = ['date_newold','date_oldnew','alpha_az','alpha_za','itemcount_longshort','itemcount_shortlong'];
+
+var myRegex = {
+	gif: /(?!gifv)(gif)/g
+};
 
 global_volume = 0.3;
 
@@ -44,7 +48,9 @@ var setLastVisited = function(library = libraryIndex,collection = collectionInde
 
 $(document).ready(function(){
 	
+	// apply all the changes when closing or refreshing
 	window.onbeforeunload = function(){
+		saveSettings();
 		applyChanges();
 	}
 	

@@ -58,6 +58,7 @@ var sizeGhostImageForWidth = function(element,img){
 }
 	
 var fullscreenImage = function(img){
+	console.info('fullscreening #',img.dataset.index);
 	currentFSElement = img; // this is for other functions to know on the first time using currentFSElement
 	removeFullScreenChildren();
 	var element = document.getElementById("FullScreenView");
@@ -81,7 +82,7 @@ var fullscreenImage = function(img){
 		goFullscreen();
 
 		$('.Notifications').hide();
-		if(getSetting('fullscreenCaptions').value === true){
+		if(getSetting('fullscreenCaptions') === true){
 			notify(imageDB.items[selected_index].caption);
 		}
 	}
@@ -108,7 +109,7 @@ var fullscreenVideo = function(vid){
 	if (Fullscreen() == false) {			  
 		
 		goFullscreen();
-		if(getSetting('fullscreenCaptions').value){
+		if(getSetting('fullscreenCaptions')){
 			notify(imageDB.items[selected_index].caption);
 		}
 		
@@ -123,7 +124,7 @@ var IterateSlideshow = function(direction){
 		var nextElemIndex = parseInt(currentFSElement.getAttribute("data-index"))-direction; // the id of the element to switch to
 		var element = null;
 		iterating = true;
-		
+		var nextSelector = $('.imageBox[data-item-index="'+nextElemIndex+'"] .media-item');
 		
 		if (direction>0){
 			if(nextElemIndex > -1){ // if not reached the end of the collection, proceed (direction increment correlates with id decrement)
@@ -299,6 +300,7 @@ $(document).ready(function(){
 	//Fullscreen click events
 	$('#FullScreenView')
 		.on('mousedown',function(e){
+			/*
 			if(!zoomedIn && e.target !== document.getElementById('btnExitFullscreen')){
 				if(e.which===1){
 					IterateSlideshow(1);
@@ -317,29 +319,20 @@ $(document).ready(function(){
 						}
 				}
 			}
+			*/
 		})
 		.on('mousedown',function(e){
-			if(!covered){
-				if(e.target !== document.getElementById('btnExitFullscreen')){
-					if(e.which===1){
-						IterateSlideshow(1);
-					}
-					else if(e.which===3){
-						IterateSlideshow(-1);
-					}
-					else if(e.which===2){
-						e.preventDefault();
-					}
+			if(e.target !== document.getElementById('btnExitFullscreen')){
+				if(e.which===1){
+					IterateSlideshow(1);
 				}
-				
+				else if(e.which===3){
+					IterateSlideshow(-1);
+				}
+				else if(e.which===2){
+					e.preventDefault();
+				}
 			}
-			if(zoomedIn){
-				dragging = true; // only set if zoomed in
-				originX = e.clientX - bgPosition(this).x;
-				originY = (e.clientY - bgPosition(this).y) / ghostImageForZoom.height;
-			}
-
-			
 		})
 		.on('mouseup',function(e){
 			dragging = false;

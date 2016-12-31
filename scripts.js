@@ -28,33 +28,34 @@ var generateTimestamp = function(){
 };
 
 var updateUIColor = function(){
-	var opacity = 0.6;
-	if(typeof imageDB.UIColor === 'string' && imageDB.UIColor !== 'none'){
-		
-		var toarray = rgbStringToArray(imageDB.UIColor); // turn rgbstring into array of ints
-		var averageVal = (toarray[0] + toarray[1] + toarray[2]) / 3; // average 'brightness' of all values
-		var valueThresh = 150;
-		// calculate a new opacity based on how bright the color is.
-		// brighter gets more transparent
-		//opacity = ((averageVal<40?averageVal+200:(averageVal>valueThresh?averageVal-40:averageVal)) / 255);
-		var colorWithAlpha = applyOpacityToUIColor(imageDB.UIColor,opacity);
-		$('#navbar-top,.collectionFooter').css('background-color',colorWithAlpha);
-		
-		
-		if( averageVal > valueThresh){
-			updateFontTheme('dark');
-			var darkenedColor = darkenColorArray(rgbStringToArray(imageDB.UIColor),0.5,'string');
-			$('.rounded.superButton').css('background-color',darkenedColor);
+		var opacity = 0.6;
+		if(typeof imageDB.UIColor === 'string' && imageDB.UIColor !== 'none' && getSetting('collectionThemes')){
+			
+			var toarray = rgbStringToArray(imageDB.UIColor); // turn rgbstring into array of ints
+			var averageVal = (toarray[0] + toarray[1] + toarray[2]) / 3; // average 'brightness' of all values
+			var valueThresh = 187;
+			// calculate a new opacity based on how bright the color is.
+			// brighter gets more transparent
+			//opacity = ((averageVal<40?averageVal+200:(averageVal>valueThresh?averageVal-40:averageVal)) / 255);
+			var colorWithAlpha = applyOpacityToUIColor(imageDB.UIColor,opacity);
+			$('#navbar-top,.collectionFooter').css('background-color',colorWithAlpha);
+			
+			
+			if( averageVal > valueThresh){
+				updateFontTheme('dark');
+				/*var darkenedColor = darkenColorArray(rgbStringToArray(imageDB.UIColor),0.5,'string');*/
+				
+			}
+			else{
+				updateFontTheme();
+			}
+			
 		}
 		else{
+			$('#navbar-top,.collectionFooter').css('background-color','');
 			updateFontTheme();
 		}
-		
-	}
-	else{
-		$('#navbar-top,.collectionFooter').css('background-color','');
-		updateFontTheme();
-	}
+	
 }
 
 var updateFontTheme = function(lightOrDark = 'light'){
@@ -161,7 +162,7 @@ $(document).ready(function(){
 	
 	var openDialogRenameCollection = function(){
 		showDialogue('d_EditCollection'); // Rename collection dialogue
-		$('#d_EditCollection #dialogue_title').html('<span style="font-weight:lighter;color:gray">Edit collection </span>'+imageDB.name+'');
+		$('#d_EditCollection .dialog-title .bold').html(imageDB.name);
 		var txtbx = $('#txtRenameCollection');
 		txtbx.val(collections[collectionIndex].name); // set the textbox to the current collection name
 		txtbx.focus();
@@ -302,9 +303,12 @@ $(document).ready(function(){
 					break;
 			}
 			
+			applyChanges();
 			List();
 			notify('"'+text+'" added.','good');
 			popDropdown();
+			
+		$(window).scrollTop(0);
 		}
 		
 	};
@@ -331,6 +335,7 @@ $(document).ready(function(){
 		
 	$("#btnSubmit").on("click",function(){
 		Add();
+		$('#txtInput').val('');
 	});
 	
 	$("#btnUndo").on("click",function(){
@@ -367,6 +372,11 @@ $(document).ready(function(){
 	
 	$('#btnCollections').on('click',function(){
 		toggleCollections();
+	});
+	
+	$('#btnOpenPrettyCollections').on('click',function(){
+		var pretty = $('.prettyCollectionsContainer');
+		pretty.css('display')==='none'?pretty.fadeIn('fast'):pretty.hide();
 	});
 	
 	$('#collectionsContainer').hide();
@@ -413,7 +423,13 @@ $(document).ready(function(){
 		}
 	});
 	
-
+	$(window).on('resize',function(e){
+		$('.imageBox').each(function(){
+			$(this).height($(this).children('.media-item').height());
+		});
+	});
+	
+/*
 	$(window).on('resize',function(e){
 		$('#collectionsContainer').width(window.innerWidth);
 		$('#navbar-top').width(window.innerWidth);
@@ -421,6 +437,7 @@ $(document).ready(function(){
 		$('#collectionsContainer').width(window.innerWidth);
 		$('#navbar-top').width(window.innerWidth);
 	});
+*/
 	
 	/*$(window).on('scroll',function(e){
 		var sortParent = $('#sortItemsParent');

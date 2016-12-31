@@ -45,7 +45,7 @@ var extEnumImage = ['jpg','jpeg','bmp','tif','gif','png'];
 // used for evaluating input in realtime to make a 'smart' submit type
 var isURL = function(string){
 	string = string.toLowerCase();
-	if(string.includes('youtube.com/watch?v=')){
+	if(string.includes('youtube.com/watch?v=') || string.indexOf('http') > -1){
 		return true;
 	}
 	for(var x in extEnumImage){
@@ -61,6 +61,16 @@ var isURL = function(string){
 		}
 	}
 	return false;
+}
+
+var isGIF = function(item){
+	if(item.type === 'image'){
+		if(myRegex.gif.test(getURL(item)) === true){
+			return true
+		}
+		return false
+	}
+	return false
 }
 
 var getURLType = function(url,assumeImage = true){
@@ -81,6 +91,12 @@ var getURLType = function(url,assumeImage = true){
 	}
 	else{
 		return 'youtube';
+	}
+	if(assumeImage){
+		return 'image';
+	}
+	else{
+		return 'generic';
 	}
 }
 
@@ -103,16 +119,21 @@ var processURL = function(i){
 	var element = "";
 	var type = getURLType(img);
 	var extension = img.substr(img.lastIndexOf('.')+1);
+	
 	if(type === 'image'){
 		element = "<img "+itemClass+"data-index='"+i+"' src='"+img+"'/>"; // placeholder img element with no source
 	}
 	else if(type === 'video'){
-		element = "<video "+itemClass+" autoplay loop data-index='"+i+"' src='"+img+"'></video>";
+		element = "<video "+itemClass+" loop data-index='"+i+"' src='"+img+"'></video>";
 	}
 	else if(type === 'youtube'){
 		var youtubeVidId = img.slice(img.lastIndexOf('=')+1);
 		console.log('youtube video: ',youtubeVidId);
 		element = '<iframe '+itemClass+' data-index="'+i+'" width="853" height="480" src="https://www.youtube.com/embed/'+youtubeVidId+'?rel=0&amp;controls=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe>';
+	}
+	else{
+		log('couldnt determine url type: ' + img);
+		return false;
 	}
 	
 	return element;
@@ -170,6 +191,12 @@ var bgPosition = function(element){
 var bgSize = function(element){
 	var size = $(element).css('background-size').replace('px','').replace('px','').replace('%');
 }
+
+// generic get object of array by name
+var getObjByName = function(array,name){
+	// retrieve the first item from an array of settings that match the given name
+	return $.grep(array,function(e){return e.name === name})[0];
+};
 
 // Last Index of ... functions (used for History functions)
 
@@ -380,6 +407,28 @@ var rgbArrayToString = function(array,alpha = false){
 	else{
 		return 'rgb('+array[0]+','+array[1]+','+array[2]+')';
 	}
+}
+
+var brightenColorRGBString = function(rgbString,brightenFactor){
+	var array = rgbStringToArray(rgbString);
+	// for each value r,g,b
+	
+	for(var c in array){
+		if(array[c]<10){
+			array[c]*=40;
+		}
+		// if colorVal * brightenFactor < 255 (max), then use
+		// otherwise, decrement the number until its <= 255
+		for(var i = 0;array[c]*brightenFactor-i>=255;i++){
+			if(array[c]*brightenFactor-i<=255){
+				array[c]=array[c]*brightenFactor-i;
+			}
+		}
+	}
+	
+	// return it again as an rgb string
+	var returnRGBString = rgbArrayToString(array);
+	return returnRGBString;
 }
 
 // search for a db item that has a date and return that item

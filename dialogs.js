@@ -28,7 +28,7 @@ $(function(){
 var exportCode = function(exportType){
 	var exportObject = $('<div></div>'); // initialize export object to add stuff to
 	
-	if(exportType == 'plain'){ // plain text 
+	if(exportType == 'plain_text'){ // plain text 
 		var current_item = false;
 		for(var i = 0;i<collections.length;i++){
 			exportObject.append(collections[i].name+'</br>');
@@ -62,7 +62,7 @@ var exportCode = function(exportType){
 		var jsonify = [];
 		var items;
 		
-		$(DATABASE).each(function(i,item){
+		$(libraries[libraryIndex].collections).each(function(i,item){
 			
 			items = [];
 			$(item).each(function(x,xmen){
@@ -100,21 +100,8 @@ $(function(){
 	$('#selectExportType').bind('change',function(){
 		var newExportCode = "";
 		$('#exportCode').html("");
-		if(this.selectedIndex === 0){
-			newExportCode = exportCode('plain');
-		}
-		else if(this.selectedIndex === 1){
-			newExportCode = exportCode('html');
-		}
-		else if(this.selectedIndex === 2){
-			newExportCode = exportCode('json');
-		}
-		else if(this.selectedIndex === 3){
-			newExportCode = exportCode('Image Collection');
-		}
-		else{
-			newExportCode = "Error generating export code: invalid export type";
-		}
+		var type = $(this).children('option:selected').get(0).dataset.export;
+		newExportCode = exportCode(type);
 		
 		$('#exportCode').html(newExportCode);
 		var html = document.getElementById("exportCode").innerHTML;
@@ -126,7 +113,7 @@ $(function(){
 				   .replace(/'/g, '%27');    // <-- Escape ' (to be 100% safe)
 		var dataURL = 'data:text/html;charset=UTF-8,' + html;
 		var openbutton = $('<button></button>');
-		openbutton.html('open in full page')
+		openbutton.html('Open in New Window')
 		.click(function(){
 			document.location = dataURL;
 		});

@@ -66,76 +66,80 @@ var toggleCollections = function(slidespeed = 50,trueSlideUp_falseSlideDown){
 	}
 };
 
+var collapseCollectionItems = function(){
+	var first = $('.collectionItem').first();
+	var leftX = first.offset().left;
+	
+	$('#collectionsContainer').children().each(function(i,item){
+		var saveX = $(item).offset().left,
+			saveY = $(item).offset().top;
+			
+		$(item).animate({left:'-'+saveX+'px'},500,function(){
+			$(item).hide();
+		});
+	});
+}
+
 
 var teaseSlideBackTimeout = 0;
 var popDropdown = function(){
 	
-
-		/*$("#dropdown").html("");
-		for(var c in collections){
-				$("#dropdown").append("<option>"+collections[c]+"</option>");
-			
-		}
-		$("#dropdown").append("<option>new collection...</option>");
+	var container = $('.collectionItemContainer');
+	var pretty = $('.prettyCollectionsContainer');
+	
+	// clear the collection items
+	container.children().each(function(i,item){
+		$(item).remove();
+	});
+	pretty.children().remove();
+	
+	// allow different sorting of collections, such as alphabetical,
+	// sort type is embedded in current library as a property
+	var sort = typeof libraries[libraryIndex].sort === 'string' ? libraries[libraryIndex].sort : 'date_newold';
+	
+	// pass to the sort function to sort based on the sortType
+	var sorted = sortGeneric(libraries[libraryIndex].collections,sort);
+	// create a new collection item for each sorted item in the library
+	for(var i in sorted){
+		var item = sorted[i];
+		$(container).append('<span class="collectionItem" data-collection-index="'+item.index+'">'+item.name+'<span class="collectionCounter">'+item.item_count+'</span></span>');
 		
-		document.getElementById("dropdown").selectedIndex=collectionIndex;*/
+		// PRETTY UI
+		var newPrettyItem = $('<div class="itemContainer" data-collection-index="'+item.index+'"><div class="mask"><h1>'+item.name+'</h1></div></div>');
 		
-		// New Code:
-		
-		var container = $('#collectionsContainer');
-		container.children().each(function(i,item){
-				$(item).remove();
+		var newPrettyBG = getImageForPrettyCollections(item.index);
+		if(newPrettyBG !== false){
+			newPrettyItem.css({
+				'background':'url("'+newPrettyBG+'")',
+				'background-position':'0px -33%',
+				'background-size':'100% auto'
 			});
-		
-		// allow different sorting of collections, such as alphabetical,
-		// sort type is embedded in current library as a property
-		var sort = typeof libraries[libraryIndex].sort === 'string' ? libraries[libraryIndex].sort : 'date_newold';
-		
-		// pass to the sort function to sort based on the sortType
-		var sorted = sortGeneric(libraries[libraryIndex].collections,sort);
-		for(var i in sorted){
-			var item = sorted[i];
-			$(container).append('<span class="collectionItem" data-collection-index="'+item.index+'">'+item.name+'<span class="collectionCounter">'+item.item_count+'</span></span>');
 		}
-		
-		
-		// bind click event to collectionItems:
-		$('.collectionItem').on('click',function(){
-			selectCollectionItem(parseInt($(this).attr('data-collection-index')));
-			var newIndex = parseInt($(this).attr('data-collection-index'));
-			changeCollection(newIndex);
-		});
-		
-		$(selectCollectionItem(collectionIndex)); // select the collectionItem corresponding to the current collectionIndex
-		
-		// New collection
-		// append "new collection" button to the end:
-		$(container).append('<span id="btnNewCollection" class="collectionItem">+</span>');
-		
-		//bind new collection button click event
-		$('#btnNewCollection').on('click',function(){
-			setTimeout(newCollection,20);
-		});
-		
-		// Sorting
-		// create sorting list box
-		$(container).append('<label>Sorting: </label><select id="sortCollectionsDropdown">'
-		+'<option data-sort="date_newold">New→Old</option>'
-		+'<option data-sort="date_oldnew">Old→New</option>'
-		+'<option data-sort="alpha_az">A→Z</option>'
-		+'<option data-sort="alpha_za">Z→A</option>'
-		+'<option data-sort="itemcount_longshort">3,2,1</option>'
-		+'<option data-sort="itemcount_shortlong">1,2,3</option>'
-		+'</select>');
-		
-		$('#sortCollectionsDropdown').children('option[data-sort="'+sort+'"]').prop('selected',true);
-		$('#sortCollectionsDropdown').on('change',function(){
-			var selectedSorting = $('#sortCollectionsDropdown option:selected');
-			log(selectedSorting);
-			changeCollectionSorting($('#sortCollectionsDropdown option:selected').attr('data-sort'));
-		});
-		
-		updateUIColor();
+		else{
+			newPrettyItem.css('background','gray');
+		}
+		pretty.append(newPrettyItem);
+	}
+	
+	var prettyHeight = parseInt(pretty.css('height').replace('px',''));
+	$('.mask h1').css('font-size',prettyHeight / collections.length);
+	
+	// bind click event to collectionItems (only the ones in the collection item container)
+	$('.collectionItemContainer .collectionItem,.prettyCollectionsContainer .itemContainer').on('click',function(){
+		// select the item when clicked
+		var newIndex = parseInt($(this).attr('data-collection-index'));
+		selectCollectionItem(newIndex);
+		changeCollection(newIndex);
+		pretty.hide();
+	});
+	
+	$(selectCollectionItem(collectionIndex)); 
+	// select the collectionItem of the collection last visited
+	
+	// select the sorting option that matches the library's sorting property
+	$('#sortCollectionsDropdown').children('option[data-sort="'+sort+'"]').prop('selected',true);
+
+	updateUIColor();
 		
 };
 
@@ -167,6 +171,7 @@ var changeCollection=function(new_index){
 	$(".collection-title-bottom").html(DATABASE.libraries[libraryIndex].collections[collectionIndex].name);
 	document.title = collections[collectionIndex].name;
 	updateUIColor();
+	$(window).scrollTop(0);
 	
 	if(imageDB==null || typeof imageDB=='undefined'){
 		imageDB = {
@@ -275,8 +280,41 @@ var changeCollectionSorting = function(type,libIndex = libraryIndex){
 	}
 }
 
+// determine if collection has any images,
+// if so, grab the first one and use as the background for 
+// the collection's pretty item bg in the pretty collections UI
+var getImageForPrettyCollections = function(indexOfCollection){
+	var i = indexOfCollection;
+	var items = collections[i].items;
+	if(items.length > 0){
+		for(var x in items){
+		// iterate through items to find a suitable image
+			if(items[x].type==='image' && isGIF(items[x]) === false){
+				// its an image, return it
+				return getURL(items[x]);
+			}
+		}
+	}
+	
+	// no image found
+	return false
+}
+
 
 $(function(){
+	//bind new collection button click event
+	$('#btnNewCollection').on('click',function(){
+		setTimeout(newCollection,20);
+	});
+	
+	// bind change sorting
+	$('#sortCollectionsDropdown').on('change',function(){
+		var selectedSorting = $(this).children('option:selected');
+		log(selectedSorting);
+		changeCollectionSorting($(this).children('option:selected').attr('data-sort'));
+	});
+	
+	// bind onblur-type event for clicking out of collections
 	$(document).on('mousedown',function (e){
 		var container = $("#collectionsContainer");
 		var button = $('#btnCollections');
@@ -287,39 +325,5 @@ $(function(){
 			}
 		}
 	});
-
-	var lastScrollTop = 0;
-	var goingUp = true;
-	var howManyThisDirection = 0;
-	var elasticity = 10;
-	$(window).on('scroll',function(e){
-		// Annoying behavior? 
-		/* var current = $(window).scrollTop();
-		var stillGoingUp = (current < lastScrollTop);
-		
-		if(stillGoingUp !== goingUp){
-			howManyThisDirection = 0;
-		}
-		
-		
-		if(current < lastScrollTop){
-			if(howManyThisDirection > 1){
-				showCollections();
-			}
-			goingUp = true;
-		}
-		else if(current > lastScrollTop){
-			if(howManyThisDirection > elasticity){
-				hideCollections();
-			}
-			goingUp = false;
-		}
-		lastScrollTop = current;
-		
-		howManyThisDirection += 1;
-		log((stillGoingUp ? 'going up. so far: ' : 'going down: ') + howManyThisDirection );
-		*/
-	});
-	
 
 });

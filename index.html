@@ -2,10 +2,14 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width = device-width, initial-scale = 1">
 <link rel="shortcut icon" href="bitmap.png" type="image/x-icon">
 <link rel="icon" href="favicon.ico" type="image/x-icon">
-<link rel="stylesheet" type="text/css" href="style.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="css/icons.css">
+<link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>!-->
+<script src="jquery-3.1.0.min.js"></script>
 <script src="./scripts/clipboard.js"></script>
 <!-- my scripts !-->
 <script type="text/javascript" src="init.js"></script>
@@ -29,11 +33,11 @@
 <div id="navbar-top" class="clearTransparent">
 	<div id="inputForm">
 		<div id="submitFormContainer">
-			<select class="superDropdown" id="submitTypeDropdown">
-				<option data-type="url_caption">Image/Video</option>
+			<input type="text" id="txtInput" placeholder="Enter an image URL (+ a caption separated by a space if you want)"/>
+			<select class="superDropdown superButton" id="submitTypeDropdown">
+				<option data-type="url_caption">URL</option>
 				<option data-type="plain_text">Text</option>
 			</select>
-			<input type="text" id="txtInput" placeholder="Enter an image URL (+ a caption separated by a space if you want)"/>
 			<button class="rounded superButton" id="btnSubmit">+</button>
 		</div>
 		<span id="divCollections">
@@ -55,8 +59,20 @@
 		</span>
 		
 		<div id="collectionsContainer">
-			<!--collections here!-->
-			
+			<div class="leftSizeCollectionButtons">
+				<select id="sortCollectionsDropdown" class="collectionItem">
+					<option data-sort="date_newold">New→Old</option>
+					<option data-sort="date_oldnew">Old→New</option>
+					<option data-sort="alpha_az">A→Z</option>
+					<option data-sort="alpha_za">Z→A</option>
+					<option data-sort="itemcount_longshort">3,2,1</option>
+					<option data-sort="itemcount_shortlong">1,2,3</option>
+				</select>
+				<span id="btnNewCollection" class="collectionItem">+</span>
+			</div>
+			<div class="collectionItemContainer">
+				<!--collections here!-->
+			</div>
 			
 		</div>
 	</div>
@@ -74,13 +90,13 @@
 	<div class="contain-collection-title-bottom">
 		<span class="collection-title-bottom">Fantastical Fashion</span>
 	</div>
-	<div id="btnEditCollection"></div>
-	<div id="btnTrash" class="2"></div>
+	<div class="edit-button" id="btnEditCollection"></div>
+	<div class="delete-button" id="btnTrash"></div>
 	
 	<div id="bottomLeftButtonsContainer">
 		<button id="btnLibraries" class="rounded superButton toggleButton">Libraries</button>
-		<button id="btnDeleteLibrary" class="rounded superButton">Delete Library</button>
 		<button class="rounded superButton" id="btnExport">Export</button>
+		<button class="rounded superButton" id="btnOpenPrettyCollections">Pretty Collections</button>
 	</div>
 	<div class="dropDown aboveBottomBar" id="dropDownLibraries">
 			<div class="dropDownMenuItem">
@@ -118,6 +134,19 @@
 
 
 
+<!-- Pretty Collection Selector !-->
+<div class="prettyCollectionsContainer">
+	<div class="itemContainer art">
+		<div class="mask">
+			<h1>art</h1>
+		</div>
+	</div>
+	<div class="itemContainer history">
+		<div class="mask">
+			<h1>history</h1>
+		</div>
+	</div>
+</div>
 
 <!-- Notifications !-->
 <div id="regularNotifications" class="Notifications">
@@ -131,22 +160,22 @@
 
 	<!--Export libraries!-->
 	<div class="dialogue" id="d_Export">
-		<h1 style="display:inline">Export all your collections</h1>
+		<h1 class="dialog-title">Export library <span class="bold">Library</span></h1>
+		<label style="display:block" for="selectExportType">Select an <span class="bold">Export Type</span>:</label>
 		<select id="selectExportType">
-			<option>Plain Text</option>
-			<option>HTML</option>
-			<option>JSON</option>
-			<option>Image Collection</option>
+			<option data-export="json">Image Collection</option>
+			<option data-export="html">HTML</option>
+			<option data-export="plain_text">Plain Text</option>
 		</select>
 		<button class="closeButton">x</button>
-		<span style="display:block">Just copy and paste the text below and save it to a file. Hit <strong>[ESC]</strong> to close this dialogue</span>
 		<div id="exportCode">
+			<!--Export Codes Here!-->
 		</div>
 	</div>
 	
 	<!--Edit Captions!-->
 	<div class="dialogue" id="d_EditCaption">
-		<h1>Caption</h1>
+		<h1 class="dialog-title">Caption</h1>
 		<button class="closeButton">x</button>
 		<div id="captionThumbContain">
 		<img id="editCaptionThumbnail"></img>
@@ -158,7 +187,7 @@
 	
 	<!--Edit Collection!-->
 	<div class="dialogue" id="d_EditCollection">
-		<h1 id="dialogue_title">Edit Collection</h1>
+		<h1 class="dialog-title">Edit Collection <span class="bold"></span></h1>
 		<button class="closeButton">x</button>
 		<div class="dialog-content">
 			<span class="instructions-span">Change the collection name.</span><br>
@@ -177,14 +206,14 @@
 		<button class="okbutton" id="btnOK_EditCollection">OK</button>
 	</div>
 	<div class="dialogue" id="d_Settings">
-		<h1>Settings</h1><button class="closeButton">x</button>
+		<h1 class="dialog-title">Settings</h1><button class="closeButton">x</button>
 		<!--<span class="instructions-span">Change your preferences below.</span>!-->
 		<div id="settingsContainer">
 		
 		</div>
 	</div>
 	<div class="dialogue" id="d_Help">
-		<h1>Help</h1>
+		<h1 class="dialog-title">Help</h1>
 		<button class="closeButton">x</button>
 		<div id="helpIndexTabStrip">
 			<span class="helpIndexItem droplet" id="help_index_0">Starting off</span>

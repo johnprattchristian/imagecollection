@@ -40,7 +40,7 @@ var displayNotification = function(message,type){
 		notifs = $('.Notifications');
 		clearTimeout(ntimeout); // in case another notification was already there
 		if(Fullscreen()){
-			if(getSetting('fullscreenCaptions').value === true){
+			if(getSetting('fullscreenCaptions') === true){
 				notifs = $('#fullscreenNotifs');
 				fadeoutDelay = 1500;
 				notifs.stop(true,true); // stops the fadeOut and resets
@@ -64,7 +64,7 @@ var displayNotification = function(message,type){
 
 		notifs.css({backgroundColor:'rgba(0,0,0,0.7)'}); // default coloring
 		// are notification colors turned on in settings? if not, just default color
-		if(getSetting('notificationColors').value === true){
+		if(getSetting('notificationColors') === true){
 			// set different colors for different types of messages
 			if(typeof ntype !== 'undefined' && typeof ntype !== null && ntype !== ''){ // was a notification ntype inputted?
 				switch(ntype){

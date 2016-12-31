@@ -130,12 +130,17 @@ var popHistoryDropdown = function(){
 			list.append('<div class="dropDownMenuItem" name="history'+i+'">'+thumbDom.prop('outerHTML')+'<div class="historyItemRightSide"><span class="dropDownMenuItemText">'+text+'</span><span class="menuItemSubtext">'+subText+'</span></div></div>');
 		});
 		
+		$('.dropDownHistory').prepend('<div id="historyRestoreCount" class="dropDownMenuItem info"><span class="dropDownMenuItemText"></span></div>');
+		
 		// bind click for each history item
-		$('.dropDownHistory .dropDownMenuItem').on('mousemove',function(){
+		$('.dropDownHistory .dropDownMenuItem').not('.info').on('mousemove',function(){
 			console.log('hovering over history item.');
 			$('.dropDownHistory .dropDownMenuItem').removeClass('highlight');
+			// add highlight clas to all items on mouse and beneath
 			$(this).addClass('highlight');
 			$(this).nextAll().addClass('highlight');
+			// update infobox with # of items to be restored
+			$('#historyRestoreCount .dropDownMenuItemText').html('Restore '+$('.highlight').length+' item'+($('.highlight').length>1?'s':''));
 		}).on('mouseleave',function(){
 			$(this).removeClass('highlight');
 		}).on('mousedown',function(){
@@ -149,6 +154,10 @@ var popHistoryDropdown = function(){
 			log('restoring back to history item #'+index+'...');
 			// restore all history back to this point
 			Undo(noOfItems);
+		});
+		
+		$('.dropDownHistory').on('mouseleave',function(){
+			$('#historyRestoreCount .dropDownMenuItemText').html('');
 		});
 		
 		

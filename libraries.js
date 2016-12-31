@@ -90,15 +90,21 @@ var newLibrary = function(libraryName){
 
 var popLibrariesDropdown = function(){
 	var dropdown = $('#dropDownLibraries');
+	// clear dropdown items
 	dropdown.children('.dropDownMenuItem').remove();
-	$('#blueCircle').hide() // hide the blue dot until it finds a home
+	
+	// make an item for each library in the database
 	$(DATABASE.libraries).each(function(i,item){
-		dropdown.append('<div class="dropDownMenuItem" name="library'+i+'"><span class="dropDownMenuItemText">'+item.name+'</span><span class="menuItemSubtext">'+item.collections.length+' collections</span></div>');
+		dropdown.append('<div class="dropDownMenuItem" name="library'+i+'"><span class="dropDownMenuItemText">'+item.name+'</span><span class="menuItemSubtext">'+item.collections.length+(item.collections.length > 1?' collections':' collection')+'</span>'
+		+'<div class="button-strip libraryItemButtons">'
+		+'<span class="edit-button faded" data-index="'+i+'"></span>'
+		+'<span class="delete-button faded" data-index="'+i+'"></span>'
+		+'</div></div>');
 		if(i === libraryIndex){
-			dropdown.children('.dropDownMenuItem').last().append('<img id="blueCircle" src="blue-dot.png" height="15px" width="15px"></img>');
+			dropdown.children('.dropDownMenuItem').last().append('<div class="blue-dot"></div>');
 		}
 	});
-	dropdown.append('<div class="dropDownMenuItem last btnNewLibrary">New Library</div>');
+	dropdown.append('<div class="dropDownMenuItem last btnNewLibrary">+</div>');
 	
 	$('.btnNewLibrary').on('click',function(){
 		setTimeout(function(){
@@ -109,15 +115,37 @@ var popLibrariesDropdown = function(){
 		},100)
 	});
 	
+	// bind click event for library buttons
 	$('#dropDownLibraries .dropDownMenuItem').not('.btnNewLibrary').on('click',function(){4
 		log('library menu item clicked');
 		var newIndex = parseInt($(this).attr('name').replace('library',''));
-		$('#blueCircle').remove();
-		$(this).append('<img id="blueCircle" src="blue-dot.png"></img>');
+		$('.blue-dot').remove();
+		$(this).append('<div class="blue-dot"></div>');
 		setTimeout(function(){
 			changeLibrary(newIndex);
 			$('#btnLibraries').click(); // hide the dropdown
 		},50);
+	});
+	
+	// change library name button
+	$('.libraryItemButtons .edit-button').bind('click',function(){
+		var index = parseInt(this.dataset.index);
+		var curName = libraries[index].name;
+		var editLibrary = prompt('Edit library name',curName);
+		if(editLibrary && editLibrary !== '' && editLibrary !== curName){
+			libraries[index].name = editLibrary;
+			popLibrariesDropdown();
+		}
+	});
+	
+	// delete library button
+	$('.libraryItemButtons .delete-button').bind('click',function(){
+		var index = parseInt(this.dataset.index);
+		var deleteConfirm = confirm('Delete "'+libraries[index].name+'"');
+		if(deleteConfirm){
+			changeLibrary(index);
+			deleteLibrary();
+		}
 	});
 };
 

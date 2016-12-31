@@ -1,27 +1,49 @@
 // user settings:
 var _settings;
+var Settings = {
+	UI:{
+		fullscreenCaptions:false,
+		notificationColors:true,
+		quickPreview:true,
+		roundedCorners:true,
+		collectionThemes:true
+	},
+	updateSettings:forceUpdateSettings
+};
 
 var saveSettings = function(){
-	localStorage.setItem("user_settings",JSON.stringify(_settings));
+	localStorage.setItem("user_settings",JSON.stringify(Settings));
 }
 
 var forceUpdateSettings = function(){
-	localStorage.setItem('user_settings','empty');
+	localStorage.setItem('user_settings',null);
 }
 
 var initializeSettings = function(){
-	var settingsString = localStorage.getItem('user_settings');
-	if(settingsString.length > 1 && settingsString !== 'empty'){
-		_settings = JSON.parse(settingsString);
-	}
-	if(settingsString.length < 1 || _settings === null || _settings === {} || typeof _settings[0].name === 'undefined'){
-		_settings = [
-			{name:'fullscreenCaptions',category:'slideshow',value:true,label:'Slideshow captions'},
-			{name:'notificationColors',category:'notifications',value:true,label:'Notification colors'},
-			{name:'quickPreview',category:'interface',value:true,label:'Quick-preview'},
-				{name:'updateSettings',category:'debug',value:forceUpdateSettings,label:'Force Settings Upgrade'}
-		]
-		saveSettings();
+	var saved = JSON.parse(localStorage.getItem('user_settings'));
+	for(var x in Settings){
+		if(Settings.hasOwnProperty(x)){
+			if(typeof saved[x] !== 'undefined'){
+				var savedX = savedX;
+				if(typeof x === 'object'){
+					var SettingsX = Settings[x];
+					for(var y in x){
+						if(typeof savedX[y] !== 'undefined'){
+							SettingsX[y] = savedX[y];
+							log('updated Settings.',x+'.'+y);
+						}
+					}
+				}
+				else{
+					Settings[x] = saved[x];
+					log('Updated setting:',x);
+				}
+			}
+			else{
+				Settings[x] = saved[x];
+				log('Added new prop to settings:',x);
+			}
+		}
 	}
 }
 
@@ -31,28 +53,96 @@ $(document).ready(function(){
 
 // Retrieve a setting object by 'item' property (the name) from the _settings arrays for use
 var getSetting = function(setting){
-	// retrieve the first item from an array of settings that match the given name
-	return $.grep(_settings,function(e){return e.name === setting})[0];
+	return propInObjRecursive(Settings,setting);
+};
+
+var propInObjRecursive = function(obj,prop){
+	for(var p in obj){
+		if(obj.hasOwnProperty(p)){
+			if(typeof obj[p] === 'object'){
+				var recurse = propInObjRecursive(obj[p],prop);
+				if(recurse !== null){
+					return recurse;
+				}
+			}
+			else{
+				if(p === prop){
+					return obj[p];
+				}
+			}
+		}
+	}
+	return null;
+}
+
+// a recursive method for finding the first setting
+// of a given name, no matter how deep, and setting its value to
+// the given value
+var setSetting = function(name,newValue,object=Settings){
+	for(var p in object){
+		if(object.hasOwnProperty(p)){
+			// if setting is actually an object of sub-settings, then recurse
+			if(typeof object[p] === 'object'){
+				setSetting(name,newValue,object[p]);
+			}
+			// if its just a setting, then set it
+			else{
+				if(p === name && typeof newValue === typeof object[p]){
+					object[p] = newValue;
+					return true;
+				}
+			}
+		}
+	}
+	return false;
 };
 
 var settingChanged = function(element){
 	var $element = $(element);
+	var setting = element.dataset.setting;
 	if($element.is(":checkbox")){
 		console.log('its a checkbox');
-		var setting = getSetting(element.dataset.setting);
 		if($element.is(":checked")){
 			// find the setting for the given checkbox and match the setting to whether or not its checked:
-			setting.value = true;
+			setSetting(setting,true);
 			
 		}
 		else{
-			setting.value = false;
+			setSetting(setting,false);
 		}
-		console.log(setting.value);
+		// Reflect settings changes:
+		List();
+		updateUIColor();
+		console.log(setting,":",getSetting(setting));
 	}
 	
 	saveSettings();
 };
+
+var returnElementForSetting = function(setting,s){
+	var displaySetting = '';
+	switch(typeof setting){
+		case 'boolean':
+			displaySetting = $("<label><input type='checkbox' data-setting='"+s+"'" +
+			""+
+			(setting === true ? 'checked' : '') + ">"+s.split(/(?=[A-Z])/).join(" ").replace(/\b./g, function(m){ return m.toUpperCase(); })+"</label></input>");
+			break;
+		case 'function':
+			displaySetting = $("<button onclick='"+setting+"'>"+s+"</button>");
+			break;
+		case 'object':
+			displaySetting = $('<div class="setting-category-container"><div class="setting-category-header">'+s+'</div></div>');
+			for(var prop in setting){
+				displaySetting.append(returnElementForSetting(setting[prop],prop));
+				displaySetting.append('</br>');
+			}
+			break;
+		default:
+			console.log('could not evaluate setting ' + s);
+			break;
+	}
+	return displaySetting;
+}
 
 var settingsDialogue = function(){
 	var dialog = $('#d_Settings');
@@ -61,35 +151,18 @@ var settingsDialogue = function(){
 	// empty the _settings dialog
 	settingsDiv.html("");
 	
+
+	
 	// loop through _settings to display them in the dialog
 	var headers = [];
 	// create a copy of _settings sorted by category
 	/*var copy = _settings.sort(function(a,b){
 		return a.category !== b.category ? 1 : 0;
 	}).slice(0);*/
-	for(var s in _settings){
-		var setting = _settings[s]; // the current setting
-		if($(settingsDiv).children('[data-category="'+setting.category+'"]').length===0){
-			var newCategory = $('<div class="setting-category-container" data-category="'+setting.category+'" ></div>').append('<h2 class="setting-category-header">'+setting.category+'</h2>').appendTo(settingsDiv);
-		}
-		var displaySetting = '';
-		switch(typeof setting.value){
-			case 'boolean':
-				displaySetting = $("<label><input type='checkbox' data-setting='"+setting.name+"'" +
-				""+
-				(setting.value === true ? 'checked' : '') + ">"+setting.label+"</label></input>");
-				break;
-			case 'function':
-				displaySetting = $("<button onclick='"+setting.value+"'>"+setting.label+"</button>");
-			default:
-				console.log('could not evaluate setting ' + setting.name);
-				break;
-		}
-		var categoryDiv = $('[data-category="'+setting.category+'"]');
-		categoryDiv.append(displaySetting);
-		categoryDiv.append('</br>');
+	for(var s in Settings){
+		var setting = Settings[s]; // the current setting
+		settingsDiv.append(returnElementForSetting(setting,s));
 	}
-
 	
 	
 	/*$(_settings).each(function(i,item){

@@ -42,8 +42,6 @@ var Delete = function(domElement = null){
 var tm_afterlistcallback = 0; // timeOut for after the list is completed. wait until perform callback
 var List = function(load_animation = false,callback){
 	
-	var gifRegEx = /(?!gifv)(gif)/g;
-	
 	// Populate images
 	clearTimeout(tm_afterlistcallback);
 
@@ -71,15 +69,25 @@ var List = function(load_animation = false,callback){
 		// create new container box
 		var newBox = $('<div class="imageBox" data-item-index="'+i+'"></div');
 		
+		// changeable styling
+		getSetting('roundedCorners') ? newBox.addClass('rounded') : false;
+		
 		// appendings for only images and videos
 		if(item.type==='image' || item.type ==='video' || item.type === 'youtube'){
 			var element = processURL(i);
-			var loading_img = '<img class="loading-animation" src="./images/loading.gif">';
+			// create the spinner loader
+			var loading_img = $('<div class="loading-animation"><div class="loading-circle red"></div><div class="loading-circle green"></div><div class="loading-circle blue"></div></div>');
+			
+			// create the caption UI
 			var caption = "<div class='caption imageBoxUI'><span class='captionText'>" + processCaption(imageDB.items[i])
-			+"</span><button class='btnEditCaption'>&#128393;</button></div>"; // add edit button to image caption
-			newBox.append(element).append(caption)
+			+"</span><span class='btnEditCaption faded edit-button'></span></div>"; // add edit button to image caption
+			// append the caption UI
+			newBox.append(element).append(caption);
+			// append the copy URL button
 			newBox.append('<div class="btnCopyURL imageBoxUI" data-clipboard-text="'+getURL(item)+'"></div>');
-			if(gifRegEx.test(item.url)===false){
+			// if it's not a GIF, append the loader thingy
+			var testGIF = myRegex['gif'].test(getURL(item));
+			if(myRegex['gif'].test(getURL(item))===false){
 				$(element).css('opacity',0.4);
 				newBox.append(loading_img);
 			}
@@ -117,22 +125,43 @@ var List = function(load_animation = false,callback){
 	
 	// Put bindings on all elements after calling List():
 
-	
-	$('#imageList video.media-item').css('opacity',0.4).on('loadeddata',function(){
-		//$(this).parent().fadeIn(1000);
+	// video binds
+	var videoMediaItem = $('#imageList video.media-item');
+	videoMediaItem.css('opacity',0.4);
+	// append play icon
+	videoMediaItem.on('loadeddata',function(){
+		$(this).parent().height($(this).parent().height()-5);
+		
+		// remove loading icon
 		$(this).siblings('.loading-animation').remove();
+		
+		// append play icon
+		var playIcon = $('<div class="play-icon" onclick="$(this).hide()"></div>');
+		playIcon.on('click',function(){
+			var vid = $(this).siblings('video').get(0);
+			if(vid.paused){
+				$('video.media-item').each(function(){
+					this.pause();
+				});
+				vid.play()
+			}else{vid.pause()}
+		});
+		$(this).parent().append(playIcon);
+		if($(this).height()<$(this).width()){
+			playIcon.css('top','-='+$(this).siblings('.caption').height());
+		}
+		
 		$(this).css('opacity',1);
 		
+		// if loaded properly, do stuff
 		if (typeof this.webkitAudioDecodedByteCount !== "undefined") {
 			// non-zero if video has audio track
 			if (this.webkitAudioDecodedByteCount > 0){
-				var thisId = this.getAttribute('data-index');
+				var thisId = this.dataset.index;
 				// create unmute button:
-				var unmuteButton = $('<button/>',{id:'unmute'+thisId});
-				unmuteButton.addClass('btnUnmute')
-				.html('&#128266;')
+				var unmuteButton = $('<div class="btnUnmute imageBoxUI" data-index="'+thisId+'"></div>')
 				.on('click',function(){
-					var video = document.getElementById(thisId);
+					var video = $('video.media-item[data-index="'+thisId+'"]').get(0);
 					if(video.muted){
 						muteAll();
 						Unmute(video);
@@ -152,9 +181,29 @@ var List = function(load_animation = false,callback){
 			}
 		}
 	}).on('error',function(){
+		// create an 'Error' imageBox
 		$(this).parent().show();
 		$(this).css('border','solid 2px red').parent().children('.btnDelete').css('borderColor','rgba(255,0,0,0.7)');
 		notify("Some images could not be loaded.",'warning');
+	})
+	.on('click',function(e){
+		// play video and pause all others on page
+		var vid = $(this).get(0);
+		if(vid.paused){
+			$('video.media-item').each(function(){
+				this.pause();
+			});
+			vid.play()
+		}else{vid.pause()}
+	})
+	.on('pause',function(){
+		$(this).siblings('.play-icon').show();
+	}).on('play',function(){
+		$(this).siblings('.play-icon').hide();
+		// unmute on first play
+		if(this.currentTime < 1){
+			Unmute(this);
+		}
 	});
 	
 	// unmute the previously unmuted video if any
@@ -163,9 +212,9 @@ var List = function(load_animation = false,callback){
 		$(unmuteVideo).prop('muted',false);
 	}
 	
-	
-	
+	// image binds
 	$('.imageBox img.media-item').on('load',function(){
+			$(this).parent().height($(this).height());
 			//$(this).parent().fadeIn(500);
 			$(this).siblings('.loading-animation').remove();
 			$(this).css('opacity',1);
@@ -206,7 +255,7 @@ var List = function(load_animation = false,callback){
 	$('.btnCopyURL').bind('click',function(){
 		selected_index = parseInt($(this).parent().attr('data-item-index'));
 		
-		notify('Copied URL');
+		notify(' Copied URL to clipboard');
 	});
 
 	// bind delete buttons events
@@ -217,7 +266,7 @@ var List = function(load_animation = false,callback){
 	
 	// show the Caption editor
 	var editImageCaption = function(element){
-		$(element).children('.captionText').hide();
+		$(element).children('.captionText,.btnEditCaption').hide();
 		$(element).prepend('<textarea class="txtEditCaption"/>');
 		
 		$('.txtEditCaption').val(getCaption(imageDB.items[selected_index])) // put in the old caption
@@ -225,12 +274,12 @@ var List = function(load_animation = false,callback){
 			if(!e.shiftKey && e.which == 13){
 				e.preventDefault();
 				changeCaption(selected_index,$(this).val()); // change image caption to whatever's in the textarea
-			$(element).children('.captionText').show();
+			$(element).children('.captionText,.btnEditCaption').show();
 			$(element).children('.txtEditCaption').remove();
 			}
 		}).on('blur',function(){
 			changeCaption(selected_index,$(this).val()); // change image caption to whatever's in the textarea
-			$(element).children('.captionText').show();
+			$(element).children('.captionText,.btnEditCaption').show();
 			$(element).children('.txtEditCaption').remove();
 		}).focus().select();
 	};
@@ -250,7 +299,7 @@ var List = function(load_animation = false,callback){
 	$("video.media-item").bind("dblclick",function(e){
 		e.preventDefault();
 		selected_index = parseInt($(this).attr("data-index"));
-		fullscreenVideo(this);		
+		fullscreenVideo(this);	
 	});
 	
 	/*$('body').on('contextmenu',function(e){
@@ -263,7 +312,8 @@ var List = function(load_animation = false,callback){
 	})
 	.on('mousedown',function(e){
 		if(e.which===3){
-			if(getSetting('quickPreview').value===true){
+			var quickPreview = getSetting('quickPreview');
+			if(getSetting('quickPreview')===true){
 					var fillPreview = $('.fillPreview');
 				fillPreview.css({
 					background:'url("'+$(this).attr('src')+'") no-repeat center ',
@@ -295,7 +345,7 @@ var changeCaption = function(item_index,newcaption,callback){
 	var old_caption = "";
 	hideDialogue();
 	if(new_caption !== "" && new_caption !== null){
-		if(!UpToDate(imageDB.items[item_index])){
+		if(typeof imageDB.items[item_index] !== 'object'){
 			//forces new Database style on old depracated objects:
 			if(imageDB.items[item_index]!== new_caption)
 			{
@@ -313,14 +363,19 @@ var changeCaption = function(item_index,newcaption,callback){
 			}
 		}
 		else{
+			// if the caption isn't the same as before...
 			if(imageDB.items[item_index].caption !== new_caption)
 			{
+				// set old caption to current caption
 				old_caption = imageDB.items[item_index].caption;
+				// if the new caption isn't blank...
 				if(new_caption !== ""){
+					// the new caption is 'new_caption'
 					imageDB.items[item_index].caption = new_caption; // uses the new database style with url: & caption:
 					
 				}
 				else{
+					// otherwise the caption becomes the URL
 					imageDB.items[item_index].caption = imageDB.items[item_index].url;
 				}
 				notify("Image caption changed","neutral");
