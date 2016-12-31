@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width = device-width, initial-scale = 1">
+<link rel="shortcut icon" href="bitmap.png" type="image/x-icon">
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<link rel="stylesheet" type="text/css" href="css/icons.css">
+<link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>!-->
+<script src="jquery-3.1.0.min.js"></script>
+<script src="./scripts/clipboard.js"></script>
+<!-- my scripts !-->
+<script type="text/javascript" src="init.js"></script>
+<script type="text/javascript" src="settings.js"></script>
+<script type="text/javascript" src="notifications.js"></script>
+<script type="text/javascript" src="libraries.js"></script>
+<script type="text/javascript" src="collections.js"></script>
+<script type="text/javascript" src="dialogs.js"></script>
+<script type="text/javascript" src="processing.js"></script>
+<script type="text/javascript" src="fullscreen.js"></script>
+<script type="text/javascript" src="volume.js"></script>
+<script type="text/javascript" src="list.js"></script>
+<script type="text/javascript" src="history.js"></script>
+<script type="text/javascript" src="animations.js"></script>
+<script type="text/javascript" src="scripts.js"></script>
+<!--!-->
+
+<title>Image Collector</title>
+</head>
+<body>
+<div id="navbar-top" class="clearTransparent">
+	<div id="inputForm">
+		<div id="submitFormContainer">
+			<input type="text" id="txtInput" placeholder="Enter an image URL (+ a caption separated by a space if you want)"/>
+			<select class="superDropdown superButton" id="submitTypeDropdown">
+				<option data-type="url_caption">URL</option>
+				<option data-type="plain_text">Text</option>
+			</select>
+			<button class="rounded superButton" id="btnSubmit">+</button>
+		</div>
+		<span id="divCollections">
+		
+			<span id="collectionsUIParent">
+				<button class="rounded superButton toggleButton" id="btnCollections">Collections <span id='arrow'>▼</span></button>
+				
+				<!--<button class="rounded superButton" id="btnRenameCollection">Edit</button>!-->
+				<!--<button class="rounded superButton" id="btnDeleteCollection">Delete Collection</button>!-->
+			</span>
+			
+		</span>
+		
+		<span id="rightSideButtonsContainer">
+		
+			<button class="rounded superButton" id="btnHelp">Help</button>
+			<button class="rounded superButton" id="btnSettings">Settings</button>
+			
+		</span>
+		
+		<div id="collectionsContainer">
+			<div class="leftSizeCollectionButtons">
+				<select id="sortCollectionsDropdown" class="collectionItem">
+					<option data-sort="date_newold">New→Old</option>
+					<option data-sort="date_oldnew">Old→New</option>
+					<option data-sort="alpha_az">A→Z</option>
+					<option data-sort="alpha_za">Z→A</option>
+					<option data-sort="itemcount_longshort">3,2,1</option>
+					<option data-sort="itemcount_shortlong">1,2,3</option>
+				</select>
+				<span id="btnNewCollection" class="collectionItem">+</span>
+			</div>
+			<div class="collectionItemContainer">
+				<!--collections here!-->
+			</div>
+			
+		</div>
+	</div>
+</div>
+
+<div class="spacer" id="top"></div>
+
+<div id="imageList">
+	
+	<!--columns generated here!-->
+</div>
+
+<div class="spacer" id="bottom"></div>
+<div class="collectionFooter clearTransparent">
+	<div class="contain-collection-title-bottom">
+		<span class="collection-title-bottom">Fantastical Fashion</span>
+	</div>
+	<div class="edit-button" id="btnEditCollection"></div>
+	<div class="delete-button" id="btnTrash"></div>
+	
+	<div id="bottomLeftButtonsContainer">
+		<button id="btnLibraries" class="rounded superButton toggleButton">Libraries</button>
+		<button class="rounded superButton" id="btnExport">Export</button>
+		<button class="rounded superButton" id="btnOpenPrettyCollections">Pretty Collections</button>
+	</div>
+	<div class="dropDown aboveBottomBar" id="dropDownLibraries">
+			<div class="dropDownMenuItem">
+				<span class="dropDownMenuItemText">Default</span>
+			</div>
+			<div class="dropDownMenuItem btnNewLibrary">+</div>
+			<!-- libraries go here !-->
+	</div>
+	
+	<div id="bottomRightButtonsContainer">
+		<button class="rounded superButton" id="btnUndo">Undo</button>
+		<div id="btnHistory" class="rounded superButton toggleButton"><span class='.pseudoButtonText'>History</span></div>
+	</div>
+	<div class="dropDown aboveBottomBar dropDownHistory">
+		<!--history items here!-->
+	</div>
+	
+<div id="header">Image Collector <sup>v3</sup></div>
+</div>
+
+
+
+
+
+
+
+
+<!-- TEMPORAL UI ELEMENTS START HERE !-->
+
+
+
+
+
+
+
+
+
+<!-- Pretty Collection Selector !-->
+<div class="prettyCollectionsContainer">
+	<div class="itemContainer art">
+		<div class="mask">
+			<h1>art</h1>
+		</div>
+	</div>
+	<div class="itemContainer history">
+		<div class="mask">
+			<h1>history</h1>
+		</div>
+	</div>
+</div>
+
+<!-- Notifications !-->
+<div id="regularNotifications" class="Notifications">
+
+	<span>Notification status bar.</span>
+</div>
+
+
+<!-- Dialog Boxes !-->
+<div id="dialogueParent"> <!-- contains all the dialogues !-->
+
+	<!--Export libraries!-->
+	<div class="dialogue" id="d_Export">
+		<h1 class="dialog-title">Export library <span class="bold">Library</span></h1>
+		<label style="display:block" for="selectExportType">Select an <span class="bold">Export Type</span>:</label>
+		<select id="selectExportType">
+			<option data-export="json">Image Collection</option>
+			<option data-export="html">HTML</option>
+			<option data-export="plain_text">Plain Text</option>
+		</select>
+		<button class="closeButton">x</button>
+		<div id="exportCode">
+			<!--Export Codes Here!-->
+		</div>
+	</div>
+	
+	<!--Edit Captions!-->
+	<div class="dialogue" id="d_EditCaption">
+		<h1 class="dialog-title">Caption</h1>
+		<button class="closeButton">x</button>
+		<div id="captionThumbContain">
+		<img id="editCaptionThumbnail"></img>
+		</div><br>
+			<span style="display:block">Edit the caption of the image. Hit Shift+ENTER to type a new paragraph.</span>
+			<textarea type="text" id="txtEditCaption"></textarea>
+		<button class="okbutton" id="btnOK_Edit">OK</button>
+	</div>
+	
+	<!--Edit Collection!-->
+	<div class="dialogue" id="d_EditCollection">
+		<h1 class="dialog-title">Edit Collection <span class="bold"></span></h1>
+		<button class="closeButton">x</button>
+		<div class="dialog-content">
+			<span class="instructions-span">Change the collection name.</span><br>
+			<input type="text" id="txtRenameCollection"></input>
+			
+			<!--Collection color!-->
+			<div class="contain-colors">
+			<span class="instructions-span">Choose a theme for this collection</span>
+				<!--Colors go here!-->
+				<div class="color-preview" data-color="none"></div>
+				<div class="contain-color-options">
+				<!--<span class="color-option">!-->
+				</div>
+			</div>
+		</div>
+		<button class="okbutton" id="btnOK_EditCollection">OK</button>
+	</div>
+	<div class="dialogue" id="d_Settings">
+		<h1 class="dialog-title">Settings</h1><button class="closeButton">x</button>
+		<!--<span class="instructions-span">Change your preferences below.</span>!-->
+		<div id="settingsContainer">
+		
+		</div>
+	</div>
+	<div class="dialogue" id="d_Help">
+		<h1 class="dialog-title">Help</h1>
+		<button class="closeButton">x</button>
+		<div id="helpIndexTabStrip">
+			<span class="helpIndexItem droplet" id="help_index_0">Starting off</span>
+			<span class="helpIndexItem droplet" id="help_index_1">Videos</span>
+			<span class="helpIndexItem droplet" id="help_index_2">Collections</span>
+			<span class="helpIndexItem droplet" id="help_index_3">Fullscreen + Slideshow</span>
+			<span class="helpIndexItem droplet" id="help_index_4">Exporting your library</span>
+			
+		</div>
+		<div id="helpContent"></div>
+		<button class="okbutton">OK</button>
+	</div>
+</div>
+
+<div id="highlight">
+
+</div>
+
+<div class="fillPreview"></div>
+
+<div id="volumeSliderDialogContainer">
+	<div id="volumeSliderDialog">
+		<img id="imgVolumeIcon" src="volume_icon.png"/>
+		<div id="volumeSliderContainer">
+			<div id="volumeSlider"></div>
+		</div>
+	</div>
+</div>
+
+<div id="FullScreenView">
+	<button id="btnExitFullscreen">x</button>
+	<div class="Notifications" id="fullscreenNotifs">
+		<span>Notification status bar.</span>
+	</div>
+	<div id="fsVolumeSliderContainer">
+		<div id="fsVolumeSlider"></div>
+	</div>
+</div>
+
+<div id="helpTipsContainer">
+
+</div>
+
+<!-- Canvas for Dynamic Color calculations !-->
+<canvas id="canvDynamicColor"></canvas>
+
+</body>
+</html>
